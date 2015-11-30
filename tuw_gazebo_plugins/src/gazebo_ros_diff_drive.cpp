@@ -89,7 +89,7 @@ void GazeboRosDiffDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _sdf 
 {
 
     this->parent = _parent;
-    gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "DiffDrive" ) );
+    gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWDiffDrive" ) );
     // Make sure the ROS node for Gazebo has already been initialized
     gazebo_ros_->isInitialized();
 

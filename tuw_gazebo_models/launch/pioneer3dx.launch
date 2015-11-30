@@ -2,8 +2,8 @@
 
   <arg name="rviz" default="0" />
   <arg name="room" default="cave" />
-  <arg name="physics" default="bullet"/> <!-- ode, bullet, dart -->
-  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/"/>    
+  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/"/> 
   
    <!-- Gazebo  -->
   <include file="$(find tuw_gazebo_models)/launch/empty_world.launch">
