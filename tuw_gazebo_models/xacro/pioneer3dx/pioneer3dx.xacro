@@ -8,14 +8,14 @@
   <xacro:include filename="$(find tuw_gazebo_models)/xacro/pioneer3dx/pioneer3dx_body.xacro"/>
   <xacro:pioneer3dx_body name="chassis" parent="base_link" meshes="package://tuw_gazebo_models/meshes/pioneer3dx"/>
   
-  <!-- Laser-->
+  <!-- Laser -->
   <xacro:include filename="$(find tuw_gazebo_models)/xacro/laser/hokuyo.xacro"/>
-  <xacro:laser name="front_laser" parent="chassis" xyz="0.16 0 0.1" rpy="0 0 0" meshes="package://tuw_gazebo_models/meshes/laser"/>
-     
+  <xacro:laser name="front_laser" parent="chassis" xyz="0.16 0 0.125" rpy="0 0 0" meshes="package://tuw_gazebo_models/meshes/laser"/>
+  
   
   <!-- GPU Laser  
   <xacro:include filename="$(find tuw_gazebo_models)/xacro/laser/hokuyo_gpu.xacro"/>
-  <xacro:laser_gpu name="front_laser" parent="chassis" xyz="0.16 0 0.1" rpy="0 0 0" meshes="package://tuw_gazebo_models/meshes/laser" />
+  <xacro:laser_gpu name="front_laser" parent="chassis" xyz="0.16 0 0.125" rpy="0 0 0" meshes="package://tuw_gazebo_models/meshes/laser" />
   -->
   
   <!-- Camera 
