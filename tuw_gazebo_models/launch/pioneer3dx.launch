@@ -18,6 +18,7 @@
      
   <node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />
      
+     
   <!-- RVIZ   -->
   <group if="$(arg rviz)">
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo_models)/launch/pioneer3dx.rviz" />
