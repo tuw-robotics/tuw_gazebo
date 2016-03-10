@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   
-  <xacro:include filename="inertia_tensors.xacro"/>
+  <xacro:include filename="../inertia_tensors.xacro"/>
   <xacro:include filename="pioneer3dx_chassis.xacro"/>
   <xacro:include filename="battery_block.xacro"/>
   <xacro:include filename="pioneer3dx_wheel.xacro"/>
