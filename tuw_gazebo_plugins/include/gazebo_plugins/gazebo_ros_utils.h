@@ -116,8 +116,9 @@ public:
      * @param _parent models parent
      * @param _sdf sdf to read
      * @param _name of the plugin class
+     * @param _internalNS specifies weather the namespace is nested under /gazebo or not; defaults to false
      **/
-    GazeboRos ( physics::ModelPtr &_parent, sdf::ElementPtr _sdf, const std::string &_plugin )
+    GazeboRos ( physics::ModelPtr &_parent, sdf::ElementPtr _sdf, const std::string &_plugin, bool _internalNS=false )
         : sdf_ ( _sdf ), plugin_ ( _plugin ) {
         namespace_ = _parent->GetName ();
         if ( !sdf_->HasElement ( "robotNamespace" ) ) {
@@ -131,7 +132,8 @@ public:
         if ( !namespace_.empty() ){
             this->namespace_ += "/";
 	}
-        rosnode_ = boost::shared_ptr<ros::NodeHandle> ( new ros::NodeHandle ( "~/" + namespace_ ) );
+	if(_internalNS) { rosnode_ = boost::shared_ptr<ros::NodeHandle> ( new ros::NodeHandle ( "~/" + namespace_ ) ); }
+	else            { rosnode_ = boost::shared_ptr<ros::NodeHandle> ( new ros::NodeHandle (        namespace_ ) ); }
         info_text = plugin_ + "(ns = " + namespace_ + ")";
         readCommonParameter ();
     }
