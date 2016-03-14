@@ -24,7 +24,7 @@
       <visual name="RPLidar_visual">
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="${model_dir}/meshes/RPLidar.dae"/>
+          <mesh filename="file://${model_dir}/meshes/RPLidar.dae"/>
         </geometry>
       </visual>
       <inertial>

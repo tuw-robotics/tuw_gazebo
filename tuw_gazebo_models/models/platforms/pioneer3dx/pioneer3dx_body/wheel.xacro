@@ -21,7 +21,7 @@
     <visual name="base_visual">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry name="pioneer_geom">
-        <mesh filename="${model_dir}/meshes/hubcap.dae"/>
+        <mesh filename="file://${model_dir}/meshes/hubcap.dae"/>
       </geometry>
       <material name="HubcapYellow">
         <color rgba="1.0 0.811 0.151 1.0"/>
@@ -54,7 +54,7 @@
     <visual name="wheel_visual">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry name="pioneer_geom">
-        <mesh filename="${model_dir}/meshes/wheel.dae"/>
+        <mesh filename="file://${model_dir}/meshes/wheel.dae"/>
       </geometry>
       <material name="WheelBlack">
         <color rgba="0.117 0.117 0.117 1"/>

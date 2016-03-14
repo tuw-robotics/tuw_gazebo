@@ -19,7 +19,7 @@
     <visual name="front_sonar_vis">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry name="pioneer_geom">
-        <mesh filename="${model_dir}/meshes/back_sonar.dae"/>
+        <mesh filename="file://${model_dir}/meshes/back_sonar.dae"/>
       </geometry>
       <material name="SonarYellow">
         <color rgba="0.715 0.583 0.210 1.0"/>

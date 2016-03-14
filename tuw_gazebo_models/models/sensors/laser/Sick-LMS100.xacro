@@ -27,7 +27,7 @@
 	</collision>
 	<visual>
 	  <geometry>
-		<mesh filename="${model_dir}/meshes/Sick-LMS100.dae"/>
+		<mesh filename="file://${model_dir}/meshes/Sick-LMS100.dae"/>
 	  </geometry>
 	  <material name="SickBlue"/>
 	</visual>

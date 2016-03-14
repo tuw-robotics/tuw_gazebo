@@ -29,7 +29,7 @@
      
   <!-- RVIZ   -->
   <group if="$(arg rviz)">
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo)/launch/pioneer3dx/multi_pioneer3dx.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo_models)/launch/pioneer3dx/multi_pioneer3dx.rviz" />
   </group>
   
 </launch>
