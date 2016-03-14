@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
+  <xacro:include filename="chassis.xacro"/>
+  <xacro:include filename="battery_block.xacro"/>
+  <xacro:include filename="wheel.xacro"/>
+  <xacro:include filename="swivel.xacro"/>
+  <xacro:include filename="sonar.xacro"/>
+  
+  <xacro:macro name="pioneer3dx_body" params="name parent">
+        
+    <!-- base_link -->
+    <link name="${parent}"/>
+    
+    <!-- Chassis -->
+    <xacro:pioneer_chassis name="${name}" parent="base_link" xyz="0 0 0" rpy="0 0 0"/>
+    
+    <!-- Front Sonar -->
+    <xacro:pioneer_sonar name="sonar" parent="${name}" xyz="0.109 0 0.209" rpy="0 0 0"/>      
+    
+    <!-- Akku0 -->
+    <xacro:pioneer_battery_block name="battery0" parent="${name}" x="-0.14" y="0.00"  z="0.13" mass="2.5" />  
+    
+    <!-- Wheels -->
+    <xacro:pioneer_wheel side="right" parent="${name}"  xyz="0  0.15 0.09" rpy="0 0 0" radius="0.09"/>
+    <xacro:pioneer_wheel side="left"  parent="${name}"  xyz="0 -0.15 0.09" rpy="0 0 0" radius="0.09"/>
+    <xacro:pioneer_swivel parent="${name}"  xyz="-0.185 0 0.055" rpy="0 0 0"/>
+    
+  </xacro:macro>
+</robot>

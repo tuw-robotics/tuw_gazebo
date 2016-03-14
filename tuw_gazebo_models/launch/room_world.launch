@@ -1,12 +1,12 @@
 <launch>
   <arg name="room" default="" />
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
-  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/"/> 
+  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/environments"/> 
      
   <!-- Gazebo  -->
   <include file="$(find tuw_gazebo_models)/launch/empty_world.launch">
      <arg name="physics" value="$(arg physics)" />
   </include>
   
-  <node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />
+  <node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/environments/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />
 </launch>

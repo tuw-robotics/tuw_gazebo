@@ -3,14 +3,12 @@
   <arg name="rviz" default="0" />
   <arg name="room" default="cave" />
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
-  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/"/>    
   
   <!-- Gazebo world with environment -->
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
      <arg name="physics" value="$(arg physics)" />
      <arg name="room"    value="$(arg room)"    />
   </include>
-  
   
   <!-- Robot with diff drive -->
   <include file="$(find tuw_gazebo_models)/launch/pioneer3dx/pioneer3dx.gazebo.launch">

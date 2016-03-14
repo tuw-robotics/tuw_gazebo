@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pioneer3dx" >
+    
+   <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
+    
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
+    
+  <!-- Import platform -->
+  <xacro:property name="model_dir" value="$(arg model_dir)/pioneer3dx_body"/>
+  <xacro:include filename="${model_dir}/body.xacro"/>
+  <xacro:pioneer3dx_body name="chassis" parent="base_link"/>
+  
+  <!-- Import platform plugins -->
+  <xacro:property name="model_dir" value="$(arg model_dir)"/>
+  <xacro:include filename="${model_dir}/pioneer3dx_plugins.xacro" />
+  <xacro:pioneer3dx_diff_drive             /> <!-- Motor  plugin -->
+  <xacro:pioneer3dx_joints_state_publisher /> <!-- Joints plugin -->
+  
+  <!-- Laser -->
+  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
+  <xacro:include filename="${model_dir}/hokuyo.xacro"/>
+  <xacro:laser name="front_laser" parent="chassis" xyz="0.16 0 0.125" rpy="0 0 0" driver="cpu"/>
+  
+  <!-- Camera 
+  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>
+  <xacro:include filename="${model_dir}/camera.xacro"/>
+  <xacro:cam name="front_camera" parent="chassis" xyz="0 0 0.5" rpy="0 0 0" />
+  -->
+</robot>

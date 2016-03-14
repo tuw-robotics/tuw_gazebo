@@ -1,19 +1,20 @@
 <launch>
 
-  <arg name="robot_name" default="p3dx" />
-  <arg name="robot_position" default="-x 0.0 -y 0.0 -z 0.01" />
+  <arg name="name" default="p3dx" />
+  <arg name="position" default="-x 0.0 -y 0.0 -z 0.01" />
+  <arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx" />
     
-  <group ns="$(arg robot_name)">
+  <group ns="$(arg name)">
 
     <!-- Load the URDF into the ROS Parameter Server -->
-    <param name="robot_description" command="$(find xacro)/xacro --check-order '$(find tuw_gazebo_models)/xacro/pioneer3dx/pioneer3dx.xacro'" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/pioneer3dx.xacro' model_dir:=$(arg model_dir)"/>
   
-    <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model $(arg robot_name) -param robot_description $(arg robot_position) "/>
+    <!-- Run a python script to the send a service call to gazebo_ros to spawn a robot -->
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -unpause -urdf -param robot_description -model $(arg name)" respawn="false"/>
 
     <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
       <param name="publish_frequency" type="double" value="30.0"/>
-      <param name="tf_prefix" type="string" value="$(arg robot_name)"/>
+      <param name="tf_prefix" type="string" value="$(arg name)"/>
     </node>
   </group>
   
