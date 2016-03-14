@@ -23,9 +23,9 @@
     <xacro:pioneer_battery_block name="battery0" parent="${name}" x="-0.14" y="0.00"  z="0.13" mass="2.5" />  
     
     <!-- Wheels -->
+    <xacro:pioneer_swivel parent="${name}"  xyz="-0.185 0 0.055" rpy="0 0 0"/>
     <xacro:pioneer_wheel side="right" parent="${name}"  xyz="0  0.15 0.09" rpy="0 0 0" radius="0.09"/>
     <xacro:pioneer_wheel side="left"  parent="${name}"  xyz="0 -0.15 0.09" rpy="0 0 0" radius="0.09"/>
-    <xacro:pioneer_swivel parent="${name}"  xyz="-0.185 0 0.055" rpy="0 0 0"/>
     
   </xacro:macro>
 </robot>

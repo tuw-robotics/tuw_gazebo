@@ -18,9 +18,9 @@
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
     </inertial>
-    <visual name="base_visual">
+    <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/hubcap.dae"/>
       </geometry>
       <material name="HubcapYellow">
@@ -51,9 +51,9 @@
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
     </inertial>
-    <visual name="wheel_visual">
+    <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/wheel.dae"/>
       </geometry>
       <material name="WheelBlack">

@@ -12,9 +12,9 @@
     <child link="${name}"/>
   </joint>
   <link name="${name}">
-    <visual name="chassis_visual">
+    <visual>
       <origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
 		  <mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
       <material name="ChassisRed">
@@ -42,7 +42,7 @@
   <link name="top">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="top_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/top.dae"/>
       </geometry>
       <material name="TopBlack">

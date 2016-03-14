@@ -20,9 +20,9 @@
       <origin xyz="0 0 0"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
     </inertial>
-    <visual name="base_visual">
+    <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/swivel.stl"/>
       </geometry>
       <material name="swivel">
@@ -56,9 +56,9 @@
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983" iyy="0.015218160428" iyz="-0.000004273467" izz="0.011763977943"/>
     </inertial>
-    <visual name="base_visual">
+    <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/center_wheel.stl"/>
       </geometry>
       <material name="WheelBlack">
@@ -89,9 +89,9 @@
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983" iyy="0.015218160428" iyz="-0.000004273467" izz="0.011763977943"/>
     </inertial>
-    <visual name="hubcap_visual">
+    <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry name="pioneer_geom">
+      <geometry>
         <mesh filename="file://${model_dir}/meshes/center_hubcap.stl"/>
       </geometry>
       <material name="swivel">
