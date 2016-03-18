@@ -2,10 +2,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <!-- Front Laser --> 
-<xacro:macro name="laser" params="name parent xyz rpy driver:=gpu model_dir:=^">
+<xacro:macro name="laser" params="name parent xyz rpy driver:=cpu model_dir:=^">
   
-  <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="driver_name" value="_gpu"/></xacro:if>
-  <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="driver_name" value=""    /></xacro:unless>
+  <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
+  <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
   
   <joint name="${parent}_${name}_chassis_joint" type="fixed">
 	  <axis xyz="0 0 1" />
@@ -43,43 +43,43 @@
   </joint>
   
   <link name="${name}"/>
-  
-	<gazebo reference="${name}">
-		<sensor name="laser" type="${driver_name}ray">
-			<pose>0 0 0 0 0 0</pose>
-			<update_rate>25</update_rate>
-			<always_on>1</always_on>
-			<visualize>true</visualize> 
-			<ray>
-				<scan>
-				  <horizontal>
-					<!-- Sick-LMS100 has  683 steps with 0.35139 Degree resolution-->
-					<resolution>1</resolution>
-					<max_angle>2.356000000</max_angle> <min_angle>-2.356000000</min_angle> <samples>1080</samples>     <!-- 135 to -135 Degree -->    
-					<!--max_angle>2.094400000</max_angle> <min_angle>-2.094400000</min_angle> <samples>683</samples--> <!-- 120 to -120 Degree --> 
-					<!--max_angle>1.745329252</max_angle> <min_angle>-1.745329252</min_angle> <samples>570</samples--> <!-- 100 to -100 Degree --> 
-					<!--max_angle>1.919862177</max_angle> <min_angle>-1.919862177</min_angle> <samples>626</samples--> <!-- 110 to -110 Degree -->
-					</horizontal>
-				</scan>
-				<range>
-					<min>0.2</min>
-					<max>20.0</max>
-					<resolution>0.01</resolution>
-				</range>
-				<noise>
-					<type>gaussian</type>
-					<mean>0.0</mean>
-					<stddev>0.01</stddev>
-				</noise>
-			</ray>
-			
-			<plugin name="gazebo_ros_laser_sick_driver" filename="libgazebo_ros_${driver_name}laser.so" >
-				<robotNamespace></robotNamespace>
-				<topicName>${name}/scan</topicName>
-				<frameName>${name}</frameName>
-			</plugin>
-		</sensor>
-	</gazebo>
+    <gazebo reference="${name}">
+	<sensor name="laser" type="${sensor_type}">
+	    <pose>0 0 0 0 0 0</pose>
+	    <update_rate>25</update_rate>
+	    <always_on>1</always_on>
+	    <visualize>true</visualize> 
+	    <ray>
+		<scan>
+		    <horizontal>
+			<!-- Sick-LMS100 has  683 steps with 0.35139 Degree resolution-->
+			<resolution>1</resolution>
+			<max_angle>2.356000000</max_angle> <min_angle>-2.356000000</min_angle> <samples>1080</samples>     <!-- 135 to -135 Degree -->    
+			<!--max_angle>2.094400000</max_angle> <min_angle>-2.094400000</min_angle> <samples>683</samples--> <!-- 120 to -120 Degree --> 
+			<!--max_angle>1.745329252</max_angle> <min_angle>-1.745329252</min_angle> <samples>570</samples--> <!-- 100 to -100 Degree --> 
+			<!--max_angle>1.919862177</max_angle> <min_angle>-1.919862177</min_angle> <samples>626</samples--> <!-- 110 to -110 Degree -->
+		    </horizontal>
+		</scan>
+		<range>
+		    <min>0.2</min>
+		    <max>20.0</max>
+		    <resolution>0.01</resolution>
+		</range>
+		<noise>
+		    <type>gaussian</type>
+		    <mean>0.0</mean>
+		    <stddev>0.01</stddev>
+		</noise>
+	    </ray>
+		
+	    <plugin name="gazebo_ros_laser_SICK_driver" filename="${driver_type}" >
+		<rosDebugLevel>Debug</rosDebugLevel>
+		<robotNamespace></robotNamespace>
+		<topicName>${name}/scan</topicName>
+		<frameName>${name}</frameName>
+	    </plugin>
+	</sensor>
+    </gazebo>
 </xacro:macro>
 
 </robot>

@@ -53,7 +53,7 @@ inline std::string GetModelName ( const sensors::SensorPtr &parent )
 {
     std::string modelName;
     std::vector<std::string> values;
-    std::string scopedName = parent->GetScopedName();
+    std::string scopedName = parent->ScopedName();
     boost::replace_all ( scopedName, "::", "," );
     boost::split ( values, scopedName, boost::is_any_of ( "," ) );
     if ( values.size() < 2 ) {
@@ -149,23 +149,23 @@ public:
      * @param _sdf sdf to read
      * @param _name of the plugin class
      **/
-    GazeboRos ( sensors::SensorPtr _parent, sdf::ElementPtr _sdf, const std::string &_plugin )
+    GazeboRos ( sensors::SensorPtr _parent, sdf::ElementPtr _sdf, const std::string &_plugin, bool _internalNS=false  )
         : sdf_ ( _sdf ), plugin_ ( _plugin ) {
-
-        std::stringstream ss;
-        if ( sdf_->HasElement ( "robotNamespace" ) ) {
-            namespace_ = sdf_->Get<std::string> ( "robotNamespace" );
+	namespace_ = _parent->Name();
+        if ( !sdf_->HasElement ( "robotNamespace" ) ) {
+            ROS_INFO ( "%s missing <robotNamespace>, defaults is %s", plugin_.c_str(), namespace_.c_str() );
+        }  else {
+            namespace_ = sdf_->GetElement ( "robotNamespace" )->Get<std::string>();
             if ( namespace_.empty() ) {
-                ss << "the 'robotNamespace' param was empty";
-                namespace_ = GetModelName ( _parent );
-            } else {
-                ss << "Using the 'robotNamespace' param: '" <<  namespace_ << "'";
+                namespace_ = GetModelName(_parent);
             }
-        } else {
-            ss << "the 'robotNamespace' param did not exit";
         }
+        if ( !namespace_.empty() ){
+            this->namespace_ += "/";
+	}
+	if(_internalNS) { rosnode_ = boost::shared_ptr<ros::NodeHandle> ( new ros::NodeHandle ( "~/" + namespace_ ) ); }
+	else            { rosnode_ = boost::shared_ptr<ros::NodeHandle> ( new ros::NodeHandle (        namespace_ ) ); }
         info_text = plugin_ + "(ns = " + namespace_ + ")";
-        ROS_INFO ( "%s: %s" , info_text.c_str(), ss.str().c_str() );
         readCommonParameter ();
     }
 

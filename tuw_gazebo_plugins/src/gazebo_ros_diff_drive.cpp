@@ -69,9 +69,6 @@ GazeboRosDiffDrive::GazeboRosDiffDrive() {}
 
 // Destructor
 GazeboRosDiffDrive::~GazeboRosDiffDrive() {
-  
-    ROS_DEBUG("Calling FiniChild in GazeboRosDiffDrive");
-    
     event::Events::DisconnectWorldUpdateBegin(this->update_connection_);
     
     odometry_publisher_.shutdown();
@@ -82,12 +79,13 @@ GazeboRosDiffDrive::~GazeboRosDiffDrive() {
     queue_.disable();
     alive_ = false;
     callback_queue_thread_.join();
+    
+    ROS_DEBUG("Destructed TUWGazeboRosDiffDrive Plugin");
 }
 
 // Load the controller
 void GazeboRosDiffDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _sdf )
 {
-
     this->parent = _parent;
     gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWDiffDrive" ) );
     // Make sure the ROS node for Gazebo has already been initialized
@@ -173,7 +171,6 @@ void GazeboRosDiffDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _sdf 
     // listen to the update event (broadcast every simulation iteration)
     this->update_connection_ =
         event::Events::ConnectWorldUpdateBegin ( boost::bind ( &GazeboRosDiffDrive::UpdateChild, this ) );
-
 }
 
 void GazeboRosDiffDrive::Reset()
@@ -286,16 +283,6 @@ void GazeboRosDiffDrive::UpdateChild()
         joints_[LEFT ]->SetParam("vel", 0, wheel_applied_vel[LEFT ] );
         joints_[RIGHT]->SetParam("vel", 0, wheel_applied_vel[RIGHT] );
     }
-}
-
-// Finalize the controller
-void GazeboRosDiffDrive::FiniChild()
-{
-    alive_ = false;
-    queue_.clear();
-    queue_.disable();
-    gazebo_ros_->node()->shutdown();
-    callback_queue_thread_.join();
 }
 
 void GazeboRosDiffDrive::getWheelVelocities()

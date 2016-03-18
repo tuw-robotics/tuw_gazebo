@@ -85,7 +85,6 @@ namespace gazebo {
 
     protected:
       virtual void UpdateChild();
-      virtual void FiniChild();
 
     private:
       void publishOdometry(double step_time);

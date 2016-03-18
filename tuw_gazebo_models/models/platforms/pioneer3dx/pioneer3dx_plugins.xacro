@@ -17,7 +17,8 @@
         <plugin name="differential_drive_controller" filename="libtuw_gazebo_ros_diff_drive.so">
             <rosDebugLevel>Debug</rosDebugLevel>
             <robotNamespace></robotNamespace>
-            <publishWheelTF>false</publishWheelTF>
+            <publishTf>true</publishTf>
+	    <publishWheelTF>true</publishWheelTF>
             <publishWheelJointState>true</publishWheelJointState>
             <alwaysOn>true</alwaysOn>
             <leftJoint>left_hub_joint</leftJoint>
