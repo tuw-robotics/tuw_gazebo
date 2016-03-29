@@ -11,11 +11,7 @@
     <child link="${name}"/>
   </joint>
   <link name="${name}">
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-    </inertial>
+    <xacro:box_inertial x="0.001" y="0.001"  z="0.001" mass="0.001" />
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>

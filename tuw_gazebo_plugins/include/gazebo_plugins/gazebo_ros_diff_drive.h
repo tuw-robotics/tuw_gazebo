@@ -80,8 +80,9 @@ namespace gazebo {
     public:
       GazeboRosDiffDrive();
       ~GazeboRosDiffDrive();
-      void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
-      void Reset();
+      virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
+      virtual void Reset();
+      virtual void Init();
 
     protected:
       virtual void UpdateChild();

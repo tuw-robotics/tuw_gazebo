@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
+    
+<xacro:macro name="BlueSteeringMount" params="name parent fb lr mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^"> 
+    
+    
+    <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
+	<origin xyz="0 0 0"  rpy="0 0 0"/> 
+    </xacro:property>
+	
+    <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->
+	<cylinder_inertial_with_origin radius="0.04" length="0.1666" mass="0.251"> <origin xyz="0 0 -0.23" rpy="0 0 0"/> </cylinder_inertial_with_origin>
+    </xacro:property>
+	
+    <xacro:property name="ThisLink2STL"> <!--this link 2 mesh center tf, file-->
+	<origin xyz="0 0 -0.371" rpy="${-pi/2} 0 0"/> 
+	<geometry> <mesh filename="file://${model_dir}/meshes/steering_mount_red.stl"/> </geometry>
+	<material name="red"/> 
+    </xacro:property>
+	
+    <xacro:property name="ThisLink2XML"> <!--this link 2 simple mesh center tf, file-->
+	<origin xyz="0 0 -0.23" rpy="0 0 0"/> 
+	<geometry> <cylinder length="0.1666" radius="0.04"/> </geometry>
+	<material name="red"/> 
+    </xacro:property>
+    
+    <!-- choosing the appropriate collision and visual mesh -->
+    <xacro:property name="ThisVisual"> <box size="0.0001 0.0001 0.0001" /> </xacro:property><!--no mesh-->
+    <xacro:property name="ThisCollis"> <box size="0.0001 0.0001 0.0001" /> </xacro:property><!--no mesh-->
+    <xacro:if value="${mesh_visual ==   'detailed'}"> <xacro:property name="ThisVisual">  <xacro:insert_block name="ThisLink2STL"/> </xacro:property> </xacro:if><!--detailed stl mesh-->
+    <xacro:if value="${mesh_collis ==   'detailed'}"> <xacro:property name="ThisCollis">  <xacro:insert_block name="ThisLink2STL"/> </xacro:property> </xacro:if><!--detailed stl mesh-->
+    <xacro:if value="${mesh_visual == 'simplified'}"> <xacro:property name="ThisVisual">  <xacro:insert_block name="ThisLink2XML"/> </xacro:property> </xacro:if><!--minimalist mesh-->
+    <xacro:if value="${mesh_collis == 'simplified'}"> <xacro:property name="ThisCollis">  <xacro:insert_block name="ThisLink2XML"/> </xacro:property> </xacro:if><!--minimalist mesh-->
+    
+    
+    <!-- joint and link definition -->
+    <joint name="${parent}${fb}${lr}2${name}${fb}${lr}_joint" type="fixed"><!--prismatic-->
+	<parent link="${parent}${fb}${lr}_link"/>
+	<child  link="${name}${fb}${lr}_link"/>
+	<axis   xyz="0 0 1"/>
+	<!--limit effort= "10" velocity="0.55" lower= "-0.17" upper="0.0"/-->
+	<!--dynamics damping="0.0" friction="0.0"/-->
+	<xacro:insert_block name="ParrentLink2ThisLink" />
+    </joint>
+
+    <link name="${name}${fb}${lr}_link">    
+	<xacro:insert_block name="ThisLink2Inert"/>
+	<visual>    <xacro:insert_block name="ThisVisual"/> </visual>
+	<collision> <xacro:insert_block name="ThisCollis"/> </collision>
+    </link>
+    <gazebo reference="${name}${fb}${lr}_link">
+	<material>Gazebo/Red</material>
+	<selfCollide>false</selfCollide>
+    </gazebo>
+	
+</xacro:macro>
+
+</robot>
+	
+	

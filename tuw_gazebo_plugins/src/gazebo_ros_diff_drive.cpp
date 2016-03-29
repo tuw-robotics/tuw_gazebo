@@ -80,7 +80,7 @@ GazeboRosDiffDrive::~GazeboRosDiffDrive() {
     alive_ = false;
     callback_queue_thread_.join();
     
-    ROS_DEBUG("Destructed TUWGazeboRosDiffDrive Plugin");
+    ROS_DEBUG("Destructed TUWDiffDrive Plugin");
 }
 
 // Load the controller
@@ -173,8 +173,13 @@ void GazeboRosDiffDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _sdf 
         event::Events::ConnectWorldUpdateBegin ( boost::bind ( &GazeboRosDiffDrive::UpdateChild, this ) );
 }
 
-void GazeboRosDiffDrive::Reset()
-{
+void GazeboRosDiffDrive::Init() {
+    gazebo::ModelPlugin::Init();
+}
+
+
+void GazeboRosDiffDrive::Reset() {
+  gazebo::ModelPlugin::Reset();
   last_update_time_ = parent->GetWorld()->GetSimTime();
   pose_encoder_.x = 0;
   pose_encoder_.y = 0;

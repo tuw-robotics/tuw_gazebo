@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="Blue" >
+    
+    <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/blue"/>
+    
+    <!-- Import colors (for Rviz)-->
+    <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
+
+    <!-- Import robot -->
+    <xacro:property name="model_dir" value="$(arg model_dir)/blue_body"/>
+    <xacro:include filename="${model_dir}/body.xacro"/>
+    <xacro:BlueBody name="body" parent="base" meshes="package://blue_gazebo/meshes" mesh_collis="simplified" mesh_visual="detailed"/><!-- simplified detailed empty-->
+  
+    <!-- Import platform plugins -->
+    <xacro:property name="model_dir" value="$(arg model_dir)"/>
+    <xacro:include filename="${model_dir}/blue_plugins.xacro" />
+    <xacro:BlueGazeboRosBridgePlugin        />
+    <xacro:BlueGazeboRosFlatControllerPlugin/> 
+  
+    <!-- Laser -->
+    <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
+    <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
+    <xacro:laser name="front_laser" parent="base_link" xyz="0 0.16 0.4" rpy="0 0 ${pi/2}" driver="cpu"/>
+
+    <!-- IMU -->
+    <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/imu"/>
+    <xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu.xacro"/>
+    <xacro:imu_sensor name="imu9dof" parent="base_link" xyz="0.0 0.05 0.262" rpy="0 0 ${pi/2}"/>
+     
+    <!-- Camera
+    <xacro:include filename="$(find blue_gazebo)/xacro/camera/camera.xacro"/>
+    <xacro:cam name="front_camera" parent="body" xyz="0 0 0.5" rpy="0 0 ${pi/2}"/>
+    -->
+  
+</robot>

@@ -46,6 +46,7 @@ catkin_package(
   tuw_gazebo_ros_diff_drive
   tuw_gazebo_ros_laser
   tuw_gazebo_ros_gpu_laser
+  tuw_gazebo_ros_imu9dof
   
   CATKIN_DEPENDS 
   std_msgs
@@ -65,7 +66,7 @@ catkin_package(
 add_dependencies(${PROJECT_NAME}_gencfg ${catkin_EXPORTED_TARGETS})
 
 ## Utils
-add_library(tuw_gazebo_ros_utils src/gazebo_ros_utils.cpp)
+add_library(tuw_gazebo_ros_utils src/gazebo_ros_utils.cpp src/noise_sim_model.cpp)
 target_link_libraries(tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_definitions(-fPIC) # what is this for?
@@ -75,7 +76,10 @@ add_library(tuw_gazebo_ros_diff_drive src/gazebo_ros_diff_drive.cpp)
 target_link_libraries(tuw_gazebo_ros_diff_drive tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_laser src/gazebo_ros_laser.cpp)
-target_link_libraries(tuw_gazebo_ros_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} RayPlugin ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(tuw_gazebo_ros_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_gpu_laser src/gazebo_ros_gpu_laser.cpp)
-target_link_libraries(tuw_gazebo_ros_gpu_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} GpuRayPlugin ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(tuw_gazebo_ros_gpu_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_library(tuw_gazebo_ros_imu9dof src/gazebo_ros_imu9dof.cpp)
+target_link_libraries(tuw_gazebo_ros_imu9dof tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})

@@ -23,9 +23,9 @@
   <xacro:laser name="front_laser" parent="chassis" xyz="0.16 0 0.125" rpy="0 0 0" driver="cpu"/>
   
   <!-- Laser -->
-  <!--xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/imu"/-->
-  <!--xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu.xacro"/>
-  <xacro:imu_sensor name="imu" parent="chassis" xyz="0.05 0.0 0.262" rpy="0 0 0"/-->
+  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/imu"/>
+  <xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu.xacro"/>
+  <xacro:imu_sensor name="imu9dof" parent="chassis" xyz="0.05 0.0 0.262" rpy="0 0 0"/>
   
   <!-- Camera 
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>

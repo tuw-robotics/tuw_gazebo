@@ -15,7 +15,7 @@
     <visual>
       <origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
       <geometry>
-		  <mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
       <material name="ChassisRed">
         <color rgba="0.851 0.0 0.0 1.0"/>
@@ -24,10 +24,10 @@
     <collision>
       <origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
       <geometry>
-		  <mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
     </collision>
-    <xacro:box_inertial x="0.36" y="0.26"  z="0.18" mass="9.0" />
+    <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> </box_inertial_with_origin>
   </link>
   <gazebo reference="${name}">
     <material value="Gazebo/Red"/>
@@ -55,7 +55,7 @@
         <mesh filename="file://${model_dir}/meshes/top.dae"/>
       </geometry>
     </collision>
-    <xacro:box_inertial x="0.445" y="0.38"  z="0.01" mass="1.0" />
+    <box_inertial_with_origin x="0.45" y="0.35"  z="0.001" mass="1.0"> <origin xyz="0.00 0 0.00" rpy="0 0 0"/> </box_inertial_with_origin>
   </link>
   <gazebo reference="top">
     <material value="Gazebo/Black"/>

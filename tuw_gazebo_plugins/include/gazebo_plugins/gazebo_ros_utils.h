@@ -35,6 +35,7 @@
 #define GAZEBO_ROS_UTILS_H
 #include <map>
 #include <boost/algorithm/string.hpp>
+#include <boost/graph/graph_concepts.hpp>
 
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
@@ -43,7 +44,8 @@
 
 namespace gazebo
 {
-
+    
+    
 /**
 * Accessing model name like suggested by nkoenig at http://answers.gazebosim.org/question/4878/multiple-robots-with-ros-plugins-sensor-plugin-vs/
 * @param parent
@@ -86,9 +88,9 @@ inline std::string GetRobotNamespace ( const sensors::SensorPtr &parent, const s
     } else {
         ss << "the 'robotNamespace' param did not exit";
     }
-    if ( pInfo != NULL ) {
-        ROS_INFO ( "%s Plugin (robotNamespace = %s), Info: %s" , pInfo, name_space.c_str(), ss.str().c_str() );
-    }
+//     if ( pInfo != NULL ) {
+//         ROS_INFO ( "%s Plugin (robotNamespace = %s), Info: %s" , pInfo, name_space.c_str(), ss.str().c_str() );
+//     }
     return name_space;
 }
 
@@ -100,6 +102,7 @@ inline std::string GetRobotNamespace ( const sensors::SensorPtr &parent, const s
 class GazeboRos
 {
 private:
+    sdf::ElementPtr base_sdf_;  /// base sdf
     sdf::ElementPtr sdf_;       /// sdf to read
     std::string plugin_;        /// name of the plugin class
     std::string namespace_;     /// name of the launched node
@@ -119,7 +122,7 @@ public:
      * @param _internalNS specifies weather the namespace is nested under /gazebo or not; defaults to false
      **/
     GazeboRos ( physics::ModelPtr &_parent, sdf::ElementPtr _sdf, const std::string &_plugin, bool _internalNS=false )
-        : sdf_ ( _sdf ), plugin_ ( _plugin ) {
+        : base_sdf_( _sdf ), sdf_ ( _sdf ), plugin_ ( _plugin ) {
         namespace_ = _parent->GetName ();
         if ( !sdf_->HasElement ( "robotNamespace" ) ) {
             ROS_INFO ( "%s missing <robotNamespace>, defaults is %s", plugin_.c_str(), namespace_.c_str() );
@@ -150,7 +153,7 @@ public:
      * @param _name of the plugin class
      **/
     GazeboRos ( sensors::SensorPtr _parent, sdf::ElementPtr _sdf, const std::string &_plugin, bool _internalNS=false  )
-        : sdf_ ( _sdf ), plugin_ ( _plugin ) {
+        : base_sdf_( _sdf ), sdf_ ( _sdf ), plugin_ ( _plugin ) {
 	namespace_ = _parent->Name();
         if ( !sdf_->HasElement ( "robotNamespace" ) ) {
             ROS_INFO ( "%s missing <robotNamespace>, defaults is %s", plugin_.c_str(), namespace_.c_str() );
@@ -169,6 +172,16 @@ public:
         readCommonParameter ();
     }
 
+    /**
+     * Returns in-use sdf data
+     * @return in-use sdf data
+     **/
+    sdf::ElementPtr& Sdf() { return sdf_; }
+    /**
+     * Returns base sdf data
+     * @return base sdf data
+     **/
+    sdf::ElementPtr& baseSdf() { return base_sdf_; }
     /**
      * Returns info text used for log messages
      * @return class name and node name as string
@@ -249,7 +262,7 @@ public:
     template <class T>
     void getParameter ( T &_value, const char *_tag_name ) {
         if ( sdf_->HasElement ( _tag_name ) ) {
-            _value = sdf_->GetElement ( _tag_name )->Get<T>();
+            _value = sdf_->GetElement ( _tag_name )->Get<T>();//TODO: should be Get<T>(_tag_name);
         }
         ROS_DEBUG ( "%s: <%s> = %s", info(), _tag_name, boost::lexical_cast<std::string> ( _value ).c_str() );
 

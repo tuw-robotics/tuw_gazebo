@@ -1,48 +1,48 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
 
 <!-- Front Laser --> 
 <xacro:macro name="laser" params="name parent xyz rpy driver:=cpu model_dir:=^">
   
-  <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
-  <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
-  
-  <joint name="${parent}_${name}_chassis_joint" type="fixed">
-	  <axis xyz="0 0 1" />
-	  <origin xyz="${xyz}" rpy="${rpy}"/>
-	  <parent link="${parent}"/>
-	  <child link="${name}_chassis"/>
-  </joint>
+    <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
+    <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
+
+    <joint name="${parent}_${name}_chassis_joint" type="fixed">
+	<axis xyz="0 0 1" />
+	<origin xyz="${xyz}" rpy="${rpy}"/>
+	<parent link="${parent}"/>
+	<child link="${name}_chassis"/>
+    </joint>
 	
-  <material name="SickBlue">
+    <material name="SickBlue">
 	<color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
-  </material>
+    </material>
   
-  <link name="${name}_chassis">
+    <link name="${name}_chassis">
 	<collision>
-	  <origin xyz="0 0 0.0751" rpy="0 0 0"/>
-	  <geometry>
+	    <origin xyz="0 0 0.0751" rpy="0 0 0"/>
+	    <geometry>
 		<box size="0.094 0.094 0.152"/>
-	  </geometry>
+	    </geometry>
 	</collision>
 	<visual>
-	  <geometry>
+	    <geometry>
 		<mesh filename="file://${model_dir}/meshes/Sick-LMS100.dae"/>
-	  </geometry>
-	  <material name="SickBlue"/>
+	    </geometry>
+	    <material name="SickBlue"/>
 	</visual>
 	<xacro:box_inertial x="0.094" y="0.094"  z="0.152" mass="1.1" />
-  </link>
+    </link>
   
   
-  <joint name="${name}_chassis_${name}_joint" type="fixed">
-	  <axis xyz="0 0 1" />
-	  <origin xyz="0 0 0.115" rpy="0 0 0"/>
-	  <parent link="${name}_chassis"/>
-	  <child link="${name}"/>
-  </joint>
+    <joint name="${name}_chassis_${name}_joint" type="fixed">
+	<axis xyz="0 0 1" />
+	<origin xyz="0 0 0.115" rpy="0 0 0"/>
+	<parent link="${name}_chassis"/>
+	<child link="${name}"/>
+    </joint>
   
-  <link name="${name}"/>
+    <link name="${name}"/>
     <gazebo reference="${name}">
 	<sensor name="laser" type="${sensor_type}">
 	    <pose>0 0 0 0 0 0</pose>

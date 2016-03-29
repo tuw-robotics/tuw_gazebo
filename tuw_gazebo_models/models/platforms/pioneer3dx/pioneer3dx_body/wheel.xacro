@@ -3,7 +3,7 @@
   xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_wheel" params="side parent xyz rpy radius model_dir:=^">   
+  <xacro:macro name="pioneer_wheel" params="side parent xyz rpy radius model_dir:=^ **contact_data">   
 
   <!-- Hubcap -->
   <joint name="${side}_hub_joint" type="continuous">
@@ -13,11 +13,7 @@
     <axis xyz="0 1 0"/>
   </joint>
   <link name="${side}_hub">
-    <inertial>
-      <mass value="0.01"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
-    </inertial>
+    <cylinder_inertial_with_origin radius="${radius}" length="0.03" mass="0.5"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -46,11 +42,7 @@
     <child link="${side}_wheel"/>
   </joint>
   <link name="${side}_wheel">
-    <inertial>
-      <mass value="0.5"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
-    </inertial>
+    <cylinder_inertial_with_origin radius="${radius}" length="0.03" mass="0.5"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -64,14 +56,13 @@
       <origin xyz="0 0 0" rpy="${-3.1415927/2} 0 0"/>
       <geometry>
         <!--<mesh filename="${meshes}/${side}_wheel.stl"/>-->
-        <cylinder radius="${radius}" length="0.01"/>
+        <cylinder radius="${radius}" length="0.001"/>
       </geometry>
     </collision>
   </link>
   <gazebo reference="${side}_wheel">
     <material value="Gazebo/Black"/>
-    <mu1 value="0.5"/>
-    <mu2 value="0.5"/>
+    <xacro:insert_block name="contact_data"/>
   </gazebo>
 
   

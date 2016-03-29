@@ -89,14 +89,12 @@ void GazeboRos ::readCommonParameter() {
         ROS_INFO("%s: <rosDebugLevel> = %s", info(), debugLevel.c_str());
     }
 
-
     tf_prefix_ = tf::getPrefixParam(*rosnode_);
-    if(tf_prefix_.empty())
-    {
+    if(tf_prefix_.empty()) {
         tf_prefix_ = namespace_;
         boost::trim_right_if(tf_prefix_,boost::is_any_of("/"));
     }
-    ROS_INFO("%s: <tf_prefix> = %s", info(), tf_prefix_.c_str());
+    ROS_DEBUG("%s: <tf_prefix> = %s", info(), tf_prefix_.c_str());
 }
 
 
@@ -104,7 +102,7 @@ void GazeboRos ::getParameterBoolean(bool &_value, const char *_tag_name, const 
     _value = _default;
     if (!sdf_->HasElement(_tag_name)) {
         ROS_WARN("%s: missing <%s> default is %s",
-                 info(), _tag_name,  (_default?"ture":"false"));
+                 info(), _tag_name,  (_default?"true":"false"));
     } else {
         getParameterBoolean(_value, _tag_name);
     }
@@ -129,7 +127,7 @@ void GazeboRos ::getParameterBoolean(bool &_value, const char *_tag_name) {
         }
     }
     ROS_DEBUG("%s: <%s> = %s",
-              info(), _tag_name,  (_value?"ture":"false"));
+              info(), _tag_name,  (_value?"true":"false"));
 
 }
 

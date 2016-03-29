@@ -54,7 +54,7 @@ GazeboRosLaser::~GazeboRosLaser() {
   parent_ray_sensor_->DisconnectUpdated(laser_connection_);
   pub_queue_.reset();
   ros_pub_laser_.shutdown();
-  ROS_DEBUG("Destructed TUWGazeboRosLaser Plugin");
+  ROS_DEBUG("Destructed TUWLaser Plugin");
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,37 +1,37 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
 
 <!-- Front Laser --> 
 <xacro:macro name="laser" params="name parent xyz rpy driver:=cpu model_dir:=^" >
   
-  <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
-  <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
-  
-  <joint name="${parent}_${name}_joint" type="fixed">
-      <axis xyz="0 0 1" />
-      <origin xyz="${xyz}" rpy="${rpy}"/>
-      <parent link="${parent}"/>
-      <child link="${name}"/>
+    <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
+    <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
+
+    <joint name="${parent}_${name}_joint" type="fixed">
+	<axis xyz="0 0 1" />
+	<origin xyz="${xyz}" rpy="${rpy}"/>
+	<parent link="${parent}"/>
+	<child link="${name}"/>
     </joint>
     
     <link name="${name}">
-      <collision>
-        <origin xyz="0 0 -0.025" rpy="0 0 ${-pi/2}"/>
-        <geometry>
-          <box size="0.1 0.1 0.1"/>
-        </geometry>
-      </collision>
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="file://${model_dir}/meshes/RPLidar_.dae"/>
-        </geometry>
-      </visual>
-      <inertial>
-        <mass value="1e-2" />
-        <origin xyz="0 0 -0.025" rpy="0 0 0"/>
-        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
-      </inertial>
+	<collision>
+	    <origin xyz="0 0 -0.025" rpy="0 0 ${-pi/2}"/>
+	    <geometry>
+		<box size="0.1 0.1 0.1"/>
+	    </geometry>
+	</collision>
+	<visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry>
+		<mesh filename="file://${model_dir}/meshes/RPLidar_.dae"/>
+	    </geometry>
+	</visual>
+	<inertial>
+	    <mass value="1e-2" />
+	    <origin xyz="0 0 -0.025" rpy="0 0 0"/>
+	    <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+	</inertial>
     </link>
     
     <gazebo reference="${name}">

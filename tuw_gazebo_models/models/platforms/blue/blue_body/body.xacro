@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+<xacro:include filename="chassis.xacro"/>
+<xacro:include filename="piston_steering_wheel.xacro"/>
+  
+<xacro:macro name="BlueBody" params="name parent meshes mesh_collis mesh_visual" >
+	
+    <!-- base_link -->
+    <link name="${parent}_link"/>
+
+    <!-- Chassis -->
+    <xacro:BlueChassis name="${name}" parent="${parent}"/>
+    
+    <!-- Piston-Steering-Wheel modules --> 
+    <Piston_SteerMnt_Steer_WheelMnt_Wheel fb="F" lr="R" parent="${name}" TransDirX= "1" TransDirY= "1" RotYaw="0"/>
+    <Piston_SteerMnt_Steer_WheelMnt_Wheel fb="F" lr="L" parent="${name}" TransDirX= "1" TransDirY="-1" RotYaw="0"/>
+    <Piston_SteerMnt_Steer_WheelMnt_Wheel fb="B" lr="R" parent="${name}" TransDirX="-1" TransDirY= "1" RotYaw="0"/>
+    <Piston_SteerMnt_Steer_WheelMnt_Wheel fb="B" lr="L" parent="${name}" TransDirX="-1" TransDirY="-1" RotYaw="0"/>
+    	
+</xacro:macro>
+
+</robot>

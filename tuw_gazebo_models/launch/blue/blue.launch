@@ -1,0 +1,24 @@
+<launch>
+
+  <arg name="rviz" default="0" />
+  <arg name="room" default="cave" />
+  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  
+  <!-- Gazebo world with environment -->
+  <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
+     <arg name="physics" value="$(arg physics)" />
+     <arg name="room"    value="$(arg room)"    />
+  </include>
+
+  <!-- Blue Robot -->
+  <include file="$(find tuw_gazebo_models)/launch/blue/blue.gazebo.launch">
+     <arg name="name" value="blue" />
+     <arg name="position" value="-x -7.0 -y -7.0 -z 0.00 -Y -0.78" />
+   </include>
+  
+  <!-- RVIZ   -->
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo_models)/launch/blue/blue.rviz" />
+  </group>
+  
+</launch>
