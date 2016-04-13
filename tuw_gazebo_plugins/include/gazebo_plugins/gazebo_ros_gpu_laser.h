@@ -106,6 +106,9 @@ namespace gazebo
     
     /// \brief tf prefix
     private: std::string tf_prefix_;
+    
+    /// \brief minimum sensor range ( whatever gazebo senses under this value is set to inf )
+    private: double snsRangeMin_;
   };
 }
 #endif //TUW_GAZEBO_ROS_GPU_LASER_H

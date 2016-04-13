@@ -54,7 +54,6 @@ GazeboRosGpuLaser::~GazeboRosGpuLaser() {
   parent_ray_sensor_->DisconnectUpdated(laser_connection_);
   pub_queue_.reset();
   ros_pub_laser_.shutdown();
-  ROS_DEBUG("Destructed TUWGpuLaser Plugin");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +62,13 @@ void GazeboRosGpuLaser::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf) {
 
     parent_ray_sensor_ = std::dynamic_pointer_cast<sensors::GpuRaySensor> ( _parent );
     if ( !parent_ray_sensor_ ) { gzthrow ( "GazeboRosGpuLaser controller requires a GpuRay Sensor as its parent" ); }
-    this->parent_ray_sensor_->SetActive ( false );// sensor data modification during a cycle set to false
+    parent_ray_sensor_->SetActive ( false );// sensor data modification during a cycle set to false
 
     gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWLaser" ) );
     gazebo_ros_->isInitialized(); // Make sure the ROS node for Gazebo has already been initialized
     gazebo_ros_->getParameter<std::string> ( frame_name_, "frameName", "front_laser" );
     gazebo_ros_->getParameter<std::string> ( topic_name_, "topicName", "front_laser/laser" );
+    gazebo_ros_->getParameter<double>      ( snsRangeMin_, "rangeMin" , 0.2 );
 
     using rosAO = ros::AdvertiseOptions;
     rosAO ao = rosAO::create<sensor_msgs::LaserScan> ( topic_name_, 1, std::bind ( &GazeboRosGpuLaser::LaserConnect   , this ),
@@ -109,7 +109,10 @@ void GazeboRosGpuLaser::OnScan(sensors::GpuRaySensorPtr &_ray) {
     laser_msg.range_max       = _ray->RangeMax();
     laser_msg.ranges.     resize ( _ray->RangeCount() );
     laser_msg.intensities.resize ( _ray->RangeCount() );
-    for( std::size_t i = 0; i < _ray->RangeCount(); ++i ) { laser_msg.ranges[i] = _ray->Range(i); laser_msg.intensities[i] = _ray->Retro(i); }
+    for( std::size_t i = 0; i < _ray->RangeCount(); ++i ) { 
+	if( _ray->Range(i) >= snsRangeMin_ ) { laser_msg.ranges[i] = _ray->Range(i); laser_msg.intensities[i] = _ray->Retro(i); }
+	else                                 { laser_msg.ranges[i] = 1./0./* inf */; laser_msg.intensities[i] = 0;              }
+    }
     
     pub_queue_->push ( laser_msg, ros_pub_laser_ );
 }

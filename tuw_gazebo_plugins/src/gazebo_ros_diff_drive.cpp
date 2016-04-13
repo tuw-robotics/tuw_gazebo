@@ -79,8 +79,6 @@ GazeboRosDiffDrive::~GazeboRosDiffDrive() {
     queue_.disable();
     alive_ = false;
     callback_queue_thread_.join();
-    
-    ROS_DEBUG("Destructed TUWDiffDrive Plugin");
 }
 
 // Load the controller

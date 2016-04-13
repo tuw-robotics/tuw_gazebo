@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pioneer3dx" >
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
     
   <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
     

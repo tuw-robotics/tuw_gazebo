@@ -18,7 +18,7 @@
 	<collision>
 	    <origin xyz="0 0 -0.025" rpy="0 0 0"/>
 	    <geometry>
-		<box size="0.1 0.1 0.1"/>
+		<box size="0.05 0.05 0.05"/>
 	    </geometry>
 	</collision>
 	<visual>
@@ -49,7 +49,7 @@
 		    </horizontal>
 		</scan>
 		<range>
-		    <min>0.08</min>
+		    <min>0.04</min>
 		    <max>5</max>
 		    <resolution>0.01</resolution>
 		</range>
@@ -65,6 +65,7 @@
 		<robotNamespace></robotNamespace>
 		<topicName>${name}/scan</topicName>
 		<frameName>${name}</frameName>
+		<rangeMin>0.2</rangeMin>
 	    </plugin>
 	</sensor>
     </gazebo>

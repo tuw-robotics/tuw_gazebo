@@ -62,7 +62,6 @@ GazeboRosImu9Dof::~GazeboRosImu9Dof() {
   pub_queue_mag_.reset();
   ros_pub_imu_.shutdown();
   ros_pub_mag_.shutdown();
-  ROS_DEBUG("Destructed TUWImu9Dof Plugin");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
