@@ -39,7 +39,7 @@
 #include <gazebo/sensors/MagnetometerSensor.hh>
 #include <gazebo/sensors/Noise.hh>
 
-#include <gazebo_plugins/gazebo_ros_imu9dof.h>
+#include <tuw_gazebo_plugins/gazebo_ros_imu9dof.h>
 
 
 #include <iostream>

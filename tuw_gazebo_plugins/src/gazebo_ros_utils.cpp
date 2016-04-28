@@ -32,7 +32,7 @@
  *********************************************************************/
 
 
-#include <gazebo_plugins/gazebo_ros_utils.h>
+#include <tuw_gazebo_plugins/gazebo_ros_utils.h>
 
 #include <sdf/sdf.hh>
 #include <tf/transform_listener.h>

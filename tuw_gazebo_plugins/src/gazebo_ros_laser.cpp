@@ -35,7 +35,7 @@
 
 #include <gazebo/sensors/RaySensor.hh>
 
-#include <gazebo_plugins/gazebo_ros_laser.h>
+#include <tuw_gazebo_plugins/gazebo_ros_laser.h>
 
 namespace gazebo
 {

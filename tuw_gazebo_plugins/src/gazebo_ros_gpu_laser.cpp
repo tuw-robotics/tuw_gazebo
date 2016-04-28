@@ -35,7 +35,7 @@
 
 #include <gazebo/sensors/GpuRaySensor.hh>
 
-#include <gazebo_plugins/gazebo_ros_gpu_laser.h>
+#include <tuw_gazebo_plugins/gazebo_ros_gpu_laser.h>
 
 namespace gazebo
 {

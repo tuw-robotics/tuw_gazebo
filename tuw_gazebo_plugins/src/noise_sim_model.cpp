@@ -34,7 +34,7 @@
 #include <string.h>
 #include <math.h>
 
-#include <gazebo_plugins/noise_sim_model.h>
+#include <tuw_gazebo_plugins/noise_sim_model.h>
 
 using namespace std;
 using namespace tuw;
