@@ -44,8 +44,8 @@
 #include <sensor_msgs/LaserScan.h>
 
 #include <gazebo/common/Plugin.hh>
-#include <gazebo_plugins/gazebo_ros_utils.h>
-#include <gazebo_plugins/PubQueue.h>
+#include <tuw_gazebo_plugins/gazebo_ros_utils.h>
+#include <tuw_gazebo_plugins/PubQueue.h>
 
 namespace gazebo
 {

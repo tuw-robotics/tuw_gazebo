@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros 
   dynamic_reconfigure 
   gazebo_msgs 
-  gazebo_plugins 
 )
 
 

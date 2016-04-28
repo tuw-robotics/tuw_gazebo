@@ -47,9 +47,9 @@
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/common.hh>
 #include <gazebo/physics/physics.hh>
-#include <gazebo_plugins/PubQueue.h>
-#include <gazebo_plugins/gazebo_ros_utils.h>
-#include <gazebo_plugins/noise_sim_model.h>
+#include <tuw_gazebo_plugins/PubQueue.h>
+#include <tuw_gazebo_plugins/gazebo_ros_utils.h>
+#include <tuw_gazebo_plugins/noise_sim_model.h>
 
 namespace gazebo
 {
