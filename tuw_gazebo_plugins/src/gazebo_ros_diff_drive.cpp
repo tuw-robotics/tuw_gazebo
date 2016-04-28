@@ -255,33 +255,32 @@ void GazeboRosDiffDrive::UpdateChild()
 
         double current_speed[2];
 
-        current_speed[LEFT] = joints_[LEFT]->GetVelocity ( 0 )   * ( wheel_diameter_ / 2.0 );
+        current_speed[LEFT ] = joints_[LEFT ]->GetVelocity ( 0 ) * ( wheel_diameter_ / 2.0 );
         current_speed[RIGHT] = joints_[RIGHT]->GetVelocity ( 0 ) * ( wheel_diameter_ / 2.0 );
 
         if ( wheel_accel == 0 ||
-                ( fabs ( wheel_speed_[LEFT] - current_speed[LEFT] ) < 0.01 ) ||
-                ( fabs ( wheel_speed_[RIGHT] - current_speed[RIGHT] ) < 0.01 ) ) {
+                ( ( fabs ( wheel_speed_[LEFT ] - current_speed[LEFT ] ) < 0.01 ) &&
+                  ( fabs ( wheel_speed_[RIGHT] - current_speed[RIGHT] ) < 0.01 ) ) ) {
             //if max_accel == 0, or target speed is reached
-            wheel_applied_vel[LEFT ] = wheel_speed_[LEFT]/ ( wheel_diameter_ / 2.0 );
-            wheel_applied_vel[RIGHT] = wheel_speed_[RIGHT]/ ( wheel_diameter_ / 2.0 );
+	    wheel_speed_instr_[LEFT ] = wheel_speed_[LEFT ];
+	    wheel_speed_instr_[RIGHT] = wheel_speed_[RIGHT];
         } else {
-            if ( wheel_speed_[LEFT]>=current_speed[LEFT] )
-                wheel_speed_instr_[LEFT]+=fmin ( wheel_speed_[LEFT]-current_speed[LEFT],  wheel_accel * seconds_since_last_update );
+            if ( wheel_speed_[LEFT ] >= current_speed[LEFT ] )
+                wheel_speed_instr_[LEFT ] += fmin ( wheel_speed_[LEFT ]-current_speed[LEFT],  wheel_accel * seconds_since_last_update );
             else
-                wheel_speed_instr_[LEFT]+=fmax ( wheel_speed_[LEFT]-current_speed[LEFT], -wheel_accel * seconds_since_last_update );
+                wheel_speed_instr_[LEFT ] += fmax ( wheel_speed_[LEFT ]-current_speed[LEFT], -wheel_accel * seconds_since_last_update );
 
-            if ( wheel_speed_[RIGHT]>current_speed[RIGHT] )
-                wheel_speed_instr_[RIGHT]+=fmin ( wheel_speed_[RIGHT]-current_speed[RIGHT], wheel_accel * seconds_since_last_update );
+            if ( wheel_speed_[RIGHT] >  current_speed[RIGHT] )
+                wheel_speed_instr_[RIGHT] += fmin ( wheel_speed_[RIGHT]-current_speed[RIGHT],  wheel_accel * seconds_since_last_update );
             else
-                wheel_speed_instr_[RIGHT]+=fmax ( wheel_speed_[RIGHT]-current_speed[RIGHT], -wheel_accel * seconds_since_last_update );
+                wheel_speed_instr_[RIGHT] += fmax ( wheel_speed_[RIGHT]-current_speed[RIGHT], -wheel_accel * seconds_since_last_update );
 
             // ROS_INFO("actual wheel speed = %lf, issued wheel speed= %lf", current_speed[LEFT], wheel_speed_[LEFT]);
             // ROS_INFO("actual wheel speed = %lf, issued wheel speed= %lf", current_speed[RIGHT],wheel_speed_[RIGHT]);
-
-            wheel_applied_vel[LEFT ] = wheel_speed_instr_[LEFT ] / ( wheel_diameter_ / 2.0 );
-            wheel_applied_vel[RIGHT] = wheel_speed_instr_[RIGHT] / ( wheel_diameter_ / 2.0 );
         }
-        last_update_time_+= common::Time ( update_period_ );
+        wheel_applied_vel[LEFT ] = wheel_speed_instr_[LEFT ] / ( wheel_diameter_ / 2.0 );
+	wheel_applied_vel[RIGHT] = wheel_speed_instr_[RIGHT] / ( wheel_diameter_ / 2.0 );
+        last_update_time_ = current_time;
         
         joints_[LEFT ]->SetParam("vel", 0, wheel_applied_vel[LEFT ] );
         joints_[RIGHT]->SetParam("vel", 0, wheel_applied_vel[RIGHT] );
@@ -295,14 +294,14 @@ void GazeboRosDiffDrive::getWheelVelocities()
     double vr = x_;
     double va = rot_;
 
-    wheel_speed_[LEFT] = vr + va * wheel_separation_ / 2.0;
-    wheel_speed_[RIGHT] = vr - va * wheel_separation_ / 2.0;
+    wheel_speed_[LEFT ] = vr - va * wheel_separation_ / 2.0;
+    wheel_speed_[RIGHT] = vr + va * wheel_separation_ / 2.0;
 }
 
 void GazeboRosDiffDrive::cmdVelCallback ( const geometry_msgs::Twist::ConstPtr& cmd_msg )
 {
     boost::mutex::scoped_lock scoped_lock ( lock );
-    x_ = cmd_msg->linear.x;
+    x_   = cmd_msg->linear.x;
     rot_ = cmd_msg->angular.z;
 }
 
@@ -317,7 +316,7 @@ void GazeboRosDiffDrive::QueueThread()
 
 void GazeboRosDiffDrive::UpdateOdometryEncoder()
 {
-    double vl = joints_[LEFT]->GetVelocity ( 0 );
+    double vl = joints_[LEFT ]->GetVelocity ( 0 );
     double vr = joints_[RIGHT]->GetVelocity ( 0 );
     common::Time current_time = parent->GetWorld()->GetSimTime();
     double seconds_since_last_update = ( current_time - last_odom_update_ ).Double();
