@@ -3,7 +3,7 @@
 
 <xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
     
-<xacro:macro name="BlueWheelMount" params="name parent fb lr mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^"> 
+<xacro:macro name="I2wsWheelMount" params="name parent fb lr mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^"> 
     
     
     <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->

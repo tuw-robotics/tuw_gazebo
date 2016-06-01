@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="I2wsSSW" >
+
+<xacro:include filename="steering_mount.xacro"/>
+<xacro:include filename="wheel_mount.xacro"/>
+<xacro:include filename="wheel.xacro"/>
+
+<xacro:macro name="Steer_WheelMnt_Wheel" params="fb lr parent TransDirX TransDirY RotYaw"> <!--fb : front, back ; lr: left, right -->
+	
+	<xacro:property name="steering_mount_name" value="steermnt" />
+	<xacro:property name="wheel_mount_name"    value="wheelmnt" />
+	<xacro:property name="wheel_name"          value="wheel" />
+
+	<xacro:I2wsSteeringMount name="${steering_mount_name}" fb="${fb}" lr="${lr}" parent="${parent}" TransDirX="${TransDirX}" TransDirY="${TransDirY}" RotYaw="${RotYaw}"/>                      
+	<xacro:I2wsWheelMount    name="${wheel_mount_name}"    fb="${fb}" lr="${lr}" parent="${steering_mount_name}"/>
+	<xacro:I2wsWheel         name="${wheel_name}"          fb="${fb}" lr="${lr}" parent="${wheel_mount_name}"   wheel_radius="0.05" wheel_length="0.001"/><!--0.025-->
+
+</xacro:macro>
+
+</robot>
+
+
+
+
+
+
+
+

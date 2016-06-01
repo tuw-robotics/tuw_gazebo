@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="Blue" >
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="I2ws" >
     
-    <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/blue"/>
+    <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/i2ws"/>
     
     <!-- Import colors (for Rviz)-->
     <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
 
     <!-- Import robot -->
-    <xacro:property name="model_dir" value="$(arg model_dir)/blue_body"/>
+    <xacro:property name="model_dir" value="$(arg model_dir)/i2ws_body"/>
     <xacro:include filename="${model_dir}/body.xacro"/>
-    <xacro:BlueBody name="body" parent="base" mesh_collis="simplified" mesh_visual="detailed"/><!-- simplified detailed empty-->
+    <xacro:I2wsBody name="body" parent="base" mesh_collis="simplified" mesh_visual="detailed"/><!-- simplified detailed empty-->
   
     <!-- Import platform plugins -->
     <xacro:property name="model_dir" value="$(arg model_dir)"/>
-    <xacro:include filename="${model_dir}/blue_plugins.xacro" />
-    <xacro:BlueGazeboRosBridgePlugin        />
-    <xacro:BlueGazeboRosFlatControllerPlugin/> 
+    <xacro:include filename="${model_dir}/i2ws_plugins.xacro" />
+    <!--xacro:BlueGazeboRosBridgePlugin        /-->
+    <!--xacro:BlueGazeboRosFlatControllerPlugin/--> 
   
     <!-- Laser -->
     <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
     <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-    <xacro:laser name="front_laser" parent="base_link" xyz="0 0.16 0.4" rpy="0 0 ${pi/2}" driver="cpu"/>
+    <xacro:laser name="front_laser" parent="base_link" xyz="0 0.16 0.4" rpy="0 0 ${pi/2}" driver="gpu"/>
 
     <!-- IMU -->
     <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/imu"/>

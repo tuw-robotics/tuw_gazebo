@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-<xacro:include filename="blue_plugins_param.xacro"/>
+<xacro:include filename="i2ws_plugins_param.xacro"/>
   
 <xacro:macro name="BlueGazeboRosBridgePlugin">
     <gazebo>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="Swivel" params="parent fb lr TransDirX TransDirY RotYaw **contact_data model_dir:=^">   
+  
+  <xacro:property name="x_ParrentLink2Piston_Link"  value= "0.1750" />
+  <xacro:property name="y_ParrentLink2Piston_Link"  value= "0.1744" />
+  <xacro:property name="z_ParrentLink2Piston_Link"  value="-0.0270" />
+
+  <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
+      <origin xyz="${x_ParrentLink2Piston_Link*TransDirX} ${y_ParrentLink2Piston_Link*TransDirY} ${z_ParrentLink2Piston_Link}"  rpy="0 0 ${RotYaw}"/> 
+  </xacro:property>
+      
+      
+  <!-- Swivel -->
+  <joint name="chassis_swivel${fb}${lr}_joint" type="continuous">
+    <xacro:insert_block name="ParrentLink2ThisLink"/>
+    <axis xyz="0 0 1"/>
+    <anchor xyz="0 0 0"/>
+    <limit effort="100" velocity="100" k_velocity="0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+    <parent link="${parent}_link"/>
+    <child link="swivel${fb}${lr}"/>
+  </joint>
+  <link name="swivel${fb}${lr}">
+    <box_inertial_with_origin x="0.07" y="0.07" z="0.05" mass="0.1"> <origin xyz="0 0 0" rpy="0 0 0"/> </box_inertial_with_origin>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${model_dir}/meshes/swivel.stl"/>
+      </geometry>
+      <material name="swivel">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="swivel${fb}${lr}">
+    <material value="Gazebo/Grey"/>
+  </gazebo>
+  
+  <!-- Center Wheel -->
+  <joint name="swivel${fb}${lr}_wheel_joint" type="continuous">
+    <origin xyz="-0.026 0 -0.016" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <anchor xyz="0 0 0"/>
+    <limit effort="100" velocity="100" k_velocity="0"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+    <parent link="swivel${fb}${lr}"/>
+    <child link="center_wheel${fb}${lr}"/>
+  </joint>
+  <link name="center_wheel${fb}${lr}">
+    <cylinder_inertial_with_origin radius="0.0375" length="0.03" mass="0.1"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${model_dir}/meshes/center_wheel.stl"/>
+      </geometry>
+      <material name="WheelBlack">
+        <color rgba="0.117 0.117 0.117 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="${-3.1415927/2.0} 0 0"/>
+      <geometry>
+        <cylinder radius="0.0375" length="0.001"/> <!--radius="0.0375"-->
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="center_wheel${fb}${lr}">
+    <material value="Gazebo/Black"/>
+    <xacro:insert_block name="contact_data"/>
+  </gazebo>
+    
+  <!-- Center Hubcap -->
+  <joint name="wheel_hubcap${fb}${lr}_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="center_wheel${fb}${lr}"/>
+    <child link="center_hubcap${fb}${lr}"/>
+  </joint>
+  <link name="center_hubcap${fb}${lr}">
+    <cylinder_inertial_with_origin radius="0.01" length="0.03" mass="0.01"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${model_dir}/meshes/center_hubcap.stl"/>
+      </geometry>
+      <material name="swivel">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>   
+  <gazebo reference="center_hubcap${fb}${lr}">
+    <material value="Gazebo/Grey"/>
+    <xacro:insert_block name="contact_data"/>
+  </gazebo>
+  
+  </xacro:macro>
+
+</robot>
