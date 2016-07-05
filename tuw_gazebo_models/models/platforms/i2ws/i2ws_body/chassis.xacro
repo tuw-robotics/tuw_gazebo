@@ -6,7 +6,7 @@
 <xacro:macro name="I2wsChassis" params="name parent mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^" >   
     
     <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
-	<origin xyz="0 0 0.07" rpy="0 0 0"/> 
+	<origin xyz="0 0 0.07" rpy="0 0 ${-pi/2}"/> 
     </xacro:property>
 
     <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->
@@ -16,7 +16,7 @@
     <xacro:property name="ThisLink2XML"> <!--this link 2 simple mesh center tf, file-->
 	<origin xyz="0 0 0.20" rpy="0 0 0"/> 
 	<geometry> <box size="0.5 0.5 0.4" /> </geometry> 
-	<material name="grey"/> 
+	<material name="light_grey"/> 
     </xacro:property>
         
     <!-- choosing the appropriate collision and visual mesh -->

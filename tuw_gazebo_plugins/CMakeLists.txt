@@ -71,7 +71,9 @@ IF(IwsControllersSource)
 endif()
 
 IF(IwsControllersSource)
-  catkin_package(LIBRARIES tuw_gazebo_ros_iws_controller tuw_gazebo_ros_iws_controller_plugin tuw_gazebo_ros_i4ws_bridge_plugin)
+  catkin_package(LIBRARIES 
+  tuw_gazebo_ros_iws_controller  tuw_gazebo_ros_iws_controller_plugin  tuw_gazebo_ros_i4ws_bridge_plugin
+  tuw_gazebo_ros_i2ws_controller tuw_gazebo_ros_i2ws_controller_plugin tuw_gazebo_ros_i2ws_bridge_plugin)
 endif()
 
 catkin_package(

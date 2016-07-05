@@ -13,8 +13,6 @@
 	<robotBaseFrame>base_link</robotBaseFrame>
 	
 	<tr_piston_joint>pistonFR2steermntFR_joint</tr_piston_joint>
-	<tl_piston_joint>pistonFL2steermntFL_joint</tl_piston_joint>
-	<br_piston_joint>pistonBR2steermntBR_joint</br_piston_joint>
 	<bl_piston_joint>pistonBL2steermntBL_joint</bl_piston_joint>
 	<piston_hi_stop>       0.0</piston_hi_stop>
 	<piston_lo_stop>     -0.17</piston_lo_stop>
@@ -24,8 +22,6 @@
 	<piston_friction>      0.0</piston_friction>
 	
 	<tr_steering_joint>steermntFR2wheelmntFR_joint</tr_steering_joint>
-	<tl_steering_joint>steermntFL2wheelmntFL_joint</tl_steering_joint>
-	<br_steering_joint>steermntBR2wheelmntBR_joint</br_steering_joint>
 	<bl_steering_joint>steermntBL2wheelmntBL_joint</bl_steering_joint>
 	<steering_hi_stop>     2.70526034</steering_hi_stop>    <!-- rad -->
 	<steering_lo_stop>    -2.70526034</steering_lo_stop>    <!-- rad -->
@@ -35,11 +31,9 @@
 	<steering_friction>           0.0</steering_friction>   <!--Nm   -->
 	
 	<tr_wheel_joint>wheelmntFR2wheelFR_joint</tr_wheel_joint>
-	<tl_wheel_joint>wheelmntFL2wheelFL_joint</tl_wheel_joint>
-	<br_wheel_joint>wheelmntBR2wheelBR_joint</br_wheel_joint>
 	<bl_wheel_joint>wheelmntBL2wheelBL_joint</bl_wheel_joint>
 	<wheel_max_torque>           10.0</wheel_max_torque> <!-- Nm  -->
-	<wheel_max_vel>             100.0</wheel_max_vel>    <!--rad/s-->
+	<wheel_max_vel>              10.0</wheel_max_vel>    <!--rad/s-->
 	<wheel_damping>               0.1</wheel_damping>    <!--Nms/rad-->
 	<wheel_friction>              0.0</wheel_friction>   <!--Nm   -->
 	
@@ -51,7 +45,7 @@
 	<odometryTopic>odom</odometryTopic>
 	<odometryFrame>odom</odometryFrame>
 	
-	<useForceControl>true</useForceControl>
+	<useForceControl>false</useForceControl>
 </xacro:property>
 
 

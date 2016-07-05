@@ -19,14 +19,14 @@
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder radius="0.03" length="0.1"/>
       </geometry>
       <material name="grey"/>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder radius="0.03" length="0.1"/>
       </geometry>
@@ -40,6 +40,7 @@
     <sensor type="camera" name="camera1">
       <update_rate>30.0</update_rate>
       <camera name="head">
+        <pose>0 0 0 0 -${pi/2}  ${pi/2}</pose>
         <horizontal_fov>1.3962634</horizontal_fov>
         <image>
           <width>800</width>

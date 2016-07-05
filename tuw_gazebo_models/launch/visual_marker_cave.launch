@@ -1,0 +1,22 @@
+<launch>
+  <node name="artag1" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0001 -gazebo -model artag_001 -y -3.4 -x -5 -z 0.5 -Y -0.2" />
+  <node name="artag2" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0002 -gazebo -model artag_002 -y -4.25 -x 0.3 -z 0.5 -Y 0.0" />
+  <node name="artag3" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0003 -gazebo -model artag_003 -y -0.75 -x 5.6 -z 0.5 -Y -0.11" />
+  <node name="artag4" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0004 -gazebo -model artag_004 -y 0.03 -x -0.95 -z 0.5 -Y -0.92" />
+  <node name="artag5" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0005 -gazebo -model artag_005 -y -0.88 -x 2.55 -z 0.5 -Y -0.35" />
+  <node name="artag6" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0006 -gazebo -model artag_006 -y 3.85 -x -0.2 -z 0.5 -Y 0" />
+  <node name="artag7" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0007 -gazebo -model artag_007 -y 2.22 -x -4.2 -z 0.5 -Y 0" />
+  <node name="artag8" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0008 -gazebo -model artag_008 -y 6.44 -x -3.5 -z 0.5 -Y 0.76" />
+  <node name="artag9" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0009 -gazebo -model artag_009 -y 3.05 -x -2.9 -z 0.5 -Y 1.56" />
+  <node name="artag10" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0010 -gazebo -model artag_010 -y -2.0 -x -5.6 -z 0.5 -Y -1.6" />
+  <node name="artag11" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0011 -gazebo -model artag_011 -y 3.5 -x -4.91 -z 0.5 -Y -1.55" />
+  <node name="artag12" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0012 -gazebo -model artag_012 -y 6.65 -x -5.9 -z 0.5 -Y -0.91" />
+  <node name="artag13" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0013 -gazebo -model artag_013 -y 4.95 -x -1.1 -z 0.5 -Y -1.55" />
+  <node name="artag14" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0014 -gazebo -model artag_014 -y 1.63 -x -0.75 -z 0.5 -Y -2.44" />
+  <node name="artag15" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0015 -gazebo -model artag_015 -y -3.2 -x -1.15 -z 0.5 -Y -1.55" />
+  <node name="artag16" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0016 -gazebo -model artag_016 -y -6.4 -x 4.37 -z 0.5 -Y -1.55" />
+  <node name="artag17" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0017 -gazebo -model artag_017 -y 5.9 -x 1.4 -z 0.5 -Y 2.40" />
+  <node name="artag18" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0018 -gazebo -model artag_018 -y 2.8 -x 4.87 -z 0.5 -Y 2.59" />
+  <node name="artag19" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0019 -gazebo -model artag_019 -y -3.37 -x 2.5 -z 0.5 -Y 1.58" />
+  <node name="artag20" pkg="gazebo_ros" type="spawn_model" args="-database BchThin_0020 -gazebo -model artag_020 -y -2.19 -x -3.85 -z 0.5 -Y 1.57" />
+</launch>

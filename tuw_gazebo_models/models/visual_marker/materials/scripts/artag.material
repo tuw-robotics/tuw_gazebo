@@ -1,0 +1,317 @@
+material BchThin_0000/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0000.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0001/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0001.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0002/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0002.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0003/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0003.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0004/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0004.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0005/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0005.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0006/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0006.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0007/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0007.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0008/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0008.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0009/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0009.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0010/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0010.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0011/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0011.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0012/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0012.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0013/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0013.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0014/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0014.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0015/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0015.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0016/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0016.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0017/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0017.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0018/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0018.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+material BchThin_0019/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0019.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
+material BchThin_0020/Diffuse
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture BchThin_0020.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
