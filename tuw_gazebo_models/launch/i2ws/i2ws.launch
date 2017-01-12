@@ -3,6 +3,7 @@
   <arg name="rviz" default="0" />
   <arg name="room" default="" />
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  <arg name="position" default="-x 0.0 -y 0.0 -z 0.0" />
   
   <!-- Gazebo world with environment -->
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
@@ -13,7 +14,7 @@
   <!-- Blue Robot -->
   <include file="$(find tuw_gazebo_models)/launch/i2ws/i2ws.gazebo.launch">
      <arg name="name" value="i2ws" />
-     <!--arg name="position" value="-x -7.0 -y -7.0 -z 0.00 -Y -0.78" /-->
+     <arg name="position" value="-x -7.0 -y -7.0 -z 0.00 -Y +0.78" />
    </include>
   
   <!-- RVIZ   -->

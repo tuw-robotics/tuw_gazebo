@@ -93,16 +93,16 @@ namespace gazebo
     private: PubQueue<sensor_msgs::LaserScan>::Ptr pub_queue_;
     
     /// \brief ROS lase sensor publisher
-    private: ros::Publisher ros_pub_laser_;
+    private: std::vector<ros::Publisher> ros_pub_laser_;
     
     
     
     //SDF Params:
     /// \brief topic name
-    private: std::string topic_name_;
+    private: std::vector<std::string> topic_name_;
     
     /// \brief frame transform name, should match link name
-    private: std::string frame_name_;
+    private: std::vector<std::string> frame_name_;
     
     /// \brief tf prefix
     private: std::string tf_prefix_;

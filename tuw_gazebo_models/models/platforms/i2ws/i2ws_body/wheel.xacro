@@ -6,7 +6,7 @@
 <xacro:macro name="I2wsWheel" params="name parent fb lr wheel_radius wheel_length mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^"> 
     
     <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
-	<origin xyz="0 0 -0.060"  rpy="0 ${pi/2} 0"/> 
+	<origin xyz="0 0 0"  rpy="${pi} ${pi/2} 0"/> 
     </xacro:property>
 
     <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->
@@ -14,7 +14,7 @@
     </xacro:property>
 
     <xacro:property name="ThisLink2STL"> <!--this link 2 mesh center tf, file-->
-	<origin xyz="0 0 0" rpy="0 -${pi/2} 0"/> 
+	<origin xyz="0 0 0" rpy="0 ${pi/2} 0"/> 
 	<geometry> <mesh filename="file://${model_dir}/meshes/wheel_red.stl"/> </geometry>
 	<material name="white"/> 
     </xacro:property>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-<xacro:property name="BlueGazeboPluginsData"> 
+<xacro:property name="P3dxGazeboPluginsData"> 
 	<rosDebugLevel>Debug</rosDebugLevel>
 	<robotNamespace></robotNamespace>
 	<publish_joints_states>true</publish_joints_states>
@@ -9,21 +9,12 @@
 	<alwaysOn>true</alwaysOn>
 	<updateRate>100.0</updateRate>
 	
-	<steering_joints_names>steermntFL2wheelmntFL_joint, steermntBL2wheelmntBL_joint, steermntBR2wheelmntBR_joint, steermntFR2wheelmntFR_joint</steering_joints_names>
-	<steering_hi_stop>     2.70526034</steering_hi_stop>    <!-- rad -->
-	<steering_lo_stop>    -2.70526034</steering_lo_stop>    <!-- rad -->
-	<steering_max_torque>        10.0</steering_max_torque> <!-- Nm  -->
-	<steering_max_vel>            5.0</steering_max_vel>    <!--rad/s-->
-	<steering_damping>            0.1</steering_damping>    <!--Nms/rad-->
-	<steering_friction>           0.0</steering_friction>   <!--Nm   -->
-	
-	<revolute_joints_names>wheelmntFL2wheelFL_joint, wheelmntBL2wheelBL_joint, wheelmntBR2wheelBR_joint, wheelmntFR2wheelFR_joint</revolute_joints_names>
+	<revolute_joints_names>right_hub_joint, left_hub_joint</revolute_joints_names>
 	<revolute_max_torque>        10.0</revolute_max_torque> <!-- Nm  -->
 	<revolute_max_vel>           50.0</revolute_max_vel>    <!--rad/s-->
 	<revolute_damping>            0.1</revolute_damping>    <!--Nms/rad-->
 	<revolute_friction>           0.0</revolute_friction>   <!--Nm   -->
 	
-	<steering_measures_type>measured_position</steering_measures_type>
 	<revolute_measures_type>measured_velocity</revolute_measures_type>
 	
 	<publish_odom_ground_truth>true</publish_odom_ground_truth>
@@ -35,6 +26,8 @@
 	<joints_measures_topic>joint_measures</joints_measures_topic>
 	<base_cmd_topic>base_cmds</base_cmd_topic>
 	<joints_cmd_topic>joint_cmds</joints_cmd_topic>
+	
+	
 </xacro:property>
 
 

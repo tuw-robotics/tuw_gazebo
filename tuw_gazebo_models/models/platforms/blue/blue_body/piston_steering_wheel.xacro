@@ -16,7 +16,7 @@
 	<xacro:BluePiston        name="${piston_name}"         fb="${fb}" lr="${lr}" parent="${parent}" TransDirX="${TransDirX}" TransDirY="${TransDirY}" RotYaw="${RotYaw}"/>
 	<xacro:BlueSteeringMount name="${steering_mount_name}" fb="${fb}" lr="${lr}" parent="${piston_name}"        />                      
 	<xacro:BlueWheelMount    name="${wheel_mount_name}"    fb="${fb}" lr="${lr}" parent="${steering_mount_name}"/>
-	<xacro:BlueWheel         name="${wheel_name}"          fb="${fb}" lr="${lr}" parent="${wheel_mount_name}"   wheel_radius="0.05" wheel_length="0.001"/><!--0.025-->
+	<xacro:BlueWheel         name="${wheel_name}"          fb="${fb}" lr="${lr}" parent="${wheel_mount_name}"   wheel_radius="0.05" wheel_length="0.0005"/><!--0.025-->
 
 </xacro:macro>
 

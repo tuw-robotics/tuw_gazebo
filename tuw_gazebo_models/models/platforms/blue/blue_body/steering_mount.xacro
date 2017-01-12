@@ -7,21 +7,21 @@
     
     
     <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
-	<origin xyz="0 0 0"  rpy="0 0 0"/> 
+	<origin xyz="0 0 ${-0.309-0.060}"  rpy="0 0 0"/> 
     </xacro:property>
 	
     <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->
-	<cylinder_inertial_with_origin radius="0.04" length="0.1666" mass="0.251"> <origin xyz="0 0 -0.23" rpy="0 0 0"/> </cylinder_inertial_with_origin>
+	<cylinder_inertial_with_origin radius="0.04" length="0.1666" mass="0.251"> <origin xyz="0 0 ${-0.23+0.309+0.060}" rpy="0 0 0"/> </cylinder_inertial_with_origin>
     </xacro:property>
 	
     <xacro:property name="ThisLink2STL"> <!--this link 2 mesh center tf, file-->
-	<origin xyz="0 0 -0.371" rpy="${-pi/2} 0 0"/> 
+	<origin xyz="0 0 ${+0.309-0.371+0.060}" rpy="${-pi/2} 0 0"/> 
 	<geometry> <mesh filename="file://${model_dir}/meshes/steering_mount_red.stl"/> </geometry>
 	<material name="red"/> 
     </xacro:property>
 	
     <xacro:property name="ThisLink2XML"> <!--this link 2 simple mesh center tf, file-->
-	<origin xyz="0 0 -0.23" rpy="0 0 0"/> 
+	<origin xyz="0 0 ${-0.23+0.309+0.060}" rpy="0 0 0"/> 
 	<geometry> <cylinder length="0.1666" radius="0.04"/> </geometry>
 	<material name="red"/> 
     </xacro:property>

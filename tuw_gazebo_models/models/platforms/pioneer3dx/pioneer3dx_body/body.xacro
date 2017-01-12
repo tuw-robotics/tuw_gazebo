@@ -24,11 +24,11 @@
     
     <!-- Wheels -->
     <xacro:property name="contact_data">
-      <mu1 value="0.7"/>
-      <mu2 value="0.7"/>
-      <kp value="100000000.0"/>
-      <kd value="1000.0"/>
-      <minDepth value="0.002"/>
+        <mu1 value="5.9"/>
+	<mu2 value="5.9"/>
+	<minDepth value="0.002"/>
+	<kp value="1000000.0"/>
+	<kd value="10.0"/>
     </xacro:property>
     <xacro:pioneer_swivel             parent="${name}"  xyz="-0.185 0    0.055" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_swivel>
     <xacro:pioneer_wheel side="right" parent="${name}"  xyz=" 0    -0.15 0.09"  rpy="0 0 0" radius="0.09"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>

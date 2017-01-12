@@ -53,7 +53,7 @@ GazeboRosGpuLaser::GazeboRosGpuLaser() {
 GazeboRosGpuLaser::~GazeboRosGpuLaser() {
   parent_ray_sensor_->DisconnectUpdated(laser_connection_);
   pub_queue_.reset();
-  ros_pub_laser_.shutdown();
+  for ( auto& ros_pub_laserI : ros_pub_laser_) { ros_pub_laserI.shutdown(); }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,16 +65,24 @@ void GazeboRosGpuLaser::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf) {
     parent_ray_sensor_->SetActive ( false );// sensor data modification during a cycle set to false
 
     gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWLaser" ) );
-    gazebo_ros_->isInitialized(); // Make sure the ROS node for Gazebo has already been initialized
-    gazebo_ros_->getParameter<std::string> ( frame_name_, "frameName", "front_laser" );
-    gazebo_ros_->getParameter<std::string> ( topic_name_, "topicName", "front_laser/laser" );
+    std::string frame_names, topic_names;
+    gazebo_ros_->getParameter<std::string> ( frame_names , "frameName", "front_laser" );
+    gazebo_ros_->getParameter<std::string> ( topic_names , "topicName", "front_laser/laser" );
     gazebo_ros_->getParameter<double>      ( snsRangeMin_, "rangeMin" , 0.2 );
-
-    using rosAO = ros::AdvertiseOptions;
-    rosAO ao = rosAO::create<sensor_msgs::LaserScan> ( topic_name_, 1, std::bind ( &GazeboRosGpuLaser::LaserConnect   , this ),
-                                                                       std::bind ( &GazeboRosGpuLaser::LaserDisconnect, this ), ros::VoidPtr(), NULL );
-    ros_pub_laser_ = gazebo_ros_->node()->advertise ( ao );
-
+    
+    boost::erase_all ( frame_names, " " ); boost::split ( frame_name_, frame_names, boost::is_any_of ( "," ) );
+    boost::erase_all ( topic_names, " " ); boost::split ( topic_name_, topic_names, boost::is_any_of ( "," ) );
+    if( frame_name_.size() != topic_name_.size() ) {
+	gzthrow ( "In GazeboRosGpuLaser, number of topic names does not match number of frame names" );
+    }
+    ros_pub_laser_.resize( topic_name_.size() );
+    for ( size_t i = 0; i < ros_pub_laser_.size(); ++i ) {
+	using rosAO = ros::AdvertiseOptions;
+	rosAO ao = rosAO::create<sensor_msgs::LaserScan> ( topic_name_[i], 1, std::bind ( &GazeboRosGpuLaser::LaserConnect   , this ),
+									      std::bind ( &GazeboRosGpuLaser::LaserDisconnect, this ), ros::VoidPtr(), NULL );
+	ros_pub_laser_[i] = gazebo_ros_->node()->advertise ( ao );
+    }
+    
     pub_multi_queue.startServiceThread();
     pub_queue_ = pub_multi_queue.addPub<sensor_msgs::LaserScan>();
     
@@ -99,7 +107,7 @@ void GazeboRosGpuLaser::OnScan(sensors::GpuRaySensorPtr &_ray) {
     // corresponding ROS message and publish it.
     sensor_msgs::LaserScan laser_msg;
     laser_msg.header.stamp    = ros::Time ( _ray->LastUpdateTime().sec, _ray->LastUpdateTime().nsec );
-    laser_msg.header.frame_id = gazebo_ros_->getNamespace() + frame_name_;
+    laser_msg.header.frame_id = gazebo_ros_->getNamespace()/* + frame_name_*/;
     laser_msg.angle_min       = _ray->AngleMin().Radian();
     laser_msg.angle_max       = _ray->AngleMax().Radian();
     laser_msg.angle_increment = _ray->AngleResolution();
@@ -113,8 +121,10 @@ void GazeboRosGpuLaser::OnScan(sensors::GpuRaySensorPtr &_ray) {
 	if( _ray->Range(i) >= snsRangeMin_ ) { laser_msg.ranges[i] = _ray->Range(i); laser_msg.intensities[i] = _ray->Retro(i); }
 	else                                 { laser_msg.ranges[i] = 1./0./* inf */; laser_msg.intensities[i] = 0;              }
     }
-    
-    pub_queue_->push ( laser_msg, ros_pub_laser_ );
+    for ( size_t i = 0; i < ros_pub_laser_.size(); ++i ) {
+	laser_msg.header.frame_id = gazebo_ros_->getNamespace() + frame_name_[i];
+	pub_queue_->push ( laser_msg, ros_pub_laser_[i] );
+    }
 }
 
 }

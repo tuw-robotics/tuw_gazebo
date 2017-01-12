@@ -14,8 +14,8 @@
     <xacro:I2wsChassis name="${name}" parent="${parent}"/>
     
     <!-- Piston-Steering-Wheel modules --> 
-    <Steer_WheelMnt_Wheel fb="F" lr="R" parent="${name}" TransDirX=  "1" TransDirY= "-1" RotYaw="0"/>
-    <Steer_WheelMnt_Wheel fb="B" lr="L" parent="${name}" TransDirX= "-1" TransDirY=  "1" RotYaw="0"/>
+    <Steer_WheelMnt_Wheel fb="F" lr="L" parent="${name}" TransDirX=  "1" TransDirY= "-1" RotYaw="0"/>
+    <Steer_WheelMnt_Wheel fb="B" lr="R" parent="${name}" TransDirX= "-1" TransDirY=  "1" RotYaw="0"/>
     
     
     <xacro:property name="swivel_contact_data">
@@ -25,8 +25,8 @@
       <kd value="1000.0"/>
       <minDepth value="0.002"/>
     </xacro:property>
-    <Swivel fb="F" lr="L" parent="${name}" TransDirX=  "1" TransDirY=  "1" RotYaw="0"> <container> <xacro:insert_block name="swivel_contact_data"/> </container> </Swivel> 
-    <Swivel fb="B" lr="R" parent="${name}" TransDirX= "-1" TransDirY= "-1" RotYaw="0"> <container> <xacro:insert_block name="swivel_contact_data"/> </container> </Swivel>
+    <Swivel fb="F" lr="R" parent="${name}" TransDirX=  "1" TransDirY=  "1" RotYaw="0"> <container> <xacro:insert_block name="swivel_contact_data"/> </container> </Swivel> 
+    <Swivel fb="B" lr="L" parent="${name}" TransDirX= "-1" TransDirY= "-1" RotYaw="0"> <container> <xacro:insert_block name="swivel_contact_data"/> </container> </Swivel>
     	
 </xacro:macro>
 

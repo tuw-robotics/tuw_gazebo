@@ -14,7 +14,7 @@
     </xacro:property>
 
     <xacro:property name="ThisLink2STL"> <!--this link 2 mesh center tf, file-->
-	<origin xyz="0 0   0" rpy="${pi/2} 0 ${pi}"/> 
+	<origin xyz="0 0   0" rpy="${pi/2} 0 ${pi/2}"/> 
 	<geometry> <mesh filename="file://${model_dir}/meshes/mobile_base_red.stl"/> </geometry> 
 	<material name="light_blue"/> 
     </xacro:property>

@@ -18,19 +18,19 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
-    <visual>
+    <!--visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder radius="0.03" length="0.1"/>
       </geometry>
       <material name="grey"/>
-    </visual>
-    <collision>
+    </visual-->
+    <!--collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <cylinder radius="0.03" length="0.1"/>
       </geometry>
-    </collision>
+    </collision-->
   </link>
   <gazebo reference="${name}">
     <material value="Gazebo/Grey"/>
@@ -41,7 +41,7 @@
       <update_rate>30.0</update_rate>
       <camera name="head">
         <pose>0 0 0 0 -${pi/2}  ${pi/2}</pose>
-        <horizontal_fov>1.3962634</horizontal_fov>
+        <horizontal_fov>1.7</horizontal_fov>
         <image>
           <width>800</width>
           <height>800</height>
@@ -68,7 +68,7 @@
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
         <frameName>${name}</frameName>
-        <hackBaseline>0.07</hackBaseline>
+        <hackBaseline>0.00</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>
         <distortionK3>0.0</distortionK3>

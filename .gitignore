@@ -57,6 +57,6 @@ devel
 ./src/CMakeLists.txt
 
 # Private stuff
-tuw_gazebo_plugins/cfg/gazebo_ros_iws_drive/
-tuw_gazebo_plugins/include/tuw_gazebo_plugins/gazebo_ros_iws_drive/
-tuw_gazebo_plugins/src/gazebo_ros_iws_drive/
+#tuw_gazebo_plugins/cfg/gazebo_ros_iws_drive/
+#tuw_gazebo_plugins/include/tuw_gazebo_plugins/gazebo_ros_iws_drive/
+#tuw_gazebo_plugins/src/gazebo_ros_iws_drive/

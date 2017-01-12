@@ -6,7 +6,7 @@
 <xacro:macro name="I2wsChassis" params="name parent mesh_collis:=^|simplified mesh_visual:=^|detailed model_dir:=^" >   
     
     <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
-	<origin xyz="0 0 0.07" rpy="0 0 ${-pi/2}"/> 
+	<origin xyz="0 0 0.07" rpy="0 0 0"/> 
     </xacro:property>
 
     <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->

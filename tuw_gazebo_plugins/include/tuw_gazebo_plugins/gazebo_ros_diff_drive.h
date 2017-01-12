@@ -80,12 +80,13 @@ namespace gazebo {
     public:
       GazeboRosDiffDrive();
       ~GazeboRosDiffDrive();
-      virtual void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
-      virtual void Reset();
-      virtual void Init();
+      void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf) override;
+      void Reset() override;
+      void Init() override;
 
     protected:
-      virtual void UpdateChild();
+      void UpdateChild();
+      void FiniChild();
 
     private:
       void publishOdometry(double step_time);
@@ -126,6 +127,7 @@ namespace gazebo {
       std::string odometry_frame_;
       std::string robot_base_frame_;
       bool publish_tf_;
+      bool legacy_mode_;
       // Custom Callback Queue
       ros::CallbackQueue queue_;
       boost::thread callback_queue_thread_;

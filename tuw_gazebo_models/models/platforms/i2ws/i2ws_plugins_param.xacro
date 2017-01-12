@@ -1,28 +1,15 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-<xacro:property name="BlueGazeboPluginsData"> 
+<xacro:property name="I2wsGazeboPluginsData"> 
 	<rosDebugLevel>Debug</rosDebugLevel>
 	<robotNamespace></robotNamespace>
-	<publishJointStates>true</publishJointStates>
-	<publishTfs>true</publishTfs>
-	<publishSimWorldOdom>true</publishSimWorldOdom>
+	<publish_joints_states>true</publish_joints_states>
+	<publish_tfs>false</publish_tfs>
 	<alwaysOn>true</alwaysOn>
 	<updateRate>100.0</updateRate>
 	
-	<robotBaseFrame>base_link</robotBaseFrame>
-	
-	<tr_piston_joint>pistonFR2steermntFR_joint</tr_piston_joint>
-	<bl_piston_joint>pistonBL2steermntBL_joint</bl_piston_joint>
-	<piston_hi_stop>       0.0</piston_hi_stop>
-	<piston_lo_stop>     -0.17</piston_lo_stop>
-	<piston_max_torque>    0.0</piston_max_torque>
-	<piston_max_vel>       0.0</piston_max_vel>
-	<piston_damping>       0.0</piston_damping>
-	<piston_friction>      0.0</piston_friction>
-	
-	<tr_steering_joint>steermntFR2wheelmntFR_joint</tr_steering_joint>
-	<bl_steering_joint>steermntBL2wheelmntBL_joint</bl_steering_joint>
+	<steering_joints_names>steermntFL2wheelmntFL_joint, steermntBR2wheelmntBR_joint</steering_joints_names>
 	<steering_hi_stop>     2.70526034</steering_hi_stop>    <!-- rad -->
 	<steering_lo_stop>    -2.70526034</steering_lo_stop>    <!-- rad -->
 	<steering_max_torque>        10.0</steering_max_torque> <!-- Nm  -->
@@ -30,22 +17,26 @@
 	<steering_damping>            0.1</steering_damping>    <!--Nms/rad-->
 	<steering_friction>           0.0</steering_friction>   <!--Nm   -->
 	
-	<tr_wheel_joint>wheelmntFR2wheelFR_joint</tr_wheel_joint>
-	<bl_wheel_joint>wheelmntBL2wheelBL_joint</bl_wheel_joint>
-	<wheel_max_torque>           10.0</wheel_max_torque> <!-- Nm  -->
-	<wheel_max_vel>              10.0</wheel_max_vel>    <!--rad/s-->
-	<wheel_damping>               0.1</wheel_damping>    <!--Nms/rad-->
-	<wheel_friction>              0.0</wheel_friction>   <!--Nm   -->
+	<revolute_joints_names>wheelmntFL2wheelFL_joint, wheelmntBR2wheelBR_joint</revolute_joints_names>
+	<revolute_max_torque>        10.0</revolute_max_torque> <!-- Nm  -->
+	<revolute_max_vel>           50.0</revolute_max_vel>    <!--rad/s-->
+	<revolute_damping>            0.1</revolute_damping>    <!--Nms/rad-->
+	<revolute_friction>           0.0</revolute_friction>   <!--Nm   -->
 	
-	<jointsStatesTopic>joint_states</jointsStatesTopic>
-	<jointsMeasurementsTopic>joint_measures</jointsMeasurementsTopic>
-	<baseCommandTopic>base_cmds</baseCommandTopic>
-	<jointsCommandTopic>joint_cmds</jointsCommandTopic>
+	<steering_measures_type>measured_position</steering_measures_type>
+	<revolute_measures_type>measured_velocity</revolute_measures_type>
 	
-	<odometryTopic>odom</odometryTopic>
-	<odometryFrame>odom</odometryFrame>
+	<publish_odom_ground_truth>true</publish_odom_ground_truth>
+	<model_base_frame>ground_truth/base_link</model_base_frame>
+	<joints_states_topic>ground_truth/joint_states</joints_states_topic>
+	<odom_topic>ground_truth/odom</odom_topic>
+	<odom_frame>/map</odom_frame>
 	
-	<useForceControl>false</useForceControl>
+	<joints_measures_topic>joint_measures</joints_measures_topic>
+	<base_cmd_topic>base_cmds</base_cmd_topic>
+	<joints_cmd_topic>joint_cmds</joints_cmd_topic>
+	
+	
 </xacro:property>
 
 

@@ -41,8 +41,9 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>tuw_artoolkitplus</run_depend>
-  <run_depend>tuw_uvc</run_depend>
+  <run_depend>tuw_gazebo_models</run_depend>
+  <run_depend>tuw_gazebo_plugins</run_depend>
+  <run_depend>tuw_gazebo_launches</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

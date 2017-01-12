@@ -1,11 +1,22 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(tuw_gazebo_plugins)
 
-set(IwsControllersSource False)
-if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/gazebo_ros_iws_drive/)
-  set(IwsControllersSource True)
-  MESSAGE(STATUS "Found IWS Controller source files. Afferent libraries will be build!")
-endif()
+add_compile_options(-std=c++14  -fext-numeric-literals -lmlg) ## for c++ 2014
+
+SET(CMAKE_BUILD_TYPE Release)
+
+MESSAGE( STATUS "CMAKE_BUILD_TYPE:              " ${CMAKE_BUILD_TYPE} )
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fno-strength-reduce -pipe ")# -Og
+set(CMAKE_CSS_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -pipe -Ofast")
+
+if(CMAKE_BUILD_TYPE MATCHES Release)
+MESSAGE( STATUS "CMAKE_CSS_FLAGS_RELEASE:       " ${CMAKE_CSS_FLAGS_RELEASE} )
+endif(CMAKE_BUILD_TYPE MATCHES Release)
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+MESSAGE( STATUS "CMAKE_CXX_FLAGS_DEBUG:         " ${CMAKE_CXX_FLAGS_DEBUG} )
+endif(CMAKE_BUILD_TYPE MATCHES Debug)
+
 
 
 find_package(catkin REQUIRED COMPONENTS 
@@ -19,26 +30,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   nav_msgs
   gazebo_msgs 
-  tuw_gazebo_msgs 
+  tuw_nav_msgs
 )
-
-IF(IwsControllersSource)
-    find_package(catkin REQUIRED COMPONENTS 
-    roscpp 
-    rospy 
-    nodelet 
-    urdf 
-    tf 
-    tf2_ros 
-    dynamic_reconfigure 
-    std_msgs
-    nav_msgs
-    gazebo_msgs 
-    tuw_gazebo_msgs
-    tuw_control 
-    tuw_geometry
-    )
-endif()
 
 include (FindPkgConfig)
 if (PKG_CONFIG_FOUND)
@@ -66,36 +59,18 @@ execute_process(COMMAND
 
 catkin_python_setup()
 
-IF(IwsControllersSource)
-  generate_dynamic_reconfigure_options( cfg/gazebo_ros_iws_drive/GazeboRosIwsControllerPlugin.cfg cfg/gazebo_ros_iws_drive/GazeboRosI4wsBridgePlugin.cfg )
-endif()
-
-IF(IwsControllersSource)
-  catkin_package(LIBRARIES 
-  tuw_gazebo_ros_iws_controller  tuw_gazebo_ros_iws_controller_plugin  tuw_gazebo_ros_i4ws_bridge_plugin
-  tuw_gazebo_ros_i2ws_controller tuw_gazebo_ros_i2ws_controller_plugin tuw_gazebo_ros_i2ws_bridge_plugin)
-endif()
+generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg )
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES 
-  tuw_gazebo_ros_utils 
-  tuw_gazebo_ros_diff_drive
-  tuw_gazebo_ros_laser
-  tuw_gazebo_ros_gpu_laser
-  tuw_gazebo_ros_imu9dof
-  
+    tuw_gazebo_ros_utils 
+    tuw_gazebo_ros_diff_drive
+    tuw_gazebo_ros_laser
+    tuw_gazebo_ros_gpu_laser
+    tuw_gazebo_ros_imu9dof
+    tuw_gazebo_ros_bridge_model  
   CATKIN_DEPENDS 
-  roscpp 
-  rospy 
-  nodelet 
-  urdf 
-  tf 
-  tf2_ros 
-  dynamic_reconfigure 
-  std_msgs
-  gazebo_msgs 
-  tuw_gazebo_msgs 
   DEPENDS 
     gazebo 
     SDF
@@ -127,6 +102,9 @@ add_definitions(-fPIC) # what is this for?
 add_library(tuw_gazebo_ros_diff_drive src/gazebo_ros_diff_drive.cpp)
 target_link_libraries(tuw_gazebo_ros_diff_drive tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(tuw_gazebo_ros_tricycle_drive src/gazebo_ros_tricycle_drive.cpp)
+target_link_libraries(tuw_gazebo_ros_tricycle_drive tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 add_library(tuw_gazebo_ros_laser src/gazebo_ros_laser.cpp)
 target_link_libraries(tuw_gazebo_ros_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
@@ -136,17 +114,17 @@ target_link_libraries(tuw_gazebo_ros_gpu_laser tuw_gazebo_ros_utils ${GAZEBO_LIB
 add_library(tuw_gazebo_ros_imu9dof src/gazebo_ros_imu9dof.cpp)
 target_link_libraries(tuw_gazebo_ros_imu9dof tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-IF(IwsControllersSource)
-  add_subdirectory(src/gazebo_ros_iws_drive)
-endif()
-
+add_library(tuw_gazebo_ros_bridge_model src/gazebo_ros_bridge_model.cpp)
+target_link_libraries(tuw_gazebo_ros_bridge_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS 
   tuw_gazebo_ros_utils 
   tuw_gazebo_ros_diff_drive
+  tuw_gazebo_ros_tricycle_drive
   tuw_gazebo_ros_laser
   tuw_gazebo_ros_gpu_laser
   tuw_gazebo_ros_imu9dof
+  tuw_gazebo_ros_bridge_model
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )

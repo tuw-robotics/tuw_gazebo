@@ -17,7 +17,9 @@
         <plugin name="differential_drive_controller" filename="libtuw_gazebo_ros_diff_drive.so">
 	    <robotNamespace></robotNamespace>
             <rosDebugLevel>Debug</rosDebugLevel>
-	    <alwaysOn>true</alwaysOn>
+            <legacyMode>false</legacyMode>
+            <alwaysOn>true</alwaysOn>
+            <alwaysOn>true</alwaysOn>
 	    <updateRate>10.0</updateRate>
 	    
 	    <robotBaseFrame>base_link</robotBaseFrame>
@@ -25,7 +27,8 @@
 	    
 	    <commandTopic>cmd_vel</commandTopic>
             <odometryTopic>odom</odometryTopic>
-            <odometrySource>world</odometrySource>
+            <!-- odom source world or encoder, world uses the simulated ground truth and encoder the wheel odometry -->
+            <odometrySource>encoder</odometrySource>
 	    
             <leftJoint>left_hub_joint</leftJoint>
             <rightJoint>right_hub_joint</rightJoint>
@@ -43,4 +46,27 @@
     </gazebo>
     
   </xacro:macro>
+  
+  
+    <xacro:include filename="pioneer3dx_plugins_param.xacro"/>
+    
+    <xacro:macro name="P3dxRosBridgeModelPlugin">
+	<gazebo>
+	    <plugin name="tuw_gazebo_ros_bridge_model_plugin" filename="libtuw_gazebo_ros_bridge_model.so">
+		<xacro:insert_block name="P3dxGazeboPluginsData" /> 
+	    </plugin>
+	</gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="p3dx_joints_state_publisher" params="ns">        
+	<gazebo>
+	    <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+		<robotNamespace>${ns}</robotNamespace>
+		<jointName>   chassis_swivel_joint, swivel_wheel_joint</jointName>
+		<updateRate>50.0</updateRate>
+		<alwaysOn>true</alwaysOn>
+	    </plugin>
+	</gazebo>
+    </xacro:macro>
+  
 </robot>
