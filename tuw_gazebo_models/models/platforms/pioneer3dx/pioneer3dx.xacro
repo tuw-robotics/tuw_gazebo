@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
     
-  <xacro:arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
+  <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
+  <xacro:arg name="namespace"   default="p3dx"/>
+  <xacro:arg name="plugin_type" default="tuw"/> <!-- tuw or generic. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
@@ -12,14 +14,21 @@
   <xacro:pioneer3dx_body name="chassis" parent="base_link"/>
   
   <!-- Import platform plugins -->
-  <xacro:property name="model_dir" value="$(arg model_dir)"/>
+  <xacro:property name="model_dir"   value="$(arg model_dir)"/>
+  <xacro:property name="namespace"   value="$(arg namespace)"/>
+  <xacro:property name="plugin_type" value="$(arg plugin_type)"/>
   <xacro:include filename="${model_dir}/pioneer3dx_plugins.xacro" />
-  <!--xacro:pioneer3dx_diff_drive             /--> <!-- Motor  plugin -->
-  <!--xacro:pioneer3dx_joints_state_publisher /--> <!-- Joints plugin -->
   
-  <xacro:P3dxRosBridgeModelPlugin/>
+  <xacro:if value="${plugin_type == 'tuw'}"> 
+    <xacro:P3dxRosBridgeModelPlugin/> <!-- Motor  plugin -->
+  </xacro:if>
+  <xacro:if value="${plugin_type == 'generic'}"> 
+    <xacro:pioneer3dx_diff_drive/> <!-- Motor  plugin -->
+  </xacro:if>
+  
+  <!-- Joints plugin -->
   <xacro:p3dx_joints_state_publisher ns=""/>
-  <xacro:p3dx_joints_state_publisher ns="p3dx/ground_truth"/>
+  <xacro:p3dx_joints_state_publisher ns="${namespace}/ground_truth"/>
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>

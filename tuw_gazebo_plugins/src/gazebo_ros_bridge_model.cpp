@@ -169,6 +169,11 @@ void GazeboRosBridgeModelPlugin::loadParameters(physics::ModelPtr _parent, sdf::
 	}
     }
     for(auto& setJointCmdTypeI : setJointCmd) { setJointCmdTypeI = []( physics::JointPtr& _joint, double _cmd ){}; }
+    
+    jointsCmd_.type_steering = "cmd_position";
+    jointsCmd_.type_revolute = "cmd_position";
+    setCmdMode(STEER, jointsCmd_.type_steering);
+    setCmdMode(REVOL, jointsCmd_.type_revolute);
 }
 
 void GazeboRosBridgeModelPlugin::setCmdMode(size_t _jointsTypeIdx, const std::string& _mode) {
@@ -180,7 +185,9 @@ void GazeboRosBridgeModelPlugin::setCmdMode(size_t _jointsTypeIdx, const std::st
     else if ( !_mode.compare("cmd_torque  ") ) { setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){ _joint->SetForce   ( 0, _cmd ); }; }
     else {
 	setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){}; 
-	ROS_ERROR("%s: Joint cmd mode: \"%s\" is not supported", gazeboRos_->info(), _mode.c_str() );
+	if (joints_[_jointsTypeIdx].size() > 0) {
+	    ROS_ERROR("%s: Joint cmd mode: \"%s\" is not supported", gazeboRos_->info(), _mode.c_str() );
+	}
     }
 }
 
@@ -213,6 +220,9 @@ void GazeboRosBridgeModelPlugin::loadJoints() {
 	    if( joints_[REVOL].back() == nullptr ) { ROS_ERROR ( "%s: Name of revolute joint number %lu (%s) not found in model!", gazeboRos_->info(), i, revolJointsNamesVec[i].c_str() ); }
 	}
     }
+    
+    jointsCmd_.revolute.resize(joints_[REVOL].size(), 0);
+    jointsCmd_.steering.resize(joints_[STEER].size(), 0);
 }
 
 
@@ -262,7 +272,6 @@ void GazeboRosBridgeModelPlugin::UpdateChild() {
     } 
     for ( size_t i = 0; i < jointsCmd_.steering.size(); ++i ) { setJointCmd[STEER](joints_[STEER][i], jointsCmd_.steering[i]); }
     for ( size_t i = 0; i < jointsCmd_.revolute.size(); ++i ) { setJointCmd[REVOL](joints_[REVOL][i], jointsCmd_.revolute[i]); }
-    
 }
 
 void GazeboRosBridgeModelPlugin::callbackConfig ( tuw_gazebo_plugins::GazeboRosBridgeModelPluginConfig& _config, uint32_t _level ) {

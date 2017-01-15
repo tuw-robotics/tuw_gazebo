@@ -10,7 +10,7 @@
     <axis xyz="0 0 1"/>
     <anchor xyz="0 0 0"/>
     <limit effort="100" velocity="100" k_velocity="0"/>
-    <joint_properties damping="0.0" friction="0.0"/>
+    <joint_properties damping="0.1" friction="0.0"/>
     <parent link="${parent}"/>
     <child link="swivel"/>
   </joint>
@@ -60,6 +60,7 @@
     </inertial-->
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
+
       <geometry>
         <mesh filename="file://${model_dir}/meshes/center_wheel.stl"/>
       </geometry>

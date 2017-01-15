@@ -10,6 +10,7 @@
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
      <arg name="physics" value="$(arg physics)" />
      <arg name="room"    value="$(arg room)"    />
+     <arg name="world_name" value="blue_ground_plane" />
   </include>
 
   <!-- Robot with diff drive -->

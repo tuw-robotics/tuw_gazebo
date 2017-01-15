@@ -3,11 +3,12 @@
   <arg name="robot_name" default="p3dx" />
   <arg name="position" default="-x 0.0 -y 0.0 -z 0.01" />
   <arg name="model_dir" default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx" />
+  <arg name="plugin_type" default="tuw" /> <!-- tuw or generic. If something else is set, no plugin will be loaded-->
     
   <group ns="$(arg robot_name)">
 
     <!-- Load the URDF into the ROS Parameter Server -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/pioneer3dx.xacro' model_dir:=$(arg model_dir)"/>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/pioneer3dx.xacro' model_dir:=$(arg model_dir) namespace:=$(arg robot_name) plugin_type:=$(arg plugin_type)"/>
   
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a robot -->
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -unpause -urdf -param robot_description -model $(arg robot_name)" respawn="false"/>

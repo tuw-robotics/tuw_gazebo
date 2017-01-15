@@ -22,10 +22,12 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
-      <geometry>
+      <origin xyz="0.01 0 0.15" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+      <!--origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
+      <geometry>  
 	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
-      </geometry>
+      </geometry-->
     </collision>
     <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> </box_inertial_with_origin>
   </link>
@@ -50,10 +52,12 @@
       </material>
     </visual>
     <collision>
-    <origin xyz="0.0 0 0.0" rpy="0 0 0"/>
+    <origin xyz="-0.05 0 ${-0.235+0.15}" rpy="0 0 0"/>
+    <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+    <!--origin xyz="0.0 0 0.0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="file://${model_dir}/meshes/top.dae"/>
-      </geometry>
+      </geometry-->
     </collision>
     <box_inertial_with_origin x="0.45" y="0.35"  z="0.001" mass="1.0"> <origin xyz="0.00 0 0.00" rpy="0 0 0"/> </box_inertial_with_origin>
   </link>
