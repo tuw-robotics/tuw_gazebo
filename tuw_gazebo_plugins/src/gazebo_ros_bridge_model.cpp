@@ -181,7 +181,7 @@ void GazeboRosBridgeModelPlugin::setCmdMode(size_t _jointsTypeIdx, const std::st
     
     jointsCmdType_[_jointsTypeIdx] = _mode;
     if      ( !_mode.compare("cmd_position") ) { setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){ _joint->SetPosition( 0, _cmd ); }; }
-    else if ( !_mode.compare("cmd_velocity") ) { setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){ _joint->SetVelocity( 0, _cmd ); }; }
+    else if ( !_mode.compare("cmd_velocity") ) { setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){ /*_joint->SetForce   ( 0, 1 * (_cmd - _joint->GetVelocity(0)) ); ROS_INFO("err=%lf, vel_des=%lf, vel_now=%lf, damping=%lf",_cmd - _joint->GetVelocity(0), _cmd, _joint->GetVelocity(0), _joint->GetDamping(0) );*/ _joint->SetVelocity( 0, _cmd ); }; }
     else if ( !_mode.compare("cmd_torque  ") ) { setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){ _joint->SetForce   ( 0, _cmd ); }; }
     else {
 	setJointCmd[_jointsTypeIdx] = []( physics::JointPtr& _joint, double _cmd ){}; 
@@ -237,7 +237,8 @@ void GazeboRosBridgeModelPlugin::setJointsConstraints() {
 // 	    JointI->SetEffortLimit      (            0, constr_max_torque_[i] ); 
 // 	    JointI->SetVelocityLimit    (            0, constr_max_vel_   [i] ); 
 // 	    JointI->SetParam            ("friction", 0, constr_damping_   [i] );
-// 	    JointI->SetDamping          (            0, constr_friction_  [i] ); 
+// 	    JointI->SetDamping          (            0, constr_damping_   [i] ); 
+// 	    JointI->Update();
 	}
     }
 }

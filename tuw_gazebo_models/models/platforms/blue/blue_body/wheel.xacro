@@ -38,6 +38,7 @@
 	<child  link="${name}${fb}${lr}_link" />
 	<axis   xyz="0 0 1"/>
 	<xacro:insert_block name="ParrentLink2ThisLink" />
+	<!--dynamics damping="0.7"/-->
     </joint>
 
     <link name="${name}${fb}${lr}_link">    
@@ -48,14 +49,25 @@
     <gazebo reference="${name}${fb}${lr}_link">
 	<material>Gazebo/White</material>
 	<selfCollide>false</selfCollide>
-	<mu1 value="5.9"/>
-	<mu2 value="5.9"/>
+	<mu1 value="0.7"/>
+	<mu2 value="0.7"/>
 	<!--fdir1>0 0 1</fdir1-->
 
 	<minDepth value="0.0002"/>
 	<kp value="1000000.0"/>
 	<kd value="10.0"/>
     </gazebo>
+    
+    <!--transmission name="trans_${name}${fb}${lr}">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="${parent}${fb}${lr}2${name}${fb}${lr}_joint">
+	    <hardwareInterface>EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="motor_${parent}${fb}${lr}2${name}${fb}${lr}">
+	    <hardwareInterface>EffortJointInterface</hardwareInterface>
+	    <mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+    </transmission-->
 	
 </xacro:macro>
 

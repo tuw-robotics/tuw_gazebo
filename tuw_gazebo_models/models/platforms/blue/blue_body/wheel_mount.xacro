@@ -42,6 +42,7 @@
 	<axis xyz=" 0 0 1"/>
 	<limit effort="50" velocity="50" lower= "${-M_PI}" upper="${M_PI}" /> <!--velocity="5" -->
 	<xacro:insert_block name="ParrentLink2ThisLink" />
+	<!--dynamics damping="0.7"/-->
     </joint>
 
     <link name="${name}${fb}${lr}_link">    
@@ -53,6 +54,17 @@
 	<material>Gazebo/Orange</material>
 	<selfCollide>false</selfCollide>
     </gazebo>
+    
+    <!--transmission name="trans_${name}${fb}${lr}">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="${parent}${fb}${lr}2${name}${fb}${lr}_joint">
+	    <hardwareInterface>EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="motor_${parent}${fb}${lr}2${name}${fb}${lr}">
+	    <hardwareInterface>EffortJointInterface</hardwareInterface>
+	    <mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+    </transmission-->
 	
 </xacro:macro>
 
