@@ -14,13 +14,13 @@
 	<steering_lo_stop>    -2.70526034</steering_lo_stop>    <!-- rad -->
 	<steering_max_torque>        10.0</steering_max_torque> <!-- Nm  -->
 	<steering_max_vel>            5.0</steering_max_vel>    <!--rad/s-->
-	<steering_damping>            0.1</steering_damping>    <!--Nms/rad-->
+	<steering_damping>            0.7</steering_damping>    <!--Nms/rad-->
 	<steering_friction>           0.0</steering_friction>   <!--Nm   -->
 	
 	<revolute_joints_names>wheelmntFL2wheelFL_joint, wheelmntBR2wheelBR_joint</revolute_joints_names>
 	<revolute_max_torque>        10.0</revolute_max_torque> <!-- Nm  -->
 	<revolute_max_vel>           50.0</revolute_max_vel>    <!--rad/s-->
-	<revolute_damping>            0.1</revolute_damping>    <!--Nms/rad-->
+	<revolute_damping>            0.7</revolute_damping>    <!--Nms/rad-->
 	<revolute_friction>           0.0</revolute_friction>   <!--Nm   -->
 	
 	<steering_measures_type>measured_position</steering_measures_type>

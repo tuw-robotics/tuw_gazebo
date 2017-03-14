@@ -6,7 +6,7 @@
   
   <xacro:property name="x_ParrentLink2Piston_Link"  value= "0.1750" />
   <xacro:property name="y_ParrentLink2Piston_Link"  value= "0.1744" />
-  <xacro:property name="z_ParrentLink2Piston_Link"  value="-0.0230" />
+  <xacro:property name="z_ParrentLink2Piston_Link"  value="-0.0235" />
 
   <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
       <origin xyz="${x_ParrentLink2Piston_Link*TransDirX} ${y_ParrentLink2Piston_Link*TransDirY} ${z_ParrentLink2Piston_Link}"  rpy="0 0 ${RotYaw}"/> 

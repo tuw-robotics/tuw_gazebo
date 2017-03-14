@@ -48,8 +48,8 @@
     <gazebo reference="${name}${fb}${lr}_link">
 	<material>Gazebo/White</material>
 	<selfCollide>false</selfCollide>
-	<mu1 value="5.9"/>
-	<mu2 value="5.9"/>
+	<mu1 value="0.7"/>
+	<mu2 value="0.7"/>
 	<!--fdir1>0 0 1</fdir1-->
 
 	<minDepth value="0.002"/>
