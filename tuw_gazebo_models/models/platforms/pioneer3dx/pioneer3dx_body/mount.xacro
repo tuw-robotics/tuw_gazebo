@@ -16,9 +16,18 @@
   </joint>
   <link name="${name}_camera_tof">
     <visual>
-      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <origin xyz="-0.01 0 0.03" rpy="0 0 0"/>
       <geometry>
         <box size="0.01 0.12 0.12"/>
+      </geometry>
+      <material name="${name}_camera_tof">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.0 0 0.0" rpy="0 ${pi/2} 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.01"/>
       </geometry>
       <material name="${name}_camera_tof">
         <color rgba="0.8 0.8 0.8 1"/>
@@ -81,7 +90,7 @@
     <visual>
       <origin xyz="0.02 0 0.19"/>
       <geometry>
-        <box size="0.02 0.23 0.02 "/>
+        <box size="0.02 0.27 0.02 "/>
       </geometry>
       <material name="aluminium_bar">
         <color rgba="${aluminium_bar_colour}"/>
@@ -91,7 +100,7 @@
     <visual>
       <origin xyz="-0.02 0 0.36"/>
       <geometry>
-        <box size="0.02 0.23 0.02 "/>
+        <box size="0.02 0.27 0.02 "/>
       </geometry>
       <material name="aluminium_bar">
         <color rgba="${aluminium_bar_colour}"/>
