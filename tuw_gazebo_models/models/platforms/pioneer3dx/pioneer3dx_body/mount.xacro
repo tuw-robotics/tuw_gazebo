@@ -5,38 +5,18 @@
   <xacro:macro name="pioneer_mount" params="name parent xyz rpy model_dir:=^">   
   <xacro:property name="mount_base_width" value="0.14" />
   <xacro:property name="mount_bar_width" value="0.02" />
-        
-  <!--  mount top bar -->
-  <joint name="${parent}_top_bar_joint" type="fixed">
-    <origin xyz="0 0 0.96" rpy="${rpy}"/>
-    <parent link="${parent}"/>
-    <child link="${name}_top_bar"/>
-  </joint>
-  <link name="${name}_top_bar">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="${mount_bar_width} 0.385 ${mount_bar_width} "/>
-      </geometry>
-      <material name="${name}_top_bar">
-        <color rgba="0.8 0.8 0.8 1"/>
-      </material>
-    </visual>
-  </link>
-  <gazebo reference="${name}_top_bar">
-    <material value="Gazebo/Grey"/>
-  </gazebo>
-        
+  <xacro:property name="aluminium_bar_colour" value="0.8 0.8 0.8 1" />
+               
   
-  <!--  mount camera tof -->
+  <!--  mount camera tof  -->
   <joint name="${parent}_camera_tof_joint" type="fixed">
-    <origin xyz="0 0 0.51" rpy="${rpy}"/>
+    <origin xyz="0 0 0.38" rpy="${rpy}"/>
     <parent link="${parent}"/>
     <child link="${name}_camera_tof"/>
   </joint>
   <link name="${name}_camera_tof">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
       <geometry>
         <box size="0.01 0.12 0.12"/>
       </geometry>
@@ -48,97 +28,99 @@
   <gazebo reference="${name}_camera_tof">
     <material value="Gazebo/Grey"/>
   </gazebo>
-  
+ 
   
   <!--  mount bottom left -->
   <joint name="${parent}_${name}_bottom_left_joint" type="fixed">
-    <origin xyz="0.0 ${+mount_base_width} ${mount_bar_width/2.}" rpy="${rpy}"/>
+    <origin xyz="0 0 0" rpy="${rpy}"/>
     <parent link="${parent}"/>
     <child link="${name}_bottom_left"/>
   </joint>
   <link name="${name}_bottom_left">
+    <!-- right base bar -->
     <visual>
-      <origin xyz="-0.04 0 0" rpy="0 0 0"/>
+      <origin xyz="-0.04 +${0.27/2.} 0.01"/>
       <geometry>
-        <box size="0.3 ${mount_bar_width} ${mount_bar_width}"/>
+        <box size="0.31 0.04 0.02"/>
       </geometry>
-      <material name="${name}_bottom_left_material">
-        <color rgba="0.8 0.8 0.8 1"/>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- left base bar -->
+    <visual>
+      <origin xyz="-0.04 -${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- right column -->
+    <visual>
+      <origin xyz="-0.0 +${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- left column -->
+    <visual>
+      <origin xyz="-0.0 -${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- laser bar -->
+    <visual>
+      <origin xyz="0.02 0 0.19"/>
+      <geometry>
+        <box size="0.02 0.23 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- camera tof bar low -->
+    <visual>
+      <origin xyz="-0.02 0 0.36"/>
+      <geometry>
+        <box size="0.02 0.23 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- camera tof bar bottom -->
+    <visual>
+      <origin xyz="-0.02 0 0.47"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <!-- Top bar -->
+    <visual>
+      <origin xyz="0 0 ${0.02+0.92+0.02/2}"/>
+      <geometry>
+        <box size="0.02 0.30 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
   </link>
   <gazebo reference="${name}_bottom_left">
     <material value="Gazebo/Grey"/>
   </gazebo>
-  
-  
-  <!--  mount bottom right -->
-  <joint name="${parent}_${name}_bottom_right_joint" type="fixed">
-    <origin xyz="0.0 ${-mount_base_width} ${mount_bar_width/2.}" rpy="${rpy}"/>
-    <parent link="${parent}"/>
-    <child link="${name}_bottom_right"/>
-  </joint>
-  <link name="${name}_bottom_right">
-    <visual>
-      <origin xyz="-0.04 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.3 ${mount_bar_width} ${mount_bar_width}"/>
-      </geometry>
-      <material name="${name}_bottom_right_material">
-        <color rgba="0.8 0.8 0.8 1"/>
-      </material>
-    </visual>
-  </link>
-  <gazebo reference="${name}_bottom_right">
-    <material value="Gazebo/Grey"/>
-  </gazebo>
-  
-  
-  <!--  mount column right -->
-  <joint name="${name}_column_right_joint" type="fixed">
-    <origin xyz="0.0 0 ${0.92/2. + mount_bar_width}" rpy="${rpy}"/>
-    <parent link="${name}_bottom_right"/>
-    <child link="${name}_column_right"/>
-  </joint>
-  <link name="${name}_column_right">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="${mount_bar_width} ${mount_bar_width} 0.92 "/>
-      </geometry>
-      <material name="${name}_column_right_material">
-        <color rgba="0.8 0.8 0.8 1"/>
-      </material>
-    </visual>
-  </link>
-  <gazebo reference="${name}_column_right">
-    <material value="Gazebo/Grey"/>
-  </gazebo>
-  
-  
-  
-  <!--  mount column left -->
-  <joint name="${name}_column_left_joint" type="fixed">
-    <origin xyz="0.0 0 ${0.92/2. + mount_bar_width}" rpy="${rpy}"/>
-    <parent link="${name}_bottom_left"/>
-    <child link="${name}_column_left"/>
-  </joint>
-  <link name="${name}_column_left">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="${mount_bar_width} ${mount_bar_width} 0.92 "/>
-      </geometry>
-      <material name="${name}_column_left_material">
-        <color rgba="0.8 0.8 0.8 1"/>
-      </material>
-    </visual>
-  </link>
-  <gazebo reference="${name}_column_left">
-    <material value="Gazebo/Grey"/>
-  </gazebo>
-  
-  
   
   </xacro:macro>
 </robot>
