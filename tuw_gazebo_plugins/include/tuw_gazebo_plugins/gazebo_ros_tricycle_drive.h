@@ -44,7 +44,7 @@
 #include <map>
 
 // Gazebo
-#include <gazebo_plugins/gazebo_ros_utils.h>
+#include <tuw_gazebo_plugins/gazebo_ros_utils.h>
 
 // ROS
 #include <ros/ros.h>

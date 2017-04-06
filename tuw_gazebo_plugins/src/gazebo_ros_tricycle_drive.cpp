@@ -86,10 +86,10 @@ void GazeboRosTricycleDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _
     gazebo_ros_->getParameter<std::string> ( robot_base_frame_, "robotBaseFrame", "base_link" );
 
     gazebo_ros_->getParameter<double> ( update_rate_, "updateRate", 100.0 );
-    gazebo_ros_->getParameter<double> ( wheel_acceleration_, "wheelAcceleration", 0 );
+    gazebo_ros_->getParameter<double> ( wheel_acceleration_, "wheelAcceleration", 0. );
     gazebo_ros_->getParameter<double> ( wheel_deceleration_, "wheelDeceleration", wheel_acceleration_ );
     gazebo_ros_->getParameter<double> ( wheel_speed_tolerance_, "wheelSpeedTolerance", 0.01 );
-    gazebo_ros_->getParameter<double> ( steering_speed_, "steeringSpeed", 0 );
+    gazebo_ros_->getParameter<double> ( steering_speed_, "steeringSpeed", 0. );
     gazebo_ros_->getParameter<double> ( steering_angle_tolerance_, "steeringAngleTolerance", 0.01 );
     gazebo_ros_->getParameter<double> ( separation_encoder_wheel_, "encoderWheelSeparation", 0.5 );
 
