@@ -21,13 +21,15 @@
     </physics>
     
     <scene>
+      <ambient>1.0 1.0 1.0 1.0</ambient>
+      <shadows>0</shadows>
       <sky>
         <clouds>
           <speed>12</speed>
         </clouds>
       </sky>
     </scene>
-   <include>
+    <include>
       <uri>model://sun</uri>
     </include>
     <include>
