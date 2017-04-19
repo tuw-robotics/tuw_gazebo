@@ -56,6 +56,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.04 +${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+    </collision>
     <!-- left base bar -->
     <visual>
       <origin xyz="-0.04 -${0.27/2.} 0.01"/>
@@ -66,6 +72,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.04 -${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+    </collision>
     <!-- right column -->
     <visual>
       <origin xyz="-0.0 +${0.25/2.} ${0.02+0.92/2}"/>
@@ -76,6 +88,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.0 +${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+    </collision>
     <!-- left column -->
     <visual>
       <origin xyz="-0.0 -${0.25/2.} ${0.02+0.92/2}"/>
@@ -86,6 +104,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.0 -${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+    </collision>
     <!-- laser bar -->
     <visual>
       <origin xyz="0.02 0 0.19"/>
@@ -96,6 +120,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0.02 0 0.19"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
     <!-- camera tof bar low -->
     <visual>
       <origin xyz="-0.02 0 0.36"/>
@@ -106,6 +136,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.02 0 0.36"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
     <!-- camera tof bar bottom -->
     <visual>
       <origin xyz="-0.02 0 0.47"/>
@@ -116,6 +152,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="-0.02 0 0.47"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
     <!-- Top bar -->
     <visual>
       <origin xyz="0 0 ${0.02+0.92+0.02/2}"/>
@@ -126,6 +168,12 @@
         <color rgba="${aluminium_bar_colour}"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0 0 ${0.02+0.92+0.02/2}"/>
+      <geometry>
+        <box size="0.02 0.30 0.02 "/>
+      </geometry>
+    </collision>
   </link>
   <gazebo reference="${name}_bottom_left">
     <material value="Gazebo/Grey"/>

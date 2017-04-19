@@ -8,6 +8,8 @@
 		<type>quick</type>
 		<iters>50</iters>
 		<sor>1.3</sor>
+		<!-- see http://gazebosim.org/tutorials?tut=parallel&cat=physics -->
+		<!-- island_threads>8</island_threads --> 
 	    </solver>
 	    <constraints>
 		<cfm>0.000000001</cfm>
