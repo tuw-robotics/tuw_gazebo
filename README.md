@@ -5,6 +5,6 @@ GazeboSim Models such as a pioneer differential drive
 ``` git clone https://github.com/tuw-robotics/tuw_msgs.git YOUR_CATKIN_SRC_NEXT_TO_TUW_GAZEBO/ ```
 * the following ros pkgs depending on your gazebo version
   * Gazebo7
-``` sudo apt-get install ros-kinetic-gazebo-ros-pkgs ```
+``` sudo apt-get install ros-kinetic-gazebo-ros-pkgs ros-kinetic-xacro```
   * Gazebo8
-``` sudo apt-get install ros-kinetic-gazebo8-ros-pkgs ```
+``` sudo apt-get install ros-kinetic-gazebo8-ros-pkgs ros-kinetic-xacro```
