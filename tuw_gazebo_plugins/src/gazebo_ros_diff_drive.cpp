@@ -144,7 +144,7 @@ void GazeboRosDiffDrive::Load ( physics::ModelPtr _parent, sdf::ElementPtr _sdf 
     // Initialize update rate stuff
     if ( this->update_rate_ > 0.0 ) this->update_period_ = 1.0 / this->update_rate_;
     else this->update_period_ = 0.0;
-    last_update_time_ = parent->GetWorld()->GetSimTime();
+    last_update_time_ = parent->GetWorld()->SimTime();
 
     // Initialize velocity stuff
     wheel_speed_[RIGHT] = 0;

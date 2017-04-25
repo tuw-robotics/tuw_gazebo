@@ -33,12 +33,12 @@
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
   <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser_front_right" frame_names="laser_front_right" topic_names="laser_front_right/scan" parent="top" xyz="0.06 -0.14 0.08" rpy="0 0 ${-pi/4}" driver="cpu"/> 
+  <xacro:laser name="laser_front_right" frame_names="laser_front_right" topic_names="laser_front_right/scan" parent="top" xyz="0.06 -0.14 0.08" rpy="0 0 ${-pi/4}" driver="gpu"/> 
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu"/> 
+  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="gpu"/> 
   
   <!-- xyz="0.16 0 0.125" -->
   
@@ -47,9 +47,14 @@
   <xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu.xacro"/>
   <xacro:imu_sensor name="imu9dof" parent="chassis" xyz="0.05 0.0 0.262" rpy="0 0 0"/>
   -->
-  <!-- Camera 
+  <!-- Camera  
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>
   <xacro:include filename="${model_dir}/camera.xacro"/>
-  <xacro:cam name="front_camera" parent="chassis" xyz="0 0 0.5" rpy="${-pi/2}  0 ${-pi/2}" />
-  -->
+  <xacro:cam name="front_camera" parent="top" xyz="0 0 1" rpy="${-pi/2}  0 ${-pi/2}" />
+   -->
+  <!-- Depth Camera  
+  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>
+  <xacro:include filename="${model_dir}/depth_camera.xacro"/>
+  <xacro:cam name="front_depth_camera" parent="top" xyz="0 0 1" rpy="0  0 0" />
+ -->
 </robot>
