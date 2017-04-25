@@ -1,0 +1,45 @@
+<sdf version ='1.4'>
+  <model name ='${name}'>
+    <pose>${pose}</pose>
+    <link name ='link'>
+      <pose>0 0 0 0 0 0</pose>
+      <collision name ='collision'>
+      <pose>0 0 -0.7 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>${radius}</radius>
+            <length>${length_collision}</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.0</mu>
+              <mu2>0.0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='visual'>
+        <geometry>
+          <cylinder>
+            <radius>${radius}</radius>
+            <length>${length_viusal}</length>
+          </cylinder>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass>${mass}</mass>
+        <pose>0 0 -0.7 0 0 0</pose>
+        <inertia>
+          <ixx>${ixx}</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>${iyy}</iyy>
+          <iyz>0.0</iyz>
+          <izz>${izz}</izz>
+        </inertia>
+      </inertial>
+    </link>
+  </model>
+</sdf>

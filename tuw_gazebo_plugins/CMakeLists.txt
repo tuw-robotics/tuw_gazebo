@@ -59,7 +59,7 @@ execute_process(COMMAND
 
 catkin_python_setup()
 
-generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg )
+generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg cfg/human_receiver.cfg )
 
 catkin_package(
   INCLUDE_DIRS include
@@ -113,6 +113,9 @@ target_link_libraries(tuw_gazebo_ros_imu9dof tuw_gazebo_ros_utils ${GAZEBO_LIBRA
 
 add_library(tuw_gazebo_ros_bridge_model src/gazebo_ros_bridge_model.cpp)
 target_link_libraries(tuw_gazebo_ros_bridge_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_library(tuw_gazebo_ros_human_receiver src/gazebo_ros_human_receiver.cpp)
+target_link_libraries(tuw_gazebo_ros_human_receiver ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS 
   tuw_gazebo_ros_utils 
