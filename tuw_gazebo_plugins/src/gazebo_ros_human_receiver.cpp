@@ -33,6 +33,7 @@ void GazeboRosHumanReceiver::Load(physics::WorldPtr _parent, sdf::ElementPtr _sd
   {
     this->max_humans_ = _sdf->GetElement("max_humans")->Get<int>();
   }
+  
   this->min_distance_between_humans_ = 0.5;
   if (!_sdf->HasElement("min_distance_between_humans"))
   {
@@ -43,27 +44,24 @@ void GazeboRosHumanReceiver::Load(physics::WorldPtr _parent, sdf::ElementPtr _sd
   {
     this->min_distance_between_humans_ = _sdf->GetElement("min_distance_between_humans")->Get<double>();
   }
-
-  if (!_sdf->HasElement("human_template_file"))
+  
+  this->inactive_placement_offset_ = 0.0;
+  if (!_sdf->HasElement("inactive_placement_offset"))
   {
-    ROS_ERROR("GazeboRosHumanReceiver Plugin (ns = %s) missing <human_template_file_>", this->robot_namespace_.c_str());
+    ROS_WARN("GazeboRosHumanReceiver Plugin (ns = %s) missing <inactive_placement_offset>, defaults to %f",
+             this->robot_namespace_.c_str(), this->inactive_placement_offset_);
   }
   else
   {
-    this->human_template_file_ = _sdf->GetElement("human_template_file")->Get<std::string>();
+    this->inactive_placement_offset_ = _sdf->GetElement("inactive_placement_offset")->Get<double>();
   }
 
   ROS_INFO("GazeboRosHumanReceiver");
   subHumanObject_ = rosnode_->subscribe("/human_publisher/human_pose", 1, &GazeboRosHumanReceiver::humanCallback, this);
-  //subCommand_ = rosnode_->subscribe("/transitbuddy_dummy/command", 1, &GazeboRosHumanReceiver::commandCallback, this);
-  // subWall_ = rosnode_->subscribe( "/human_publisher/walls", 1, &GazeboRosHumanReceiver::wallsCallback, this );
-
   updateHumansThread_ = boost::shared_ptr<boost::thread>(new boost::thread(&GazeboRosHumanReceiver::updateHumansFnc, this));
   createHumansThread_ = boost::shared_ptr<boost::thread>(new boost::thread(&GazeboRosHumanReceiver::createHumansFnc, this));
   reconfigureFnc_ = boost::bind(&GazeboRosHumanReceiver::callbackParameters, this, _1, _2);
   reconfigureServer_.setCallback(reconfigureFnc_);
-
-  //wallThread_ = boost::shared_ptr<boost::thread>(new boost::thread(&GazeboRosHumanReceiver::wallThreadFnc, this));
 }
 
 void GazeboRosHumanReceiver::humanCallback(const tuw_object_msgs::ObjectWithCovarianceArrayConstPtr &msg)
@@ -75,46 +73,12 @@ void GazeboRosHumanReceiver::humanCallback(const tuw_object_msgs::ObjectWithCova
   }
 }
 
-/*
-void GazeboRosHumanReceiver::commandCallback(const std_msgs::String &msg)
-{
-  boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutexHumans_);
-  if (msg.data.compare("clear") == 0)
-  {
-    
-    BOOST_FOREACH(int id, humansInWorld_) {
-      std::string name = idToName(id);
-      ROS_INFO ( "clearing %s", name.c_str());
-      physics::ModelPtr p  = this->world_->GetModel(name);
-      if(p) {
-          ROS_INFO ( "Fini() start", name.c_str());
-          sleep(1);
-          p->SetLinearVel(math::Vector3::Zero);
-          p->SetLinearAccel(math::Vector3::Zero);
-          p->Fini();
-          ROS_INFO ( "Fini() end", name.c_str());
-      } else {
-          ROS_INFO ( "clear failed %s", name.c_str());
-      }
-      sleep(10);
-    }
-      
-  }
-  else
-  {
-    ROS_INFO("commandCallback");
-    // physics::ModelPtr p  = this->world_->GetModel("c1");
-    // p->Fini();
-  }
-}
-*/
-
 void GazeboRosHumanReceiver::createHuman(const std::string &name, const ignition::math::Pose3d &pose)
 {
   double radius = 0.2, length_viusal = 1.8, length_collision = 0.4, mass = 10;
   double half_length_visual = length_viusal / 2.0;
   double half_length_collision = length_collision / 2.0;
-  std::string modelStr = GazeboModelTemplates::cylinderTemplate(human_template_file_, name, pose, radius, mass,
+  std::string modelStr = GazeboModelTemplates::cylinderTemplate(name, pose, radius, mass,
                                                                 length_viusal, half_length_collision);
   sdf::SDF sdfModel;
   sdfModel.SetFromString(modelStr);
@@ -130,8 +94,7 @@ void GazeboRosHumanReceiver::createHumansFnc()
   {
     int r = id / cols;
     int c = id % cols;
-    // math::Pose pose(min_distance_between_humans_*r, min_distance_between_humans_*c, 0, 0, 0, 0);
-    ignition::math::Pose3d pose(min_distance_between_humans_ * r, min_distance_between_humans_ * c, 0, 0, 0, 0);
+    ignition::math::Pose3d pose(min_distance_between_humans_ * r + inactive_placement_offset_, min_distance_between_humans_ * c + inactive_placement_offset_, 0, 0, 0, 0);
     std::string name = idToName(id);
     createHuman(name, pose);
   }

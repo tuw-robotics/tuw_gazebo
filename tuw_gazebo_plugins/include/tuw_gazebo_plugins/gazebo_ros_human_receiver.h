@@ -50,7 +50,6 @@ public:
    * @param msg received message
    */
   void humanCallback(const tuw_object_msgs::ObjectWithCovarianceArrayConstPtr &msg);
-  //void commandCallback(const std_msgs::String &msg);
   void callbackParameters(gazebo_human_receiver::human_receiverConfig &config, uint32_t level);
 
 private:
@@ -59,7 +58,7 @@ private:
   double map_offset_angle_;
   int max_humans_;
   double min_distance_between_humans_;
-  std::string human_template_file_;
+  double inactive_placement_offset_;
   
   tuw_object_msgs::ObjectWithCovarianceArray msgHumans_;
   

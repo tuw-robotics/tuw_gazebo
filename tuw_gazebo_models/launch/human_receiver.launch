@@ -1,39 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-
-  <arg name="world" default="floor" />
+  <arg name="room" default="freihaus"/>
+  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/environments/:$(find tuw_gazebo_models)/models/visual_marker/"/>
+  <!-- Gazebo  -->
+  <include file="$(find tuw_gazebo_models)/launch/empty_world.launch">
+     <arg name="physics" value="$(arg physics)" />
+     <arg name="world_name" value="$(find tuw_gazebo_models)/worlds/human_receiver.world"/>
+  </include>
   
-  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="false"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
-  <arg name="room" default="freihaus" />
-  <arg name="world_name" default="$(find tuw_gazebo_models)/worlds/$(arg world).world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
-
-  <!-- set use_sim_time flag -->
-  <group if="$(arg use_sim_time)">
-    <param name="/use_sim_time" value="true" />
-  </group>
-
-  <!-- set command arguments -->
-  <arg unless="$(arg paused)" name="command_arg1" value=""/>
-  <arg     if="$(arg paused)" name="command_arg1" value="-u"/>
-  <arg unless="$(arg headless)" name="command_arg2" value=""/>
-  <arg     if="$(arg headless)" name="command_arg2" value="-r"/>
-  <arg unless="$(arg debug)" name="script_type" value="gzserver"/>
-  <arg     if="$(arg debug)" name="script_type" value="debug"/>
-
-  <!-- start gazebo server-->
-  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="false" output="screen"
-    args="$(arg command_arg1) $(arg command_arg2) $(arg world_name)" />
-    
-  <!-- start gazebo client -->
-  <group if="$(arg gui)">
-    <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
-  </group>
-  
-  <!--<node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/environments/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />-->
-
+  <node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/environments/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />
 </launch>

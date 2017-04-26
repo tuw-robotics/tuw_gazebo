@@ -73,10 +73,60 @@ public:
         boost::replace_all(modelStr, "${izz}", boost::lexical_cast<std::string>(izz));
         return modelStr;
     }
-    static std::string cylinderTemplate(const std::string &tmplateFile, const std::string &name, const ignition::math::Pose3d &pose, double radius, double mass, double length_visual, double length_collision) {
-        std::ifstream ifs(tmplateFile.c_str());
-        std::string modelStr( (std::istreambuf_iterator<char>(ifs) ),  (std::istreambuf_iterator<char>()    ) );
-        ifs.close();
+    static std::string cylinderTemplate(const std::string &name, const ignition::math::Pose3d &pose, double radius, double mass, double length_visual, double length_collision) {
+        std::string modelStr(
+            "<sdf version ='1.6'>\
+              <model name ='${name}'>\
+                <pose>${pose}</pose>\
+                <link name ='link'>\
+                  <pose>0 0 0 0 0 0</pose>\
+                  <collision name ='collision'>\
+                  <pose>0 0 -0.7 0 0 0</pose>\
+                    <geometry>\
+                      <cylinder>\
+                        <radius>${radius}</radius>\
+                        <length>${length_collision}</length>\
+                      </cylinder>\
+                    </geometry>\
+                    <surface>\
+                      <friction>\
+                        <ode>\
+                          <mu>0.0</mu>\
+                          <mu2>0.0</mu2>\
+                        </ode>\
+                      </friction>\
+                    </surface>\
+                  </collision>\
+                  <visual name='visual'>\
+                    <geometry>\
+                      <cylinder>\
+                        <radius>${radius}</radius>\
+                        <length>${length_viusal}</length>\
+                      </cylinder>\
+                    </geometry>\
+                    <material>\
+                      <ambient>0 0.5 0 1</ambient>\
+                      <diffuse>0 0.5 0 1</diffuse>\
+                      <specular>0.1 0.1 0.1 1</specular>\
+                      <emissive>0 0 0 0</emissive>\
+                    </material>\
+                  </visual>\
+                  <inertial>\
+                    <mass>${mass}</mass>\
+                    <pose>0 0 -0.7 0 0 0</pose>\
+                    <inertia>\
+                      <ixx>${ixx}</ixx>\
+                      <ixy>0.0</ixy>\
+                      <ixz>0.0</ixz>\
+                      <iyy>${iyy}</iyy>\
+                      <iyz>0.0</iyz>\
+                      <izz>${izz}</izz>\
+                    </inertia>\
+                  </inertial>\
+                </link>\
+              </model>\
+            </sdf>");
+
         std::stringstream poseStr;
         double ixx = 0.0833333 * mass * (3 * radius * radius + length_collision * length_collision);
         double iyy = 0.0833333 * mass * (3 * radius * radius + length_collision * length_collision);
