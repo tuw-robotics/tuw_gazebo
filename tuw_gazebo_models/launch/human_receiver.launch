@@ -9,6 +9,7 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
+  <arg name="room" default="freihaus" />
   <arg name="world_name" default="$(find tuw_gazebo_models)/worlds/$(arg world).world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
 
   <!-- set use_sim_time flag -->
@@ -32,5 +33,7 @@
   <group if="$(arg gui)">
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
+  
+  <!--<node name="$(arg room)" pkg="gazebo_ros" type="spawn_model" args="-file $(find tuw_gazebo_models)/models/environments/$(arg room)/model.sdf -sdf -x 0 -y -0 -z 0 -model $(arg room)" />-->
 
 </launch>

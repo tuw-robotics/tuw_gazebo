@@ -27,6 +27,9 @@
             <length>${length_viusal}</length>
           </cylinder>
         </geometry>
+        <material>
+          <specular>0 1 0 1</specular>
+        </material>
       </visual>
       <inertial>
         <mass>${mass}</mass>

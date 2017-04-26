@@ -59,7 +59,8 @@ execute_process(COMMAND
 
 catkin_python_setup()
 
-generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg cfg/human_receiver.cfg )
+generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg 
+                                      cfg/GazeboRosHumanReceiverPlugin.cfg )
 
 catkin_package(
   INCLUDE_DIRS include
