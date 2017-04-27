@@ -69,8 +69,7 @@ GazeboRosDiffDrive::GazeboRosDiffDrive() {}
 
 // Destructor
 GazeboRosDiffDrive::~GazeboRosDiffDrive() {
-    event::Events::DisconnectWorldUpdateBegin(this->update_connection_);
-    
+    /*
     odometry_publisher_.shutdown();
     joint_state_publisher_.shutdown();
     cmd_vel_subscriber_.shutdown();
@@ -79,6 +78,7 @@ GazeboRosDiffDrive::~GazeboRosDiffDrive() {
     queue_.disable();
     alive_ = false;
     callback_queue_thread_.join();
+    */
 }
 
 // Load the controller
