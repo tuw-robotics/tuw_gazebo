@@ -3,7 +3,7 @@
     
   <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
   <xacro:arg name="namespace"   default="p3dx"/>
-  <xacro:arg name="motor_plugin" default="diff_twist"/> <!-- diff_iws or diff_twist. If something else is set, no plugin will be loaded-->
+  <xacro:arg name="motor_plugin" default="diffdrive"/> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
@@ -19,11 +19,11 @@
   <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
   <xacro:include filename="${model_dir}/pioneer3dx_plugins.xacro" />
   
-  <xacro:if value="${motor_plugin == 'diff_iws'}"> 
-    <xacro:P3dxRosBridgeModelPlugin/> <!-- Motor  plugin -->
+  <xacro:if value="${motor_plugin == 'iws'}"> 
+    <xacro:P3dxRosBridgeModelPlugin/> <!-- independent wheel steering plugin -->
   </xacro:if>
-  <xacro:if value="${motor_plugin == 'diff_twist'}"> 
-    <xacro:pioneer3dx_diff_drive/> <!-- Motor  plugin -->
+  <xacro:if value="${motor_plugin == 'diffdrive'}"> 
+    <xacro:pioneer3dx_diff_drive/> <!-- differntial drive plugin -->
   </xacro:if>
   
   <!-- Joints plugin -->
