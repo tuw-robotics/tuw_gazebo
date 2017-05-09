@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
 
   <arg name="rviz" default="0" />
@@ -5,6 +6,7 @@
   <arg name="position" default="-x -7.0 -y -7.0 -z 0.01 -Y 0.78" />
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
   <arg name="robot_name" default="r1"/>
+  <arg name="motor_plugin" default="diffdrive" /> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
   
   <!-- Gazebo world with environment -->
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
@@ -17,6 +19,7 @@
   <include file="$(find tuw_gazebo_models)/launch/pioneer3dx/pioneer3dx.gazebo.launch">
      <arg name="robot_name" value="$(arg robot_name)" />
      <arg name="position" value="$(arg position)" />
+     <arg name="motor_plugin" value="$(arg motor_plugin)" />
    </include>
   
   <!-- RVIZ   -->
