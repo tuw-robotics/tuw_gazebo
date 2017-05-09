@@ -2,7 +2,7 @@
 <sdf version="1.5">
   <world name="human_receiver">
     <!--    -->
-    <physics name="ode_blue" type="ode">
+    <physics name="ode" type="ode">
       <ode>
         <solver>
           <type>quick</type>
@@ -33,7 +33,7 @@
     </include>
     <plugin name="human_receiver" filename="libtuw_gazebo_ros_human_receiver.so">
         <max_humans>100</max_humans>
-        <min_distance_between_humans>0.5</min_distance_between_humans>
+        <min_distance_between_humans>1.0</min_distance_between_humans>
         <inactive_placement_offset>50</inactive_placement_offset>
     </plugin>
   </world>

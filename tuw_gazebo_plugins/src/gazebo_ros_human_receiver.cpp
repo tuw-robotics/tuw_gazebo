@@ -57,7 +57,7 @@ void GazeboRosHumanReceiver::Load(physics::WorldPtr _parent, sdf::ElementPtr _sd
   }
 
   ROS_INFO("GazeboRosHumanReceiver");
-  subHumanObject_ = rosnode_->subscribe("/human_publisher/human_pose", 1, &GazeboRosHumanReceiver::humanCallback, this);
+  subHumanObject_ = rosnode_->subscribe("human_objects", 1, &GazeboRosHumanReceiver::humanCallback, this);
   updateHumansThread_ = boost::shared_ptr<boost::thread>(new boost::thread(&GazeboRosHumanReceiver::updateHumansFnc, this));
   createHumansThread_ = boost::shared_ptr<boost::thread>(new boost::thread(&GazeboRosHumanReceiver::createHumansFnc, this));
   reconfigureFnc_ = boost::bind(&GazeboRosHumanReceiver::callbackParameters, this, _1, _2);
