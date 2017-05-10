@@ -21,5 +21,6 @@
         <cast_shadows>false</cast_shadows>
       </visual>
     </link>
+    <pose>0 1 0 0 0 0</pose>
   </model>
 </sdf>
