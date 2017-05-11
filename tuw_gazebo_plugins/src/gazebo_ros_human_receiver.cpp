@@ -148,6 +148,7 @@ void GazeboRosHumanReceiver::updateHumansFnc()
           continue;
         }
         const geometry_msgs::Point &pos = msgHumans_.objects[i].object.pose.position;
+        const geometry_msgs::Twist &twist = msgHumans_.objects[i].object.twist;
         double xw = ca * pos.x - sa * pos.y + map_offset_x_;
         double yw = sa * pos.x + ca * pos.y + map_offset_y_;
         double zw = 0.0;
@@ -155,6 +156,10 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         yw = pos.y;
         zw = 0;
         ignition::math::Pose3d poseModel(xw, yw, zw, 0, 0, 0);
+        
+        double vx = twist.linear.x;
+        double vy = twist.linear.y;
+        double vz = 0.0;
         it = lasthumansActive.find(msgHumans_.objects[i].object.ids[0]);
         if (it == lasthumansActive.end())
         {
@@ -178,8 +183,9 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         }
         humansActive_[msgHumans_.objects[i].object.ids[0]] = p;
         const ignition::math::Pose3d &current = p->WorldPose();
-        ignition::math::Vector3d diff = poseModel.Pos() - current.Pos();
-        p->SetLinearVel(ignition::math::Vector3d(diff.X(), diff.Y(), -0));
+        //ignition::math::Vector3d diff = poseModel.Pos() - current.Pos();
+        //p->SetLinearVel(ignition::math::Vector3d(diff.X(), diff.Y(), 0));
+        p->SetLinearVel(ignition::math::Vector3d(vx, vy, vz));
         p->SetAngularVel(ignition::math::Vector3d::Zero);
         p->SetAngularAccel(ignition::math::Vector3d::Zero);
       }
