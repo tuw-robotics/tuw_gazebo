@@ -61,6 +61,7 @@ private:
   double inactive_placement_offset_;
   double radius_;
   double length_collision_;
+  double length_visual_;
   
   tuw_object_msgs::ObjectWithCovarianceArray msgHumans_;
   

@@ -81,7 +81,7 @@ public:
                 <link name ='link'>\
                   <pose>0 0 0 0 0 0</pose>\
                   <collision name ='collision'>\
-                    <pose>0 0 -0.7 0 0 0</pose>\
+                    <pose>0 0 ${half_length_collision} 0 0 0</pose>\
                     <geometry>\
                       <cylinder>\
                         <radius>${radius}</radius>\
@@ -98,10 +98,11 @@ public:
                     </surface>\
                   </collision>\
                   <visual name='visual'>\
+                    <pose>0 0 ${half_length_visual} 0 0 0</pose>\
                     <geometry>\
                       <cylinder>\
                         <radius>${radius}</radius>\
-                        <length>${length_viusal}</length>\
+                        <length>${length_visual}</length>\
                       </cylinder>\
                     </geometry>\
                     <material>\
@@ -138,7 +139,7 @@ public:
         boost::replace_all(modelStr, "${half_length_visual}", boost::lexical_cast<std::string>(length_visual/2.0));
         boost::replace_all(modelStr, "${half_length_collision}", boost::lexical_cast<std::string>(length_collision/2.0));
 
-        boost::replace_all(modelStr, "${length_viusal}", boost::lexical_cast<std::string>(length_visual));
+        boost::replace_all(modelStr, "${length_visual}", boost::lexical_cast<std::string>(length_visual));
         boost::replace_all(modelStr, "${length_collision}", boost::lexical_cast<std::string>(length_collision));
         boost::replace_all(modelStr, "${mass}", boost::lexical_cast<std::string>(mass));
         boost::replace_all(modelStr, "${ixx}", boost::lexical_cast<std::string>( ixx));

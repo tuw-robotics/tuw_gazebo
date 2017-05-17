@@ -75,7 +75,18 @@ void GazeboRosHumanReceiver::Load(physics::WorldPtr _parent, sdf::ElementPtr _sd
   }
   else
   {
-    this->radius_ = _sdf->GetElement("length_collision")->Get<double>();
+    this->length_collision_ = _sdf->GetElement("length_collision")->Get<double>();
+  }
+  
+  this->length_visual_ = 1.8;
+  if (!_sdf->HasElement("length_visual"))
+  {
+    ROS_WARN("GazeboRosHumanReceiver Plugin (ns = %s) missing <length_visual>, defaults to %f",
+             this->robot_namespace_.c_str(), this->length_visual_);
+  }
+  else
+  {
+    this->length_visual_ = _sdf->GetElement("length_visual")->Get<double>();
   }
 
   ROS_INFO("GazeboRosHumanReceiver");
@@ -97,12 +108,12 @@ void GazeboRosHumanReceiver::humanCallback(const tuw_object_msgs::ObjectWithCova
 
 void GazeboRosHumanReceiver::createHuman(const std::string &name, const ignition::math::Pose3d &pose)
 {
-  double length_viusal = 1.8, mass = 10;
+  double mass = 10;
   //double radius = 0.2, length_viusal = 1.8, length_collision = 0.4, mass = 10;
-  double half_length_visual = length_viusal / 2.0;
+  double half_length_visual = length_visual_ / 2.0;
   double half_length_collision = length_collision_ / 2.0;
   std::string modelStr = GazeboModelTemplates::cylinderTemplate(name, pose, radius_, mass,
-                                                                length_viusal, half_length_collision);
+                                                                length_visual_, half_length_collision);
   sdf::SDF sdfModel;
   sdfModel.SetFromString(modelStr);
   this->world_->InsertModelSDF(sdfModel);
