@@ -59,6 +59,8 @@ private:
   int max_humans_;
   double min_distance_between_humans_;
   double inactive_placement_offset_;
+  double radius_;
+  double length_collision_;
   
   tuw_object_msgs::ObjectWithCovarianceArray msgHumans_;
   

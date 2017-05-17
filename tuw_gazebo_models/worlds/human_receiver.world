@@ -33,6 +33,8 @@
     </include>
     <plugin name="human_receiver" filename="libtuw_gazebo_ros_human_receiver.so">
         <max_humans>100</max_humans>
+        <radius>0.2</radius>
+        <length_collision>0.2</length_collision>
         <min_distance_between_humans>1.0</min_distance_between_humans>
         <inactive_placement_offset>50</inactive_placement_offset>
     </plugin>

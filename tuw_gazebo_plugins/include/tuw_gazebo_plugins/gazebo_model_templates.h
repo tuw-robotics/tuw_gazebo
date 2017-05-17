@@ -81,7 +81,7 @@ public:
                 <link name ='link'>\
                   <pose>0 0 0 0 0 0</pose>\
                   <collision name ='collision'>\
-                  <pose>0 0 -0.7 0 0 0</pose>\
+                    <pose>0 0 -0.7 0 0 0</pose>\
                     <geometry>\
                       <cylinder>\
                         <radius>${radius}</radius>\
