@@ -37,7 +37,7 @@
         <length_visual>1.8</length_visual>
         <length_collision>1.8</length_collision>
         <min_distance_between_humans>1.0</min_distance_between_humans>
-        <inactive_placement_offset>50</inactive_placement_offset>
+        <inactive_placement_offset>150</inactive_placement_offset>
     </plugin>
   </world>
 </sdf>
