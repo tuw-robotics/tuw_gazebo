@@ -36,8 +36,8 @@
 	<kd value="10.0"/>
     </xacro:property>
     <xacro:pioneer_swivel             parent="${parent}"  xyz="-0.185 0    0.0535" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_swivel>
-    <xacro:pioneer_wheel side="right" parent="${parent}"  xyz=" 0    -0.15 ${wheel_radius}"   rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>
-    <xacro:pioneer_wheel side="left"  parent="${parent}"  xyz=" 0     0.15 ${wheel_radius}"   rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>
+    <xacro:pioneer_wheel side="right" parent="${parent}"  xyz=" 0    -0.165 ${wheel_radius}" rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>
+    <xacro:pioneer_wheel side="left"  parent="${parent}"  xyz=" 0     0.165 ${wheel_radius}" rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>
     
   </xacro:macro>
 </robot>
