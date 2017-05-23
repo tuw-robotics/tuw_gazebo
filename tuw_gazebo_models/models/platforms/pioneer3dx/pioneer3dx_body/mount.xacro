@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="pioneer_mount" params="name parent xyz rpy model_dir:=^">   
+  <xacro:property name="mount_base_width" value="0.14" />
+  <xacro:property name="mount_bar_width" value="0.02" />
+  <xacro:property name="aluminium_bar_colour" value="0.8 0.8 0.8 1" />
+               
+  
+  <!--  mount camera tof  -->
+  <joint name="${parent}_camera_tof_joint" type="fixed">
+    <origin xyz="0 0 0.38" rpy="${rpy}"/>
+    <parent link="${parent}"/>
+    <child link="${name}_camera_tof"/>
+  </joint>
+  <link name="${name}_camera_tof">
+    <visual>
+      <origin xyz="-0.01 0 0.03" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.12 0.12"/>
+      </geometry>
+      <material name="${name}_camera_tof">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.0 0 0.0" rpy="0 ${pi/2} 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.01"/>
+      </geometry>
+      <material name="${name}_camera_tof">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+  <gazebo reference="${name}_camera_tof">
+    <material value="Gazebo/Grey"/>
+  </gazebo>
+ 
+  
+  <!--  mount bottom left -->
+  <joint name="${parent}_${name}_bottom_left_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${rpy}"/>
+    <parent link="${parent}"/>
+    <child link="${name}_bottom_left"/>
+  </joint>
+  <link name="${name}_bottom_left">
+    <!-- right base bar -->
+    <visual>
+      <origin xyz="-0.04 +${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.04 +${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+    </collision>
+    <!-- left base bar -->
+    <visual>
+      <origin xyz="-0.04 -${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.04 -${0.27/2.} 0.01"/>
+      <geometry>
+        <box size="0.31 0.04 0.02"/>
+      </geometry>
+    </collision>
+    <!-- right column -->
+    <visual>
+      <origin xyz="-0.0 +${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0 +${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+    </collision>
+    <!-- left column -->
+    <visual>
+      <origin xyz="-0.0 -${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0 -${0.25/2.} ${0.02+0.92/2}"/>
+      <geometry>
+        <box size="0.02 0.02 0.92"/>
+      </geometry>
+    </collision>
+    <!-- laser bar -->
+    <visual>
+      <origin xyz="0.02 0 0.19"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.02 0 0.19"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
+    <!-- camera tof bar low -->
+    <visual>
+      <origin xyz="-0.02 0 0.36"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.02 0 0.36"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
+    <!-- camera tof bar bottom -->
+    <visual>
+      <origin xyz="-0.02 0 0.47"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.02 0 0.47"/>
+      <geometry>
+        <box size="0.02 0.27 0.02 "/>
+      </geometry>
+    </collision>
+    <!-- Top bar -->
+    <visual>
+      <origin xyz="0 0 ${0.02+0.92+0.02/2}"/>
+      <geometry>
+        <box size="0.02 0.30 0.02 "/>
+      </geometry>
+      <material name="aluminium_bar">
+        <color rgba="${aluminium_bar_colour}"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${0.02+0.92+0.02/2}"/>
+      <geometry>
+        <box size="0.02 0.30 0.02 "/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="${name}_bottom_left">
+    <material value="Gazebo/Grey"/>
+  </gazebo>
+  
+  </xacro:macro>
+</robot>

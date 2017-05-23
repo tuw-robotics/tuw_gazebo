@@ -8,6 +8,8 @@
 		<type>quick</type>
 		<iters>50</iters>
 		<sor>1.3</sor>
+		<!-- see http://gazebosim.org/tutorials?tut=parallel&cat=physics -->
+		<!-- island_threads>8</island_threads --> 
 	    </solver>
 	    <constraints>
 		<cfm>0.000000001</cfm>
@@ -21,13 +23,15 @@
     </physics>
     
     <scene>
+      <ambient>1.0 1.0 1.0 1.0</ambient>
+      <shadows>0</shadows>
       <sky>
         <clouds>
           <speed>12</speed>
         </clouds>
       </sky>
     </scene>
-   <include>
+    <include>
       <uri>model://sun</uri>
     </include>
     <include>

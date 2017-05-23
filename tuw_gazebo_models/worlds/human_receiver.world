@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="human_receiver">
+    <!--    -->
+    <physics name="ode_blue" type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>50</iters>
+          <sor>1.3</sor>
+          <!-- see http://gazebosim.org/tutorials?tut=parallel&cat=physics -->
+          <!-- island_threads>8</island_threads --> 
+        </solver>
+        <constraints>
+          <cfm>0.000000001</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>1</contact_max_correcting_vel>
+          <contact_surface_layer>0.01</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.0010</max_step_size>
+    </physics>
+    <scene>
+      <ambient>1.0 1.0 1.0 1.0</ambient>
+      <shadows>0</shadows>
+    </scene>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <plugin name="human_receiver" filename="libtuw_gazebo_ros_human_receiver.so">
+        <max_humans>100</max_humans>
+        <min_distance_between_humans>0.5</min_distance_between_humans>
+        <inactive_placement_offset>50</inactive_placement_offset>
+    </plugin>
+  </world>
+</sdf>

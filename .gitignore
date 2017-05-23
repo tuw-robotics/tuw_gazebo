@@ -49,6 +49,7 @@ build
 
 # KDevelop
 *kdev*
+*.orig
 
 # ROS
 build

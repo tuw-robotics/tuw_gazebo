@@ -35,7 +35,7 @@
     </link>
     
     <gazebo reference="${name}">
-        <sensor name="laser" type="${sensor_type}">
+        <sensor name="${name}" type="${sensor_type}">
 	    <pose>0 0 0 0 0 0</pose>
 	    <update_rate>5.5</update_rate>
 	    <visualize>true</visualize>     
