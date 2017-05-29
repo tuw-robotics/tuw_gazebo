@@ -9,7 +9,7 @@
     <origin xyz="${xyz}" rpy="${rpy}"/>
     <axis xyz="0 0 1"/>
     <anchor xyz="0 0 0"/>
-    <limit effort="100" velocity="100" k_velocity="0"/>
+    <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.1" friction="0.0"/>
     <parent link="${parent}"/>
     <child link="swivel"/>
@@ -46,7 +46,7 @@
     <origin xyz="-0.026 0 -0.016" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <anchor xyz="0 0 0"/>
-    <limit effort="100" velocity="100" k_velocity="0"/>
+    <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.0" friction="0.0"/>
     <parent link="swivel"/>
     <child link="center_wheel"/>
