@@ -118,6 +118,9 @@ target_link_libraries(tuw_gazebo_ros_bridge_model tuw_gazebo_ros_utils ${GAZEBO_
 add_library(tuw_gazebo_ros_human_receiver src/gazebo_ros_human_receiver.cpp)
 target_link_libraries(tuw_gazebo_ros_human_receiver ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(tuw_gazebo_tire_model src/tire_model.cpp)
+target_link_libraries(tuw_gazebo_tire_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 install(TARGETS 
   tuw_gazebo_ros_utils 
   tuw_gazebo_ros_diff_drive
@@ -125,6 +128,7 @@ install(TARGETS
   tuw_gazebo_ros_gpu_laser
   tuw_gazebo_ros_imu9dof
   tuw_gazebo_ros_bridge_model
+  tuw_gazebo_tire_model
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
