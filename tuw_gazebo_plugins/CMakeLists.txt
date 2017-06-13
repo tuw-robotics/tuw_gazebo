@@ -31,6 +31,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   gazebo_msgs 
   tuw_nav_msgs
+  tuw_vehicle_msgs
 )
 
 include (FindPkgConfig)
@@ -120,6 +121,9 @@ target_link_libraries(tuw_gazebo_ros_human_receiver ${catkin_LIBRARIES} ${Boost_
 
 add_library(tuw_gazebo_tire_model src/tire_model.cpp)
 target_link_libraries(tuw_gazebo_tire_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_library(tuw_gazebo_ros_rwd src/gazebo_ros_rwd.cpp src/HV_battery.cpp src/aero_forces.cpp)
+target_link_libraries(tuw_gazebo_ros_rwd tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS 
   tuw_gazebo_ros_utils 
