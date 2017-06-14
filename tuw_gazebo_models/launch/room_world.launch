@@ -2,7 +2,7 @@
   <arg name="room" default="" />
   <arg name="world_name" default="empty_world"/>
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
-  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/environments/:$(find tuw_gazebo_models)/models/visual_marker/"/> 
+  <env name="GAZEBO_MODEL_PATH" value="$(find tuw_gazebo_models)/models/environments/:$(find tuw_gazebo_models)/models/visual_marker/$(find tuw_gazebo_models)/models/tuwr/"/> 
      
   <!-- Gazebo  -->
   <include file="$(find tuw_gazebo_models)/launch/empty_world.launch">
