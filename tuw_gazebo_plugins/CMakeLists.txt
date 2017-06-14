@@ -136,6 +136,9 @@ target_link_libraries(tuw_gazebo_ros_encoder tuw_gazebo_ros_utils ${GAZEBO_LIBRA
 add_library(cone_detection_sim src/cone_detection_sim.cpp)
 target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(tuw_gazebo_ros_map src/gazebo_ros_map.cpp)
+target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 install(TARGETS 
   tuw_gazebo_ros_utils 
   tuw_gazebo_ros_diff_drive
