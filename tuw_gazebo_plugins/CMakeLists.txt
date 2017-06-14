@@ -77,6 +77,8 @@ catkin_package(
     tuw_gazebo_ros_rwd
     tuw_gazebo_tire_model
     cone_detection_sim
+    tuw_gazebo_ros_map
+    tuw_gazebo_ros_odom
   CATKIN_DEPENDS 
   DEPENDS 
     gazebo 
@@ -139,6 +141,9 @@ target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES
 add_library(tuw_gazebo_ros_map src/gazebo_ros_map.cpp)
 target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(tuw_gazebo_ros_odom src/gazebo_ros_odom.cpp)
+target_link_libraries(tuw_gazebo_ros_odom tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 install(TARGETS 
   tuw_gazebo_ros_utils 
   tuw_gazebo_ros_diff_drive
@@ -150,6 +155,8 @@ install(TARGETS
   tuw_gazebo_ros_rwd
   tuw_gazebo_ros_encoder
   cone_detection_sim
+  tuw_gazebo_ros_map
+  tuw_gazebo_ros_odom
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
