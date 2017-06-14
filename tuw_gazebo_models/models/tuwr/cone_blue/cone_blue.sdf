@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="cone_blue">
+    <pose>0 0 0 0 0 0</pose>
+    <link name="link">
+      <inertial>
+        <pose>0 0 0.1625 0 0 0</pose>
+        <mass>0.45</mass>
+        <inertia>
+          <ixx>0.007883498</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.007883498</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.000107315</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 0.1625 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.05075</radius>
+            <length>0.325</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cone/cone.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0.01 0.01 1 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <emissive>0 0 0 0</emissive>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
