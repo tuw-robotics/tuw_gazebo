@@ -61,7 +61,8 @@ execute_process(COMMAND
 catkin_python_setup()
 
 generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg 
-                                      cfg/GazeboRosHumanReceiverPlugin.cfg )
+                                      cfg/GazeboRosHumanReceiverPlugin.cfg 
+                                      cfg/ConeDetectionSim.cfg)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -75,6 +76,7 @@ catkin_package(
     tuw_gazebo_ros_encoder
     tuw_gazebo_ros_rwd
     tuw_gazebo_tire_model
+    cone_detection_sim
   CATKIN_DEPENDS 
   DEPENDS 
     gazebo 
@@ -131,6 +133,8 @@ target_link_libraries(tuw_gazebo_ros_rwd tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES
 add_library(tuw_gazebo_ros_encoder src/gazebo_ros_encoder.cpp)
 target_link_libraries(tuw_gazebo_ros_encoder tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(cone_detection_sim src/cone_detection_sim.cpp)
+target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS 
   tuw_gazebo_ros_utils 
@@ -142,6 +146,7 @@ install(TARGETS
   tuw_gazebo_tire_model
   tuw_gazebo_ros_rwd
   tuw_gazebo_ros_encoder
+  cone_detection_sim
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
