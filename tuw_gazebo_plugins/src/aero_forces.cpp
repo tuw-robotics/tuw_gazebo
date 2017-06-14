@@ -56,7 +56,7 @@ void AeroModel::AddForces(double velocity, physics::LinkPtr& baseLink) {
   double velSquared = 0 - (velocity * velocity);
   for (auto& aeroForce : aeroForces_) {
     ignition::math::Vector3d f(sgn(velocity) * velSquared * aeroForce.fx, 0,
-                                velSquared * aeroForce.fz);
+                               velSquared * aeroForce.fz);
     baseLink->AddLinkForce(f, aeroForce.pose);
   }
 }
