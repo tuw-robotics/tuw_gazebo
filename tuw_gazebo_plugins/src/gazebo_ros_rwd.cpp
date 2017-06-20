@@ -95,8 +95,6 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   // inverter calcs /12 instead of /gearTransmission
   powertrainEfficiency_ = (1.0 / 12.0) * gearTransmission_ * gearboxEfficiency;
 
-  ROS_INFO("%f", powertrainEfficiency_);
-
   leftRearJoint_ = gazebo_ros_->getJoint(parent_, "leftRearJoint",
                                          "rear_left_powertrain_joint");
   rightRearJoint_ = gazebo_ros_->getJoint(parent_, "rightRearJoint",
@@ -120,9 +118,9 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   baseLink_ = parent_->GetLink(baseLinkName_);
 
   leftSteerPID_ =
-      common::PID(250.0, 200.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(100.0, 50.0, 1.0, 1000.0, -1000.0, 1000.0, -1000.0);
   rightSteerPID_ =
-      common::PID(250.0, 200.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(100.0, 50.0, 1.0, 1000.0, -1000.0, 1000.0, -1000.0);
 
   if (this->update_rate_ > 0.0) {
     this->update_period_ = 1.0 / this->update_rate_;
@@ -192,8 +190,16 @@ void GazeboRosRWD::UpdateChild() {
   tuw_vehicle_msgs::ChassisState chassisStateMsg;
   chassisStateMsg.header.stamp = ros::Time(current_time.sec, current_time.nsec);
   chassisStateMsg.header.frame_id = "0";
-  chassisStateMsg.steeringAngle =
-      steeringAngleNoise_.sim(steering_, seconds_since_last_update.Double());
+  chassisStateMsg.steeringAngle      = steeringAngleNoise_.sim(steering_, seconds_since_last_update.Double());
+  chassisStateMsg.steeringAngleRight = GetLeftToeAngle(chassisStateMsg.steeringAngle);
+  chassisStateMsg.steeringAngleLeft  = GetRightToeAngle(chassisStateMsg.steeringAngle);
+  gazebo::math::Pose woldPose =  parent_ ->GetWorldPose();
+  const float yaw     = woldPose .rot.GetYaw();
+  math::Vector3 linear = parent_->GetWorldLinearVel();
+  chassisStateMsg.vx  = cos ( yaw ) * linear.x + sin ( yaw ) * linear.y;
+  chassisStateMsg.vy  = cos ( yaw ) * linear.y - sin ( yaw ) * linear.x;
+  chassisStateMsg.omg = parent_->GetWorldAngularVel().z;
+  
   chassis_state_publisher_.publish(chassisStateMsg);
 
   last_update_time_ = current_time;
@@ -220,7 +226,8 @@ void GazeboRosRWD::WheelForces() {
   double brakeTorqueFront = pascalPressure * frontBrakeCoefficient_;
   double brakeTorqueRear =
       pascalPressure * brakeBalance_ * rearBrakeCoefficient_;
-  double leftTorque = torqueLeft_ * powertrainEfficiency_;
+      
+  double leftTorque  = torqueLeft_  * powertrainEfficiency_;
   double rightTorque = torqueRight_ * powertrainEfficiency_;
   double resistanceConstant = 5;
   if (fabs(leftTorque) < 0.1) {

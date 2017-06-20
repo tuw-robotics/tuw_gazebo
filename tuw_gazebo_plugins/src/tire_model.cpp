@@ -177,7 +177,6 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   } else {
     this->update_period_ = 0.0;
   }
-  last_update_time_ = parent_->GetWorld()->SimTime();
 
   alive_ = true;
 
@@ -203,7 +202,6 @@ void TireModel::Init() { gazebo::ModelPlugin::Init(); }
 void TireModel::Reset() {
   gazebo::ModelPlugin::Reset();
   this->contactSub_.reset();
-  last_update_time_ = parent_->GetWorld()->SimTime();
 }
 
 void TireModel::OnContacts(ConstContactsPtr &contactsMsg) {
@@ -221,19 +219,16 @@ int sgn(T val) {
 }
 
 void TireModel::UpdateChild() {
-  common::Time current_time = parent_->GetWorld()->SimTime();
-  common::Time seconds_since_last_update = (current_time - last_update_time_);
-  double Fz = 600;  // -tireJoint_->GetForceTorque(0).body1Force.z;
+  double Fz = - tireJoint_->GetForceTorque(0).body1Force.Z();  // 600;
   ignition::math::Vector3d linearVehicleVelocity = parent_->RelativeLinearVel();
   ignition::math::Vector3d angularVehicleVelocity =
       parent_->RelativeAngularVel();
-  double elapsedSeconds = seconds_since_last_update.Double();
   if (!ignition::math::isnan(Fz) && wheelCollides_ &&
       !ignition::math::isnan(angularVehicleVelocity.Z()) &&
       !ignition::math::isnan(linearVehicleVelocity.X()) &&
       !ignition::math::isnan(linearVehicleVelocity.Y()) &&
       !ignition::math::isnan(linearVehicleVelocity.Z())) {
-    Fz = ignition::math::clamp(Fz, FZMIN_, FZMAX_);
+    //Fz = ignition::math::clamp(Fz, FZMIN_, FZMAX_);
 
     double wheelVelocity = tireJoint_->GetVelocity(0);
 
@@ -245,12 +240,8 @@ void TireModel::UpdateChild() {
     ignition::math::Quaternion<double> tireRotation =
         tireJoint_->GetChild()->RelativePose().Rot();
     double toeAngle = isRear_ ? 0 : -tireRotation.Euler().Z();
-    if (toeAngle > (M_PI / 2.0)) {
-      toeAngle = toeAngle - M_PI;
-    }
-    if (toeAngle < (-M_PI / 2.0)) {
-      toeAngle = M_PI + toeAngle;
-    }
+    if (toeAngle > ( M_PI / 2.0)) { toeAngle = toeAngle - M_PI; }
+    if (toeAngle < (-M_PI / 2.0)) { toeAngle = M_PI + toeAngle; }
     ignition::math::Vector3d vb1 =
         linearVehicleVelocity + angularVelCrossAnchorPose;
     ignition::math::Vector3d velocityTireFrame(
@@ -263,7 +254,7 @@ void TireModel::UpdateChild() {
 
     double slipAngle =
         atan(velocityTireFrame.Y() / fabs(wheelVelocity * radius_));
-    slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
+    //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
     if (!isRear_) {
       camber_ = GetCamberFromToeAngle(-toeAngle);
@@ -297,7 +288,6 @@ void TireModel::UpdateChild() {
       tireJoint_->SetForce(0, torque);
     }
   }
-  last_update_time_ = current_time;
 }
 
 double TireModel::GetSlip(double vehicleVelocity, double wheelVelocity) {
@@ -320,7 +310,7 @@ double TireModel::GetSlip(double vehicleVelocity, double wheelVelocity) {
   // TODO radius here should be effective tire radius
   double slip =
       ((wheelVelocity * radius_) - vehicleVelocity) / fabs(vehicleVelocity);
-  slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
+  //slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
   return slip;
 }
 
