@@ -128,10 +128,6 @@ void ConeDetectionSim::Update() {
   ignition::math::Pose3d robotPose = parent_->WorldPose();
   double robotX = robotPose.Pos().X(), robotY = robotPose.Pos().Y();
 
-  const double coneColorBlue = 0;
-  const double coneColorYellow = 1;
-  const double coneColorRed = 2;
-
   for (physics::ModelPtr cone : cones_) {
     double r = ((double)std::rand()) / RAND_MAX;
     if (r <= config_.p_detection) {
@@ -163,15 +159,8 @@ void ConeDetectionSim::Update() {
       object.shape = tuw_object_msgs::Object::SHAPE_TRAFFIC_CONE;
       object.shape_variables.resize(2);
       object.shape_variables[0] = 0.2;
+      object.shape_variables[1] = getConeColorShapeVariable(cone);
 
-      if (cone->GetScopedName(false).find("cone_blue") != std::string::npos) {
-        object.shape_variables[1] = coneColorBlue;
-      } else if (cone->GetScopedName(false).find("cone_yellow") !=
-                 std::string::npos) {
-        object.shape_variables[1] = coneColorYellow;
-      } else if (cone->GetScopedName(false).find("cone") != std::string::npos) {
-        object.shape_variables[1] = coneColorRed;
-      }
       setVisualDetectionCovariance(owc);
       owc.object = object;
 

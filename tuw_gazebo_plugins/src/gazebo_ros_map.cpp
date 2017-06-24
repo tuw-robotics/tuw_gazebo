@@ -6,10 +6,6 @@ namespace gazebo {
 
 const double coneRadius = 0.2;
 
-const double coneColorBlue = 0;
-const double coneColorYellow = 1;
-const double coneColorRed = 2;
-
 GazeboRosMap::GazeboRosMap() {}
 
 GazeboRosMap::~GazeboRosMap() {
@@ -65,6 +61,9 @@ void GazeboRosMap::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   std::srand(std::time(0));
 }
 
+double getColorShapeVariable() {
+}
+
 void GazeboRosMap::Update() {
   common::Time current_time = parent_->GetWorld()->SimTime();
   double dt = (current_time - last_update_time_).Double();
@@ -102,17 +101,7 @@ void GazeboRosMap::Update() {
     object.shape = tuw_object_msgs::Object::SHAPE_TRAFFIC_CONE;
     object.shape_variables.resize(2);
     object.shape_variables[0] = coneRadius;
-
-    if (cone->GetScopedName(false).find("cone_blue") != std::string::npos ||
-        cone->GetScopedName(false).find("cone_l") != std::string::npos) {
-      object.shape_variables[1] = coneColorBlue;
-    } else if (cone->GetScopedName(false).find("cone_yellow") !=
-                   std::string::npos ||
-               cone->GetScopedName(false).find("cone_r") != std::string::npos) {
-      object.shape_variables[1] = coneColorYellow;
-    } else if (cone->GetScopedName(false).find("cone") != std::string::npos) {
-      object.shape_variables[1] = coneColorRed;
-    }
+    object.shape_variables[1] = getConeColorShapeVariable(cone);
 
     owc.covariance_pose.resize(9);
     for (size_t i = 0; i < 9; i++) {
