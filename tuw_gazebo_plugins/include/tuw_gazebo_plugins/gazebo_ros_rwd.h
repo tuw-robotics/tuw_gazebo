@@ -51,7 +51,7 @@ class GazeboRosRWD : public ModelPlugin {
 
   ros::Subscriber cmd_rwd_subscriber_;
   ros::Publisher battery_state_publisher_;
-  ros::Publisher chassis_state_publisher_;
+  ros::Publisher chassis_state_;
   ros::Publisher odometry_publisher_;
   tf::TransformBroadcaster transform_broadcaster_;
   boost::mutex lock;
