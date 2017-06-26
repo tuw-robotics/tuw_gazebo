@@ -118,9 +118,9 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   baseLink_ = parent_->GetLink(baseLinkName_);
 
   leftSteerPID_ =
-      common::PID(100.0, 50.0, 1.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(250.0,300.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
   rightSteerPID_ =
-      common::PID(100.0, 50.0, 1.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(250.0,300.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
 
   if (this->update_rate_ > 0.0) {
     this->update_period_ = 1.0 / this->update_rate_;
