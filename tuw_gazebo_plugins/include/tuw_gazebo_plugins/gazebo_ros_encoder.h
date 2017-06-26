@@ -16,13 +16,15 @@
 namespace gazebo {
 
 class GazeboRosEncoder : public ModelPlugin {
- public:
+public:
   GazeboRosEncoder();
   ~GazeboRosEncoder();
   void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf) override;
 
- private:
+private:
   void Update();
+
+  double getJointRpm(const physics::JointPtr &joint);
 
   physics::ModelPtr parent_;
   physics::JointPtr joints_[4];
@@ -37,9 +39,10 @@ class GazeboRosEncoder : public ModelPlugin {
   PubQueue<tuw_vehicle_msgs::Wheelspeeds>::Ptr pub_queue_;
   ros::Publisher pub_;
   std::string topic_name_;
+  bool directionKnown_;
 
   tuw::NoiseSimModel noise_[4];
 };
 }
 
-#endif  // GAZEBO_ROS_ENCODER
+#endif // GAZEBO_ROS_ENCODER

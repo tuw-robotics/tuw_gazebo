@@ -82,9 +82,16 @@ double HVBattery::GetCurrent() { return lastAppliedCurrent_; }
 double HVBattery::GetTemperature() { return temperature_; }
 
 void HVBattery::SetBatteryState(tuw::ros_msgs::BatteryState &msg) {
-  msg.hvVoltage = currentVoltage_;
-  msg.hvCurrent = lastAppliedCurrent_;
-  msg.hvTemperature = temperature_;
+  double voltagePerCell =
+      minVoltage_ + (currentCapacity_ / totalCapacity_) * (voltageRange_);
+
+  msg.cellVoltages.resize(cellCount_);
+  msg.cellTemperatures.resize(cellCount_);
+  for (size_t i = 0; i < cellCount_; i++) {
+    msg.cellVoltages[i] = voltagePerCell;
+    msg.cellTemperatures[i] = temperature_;
+  }
+  msg.current = lastAppliedCurrent_;
 }
 
 HVBattery::~HVBattery() {}

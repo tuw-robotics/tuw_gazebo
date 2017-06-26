@@ -19,17 +19,17 @@ endif(CMAKE_BUILD_TYPE MATCHES Debug)
 
 
 
-find_package(catkin REQUIRED COMPONENTS 
-  roscpp 
-  rospy 
-  nodelet 
-  urdf 
-  tf 
-  tf2_ros 
-  dynamic_reconfigure 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  nodelet
+  urdf
+  tf
+  tf2_ros
+  dynamic_reconfigure
   std_msgs
   nav_msgs
-  gazebo_msgs 
+  gazebo_msgs
   tuw_nav_msgs
   tuw_vehicle_msgs
 )
@@ -60,14 +60,14 @@ execute_process(COMMAND
 
 catkin_python_setup()
 
-generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg 
-                                      cfg/GazeboRosHumanReceiverPlugin.cfg 
+generate_dynamic_reconfigure_options( cfg/GazeboRosBridgeModelPlugin.cfg
+                                      cfg/GazeboRosHumanReceiverPlugin.cfg
                                       cfg/ConeDetectionSim.cfg)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES 
-    tuw_gazebo_ros_utils 
+  LIBRARIES
+    tuw_gazebo_ros_utils
     tuw_gazebo_ros_diff_drive
     tuw_gazebo_ros_laser
     tuw_gazebo_ros_gpu_laser
@@ -76,12 +76,13 @@ catkin_package(
     tuw_gazebo_ros_encoder
     tuw_gazebo_ros_rwd
     tuw_gazebo_tire_model
+    map_common
     cone_detection_sim
     tuw_gazebo_ros_map
     tuw_gazebo_ros_odom
-  CATKIN_DEPENDS 
-  DEPENDS 
-    gazebo 
+  CATKIN_DEPENDS
+  DEPENDS
+    gazebo
     SDF
 )
 
@@ -135,17 +136,20 @@ target_link_libraries(tuw_gazebo_ros_rwd tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES
 add_library(tuw_gazebo_ros_encoder src/gazebo_ros_encoder.cpp)
 target_link_libraries(tuw_gazebo_ros_encoder tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_library(map_common src/map_common.cpp)
+target_link_libraries(map_common tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 add_library(cone_detection_sim src/cone_detection_sim.cpp)
-target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils map_common ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_map src/gazebo_ros_map.cpp)
-target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils map_common ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_odom src/gazebo_ros_odom.cpp)
 target_link_libraries(tuw_gazebo_ros_odom tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-install(TARGETS 
-  tuw_gazebo_ros_utils 
+install(TARGETS
+  tuw_gazebo_ros_utils
   tuw_gazebo_ros_diff_drive
   tuw_gazebo_ros_laser
   tuw_gazebo_ros_gpu_laser
@@ -154,6 +158,7 @@ install(TARGETS
   tuw_gazebo_tire_model
   tuw_gazebo_ros_rwd
   tuw_gazebo_ros_encoder
+  map_common
   cone_detection_sim
   tuw_gazebo_ros_map
   tuw_gazebo_ros_odom

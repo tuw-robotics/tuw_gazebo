@@ -16,6 +16,7 @@ void GazeboRosEncoder::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
 
   gazebo_ros_->getParameter<std::string>(topic_name_, "topicName",
                                          "wheelspeeds");
+  gazebo_ros_->getParameterBoolean(directionKnown_, "directionKnown", false);
   gazebo_ros_->getParameter<double>(update_period_, "updateRate", 100.0);
   update_period_ = 1. / update_period_;
 
@@ -35,13 +36,13 @@ void GazeboRosEncoder::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
         noise_[i].loadParam(gazebo_ros_->Sdf()->GetElement("encoder_noise"));
   }
   if (!foundNoiseSdf) {
-    ROS_WARN(
-        "%s: <encoder>: missing <noise type=\"tuw_advanced\"> defaults to "
-        "no noise",
-        gazebo_ros_->info());
+    ROS_WARN("%s: <encoder>: missing <noise type=\"tuw_advanced\"> defaults to "
+             "no noise",
+             gazebo_ros_->info());
   }
 
-  pub_ = gazebo_ros_->node()->advertise<tuw_vehicle_msgs::Wheelspeeds>(topic_name_, 1);
+  pub_ = gazebo_ros_->node()->advertise<tuw_vehicle_msgs::Wheelspeeds>(
+      topic_name_, 1);
   pub_multi_queue_.startServiceThread();
   pub_queue_ = pub_multi_queue_.addPub<tuw_vehicle_msgs::Wheelspeeds>();
 
@@ -54,9 +55,13 @@ static double radps2rpm(double radps) { return radps / M_PI * 30; }
 // y axis (0 = x, 1 = y, 2 = z)
 const int wheelRotationAxis = 1;
 
-static double getJointRpm(const physics::JointPtr &joint) {
+double GazeboRosEncoder::getJointRpm(const physics::JointPtr &joint) {
   double radps = joint->GetVelocity(wheelRotationAxis);
-  return radps2rpm(radps);
+  double rpm = radps2rpm(radps);
+  if (directionKnown_) {
+    return rpm;
+  }
+  return fabs(rpm);
 }
 
 void GazeboRosEncoder::Update() {

@@ -56,7 +56,7 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<std::string>(batteryStateTopic_,
                                          "batteryStateTopic", "battery_state");
   gazebo_ros_->getParameter<std::string>(chassisStateTopic_,
-                                         "chassisStateTopic", "chassis_state");
+                                         "chassisStateTopic", "chassis");
   gazebo_ros_->getParameter<std::string>(baseLinkName_, "baseLink",
                                          "base_link");
   gazebo_ros_->getParameter<double>(update_rate_, "updateRate", 100.0);
@@ -144,7 +144,7 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   battery_state_publisher_ =
       gazebo_ros_->node()->advertise<tuw_vehicle_msgs::BatteryState>(
           batteryStateTopic_.c_str(), 10);
-  chassis_state_publisher_ =
+  chassis_state_ =
       gazebo_ros_->node()->advertise<tuw_vehicle_msgs::ChassisState>(
           chassisStateTopic_.c_str(), 10);
 
@@ -170,12 +170,12 @@ void GazeboRosRWD::UpdateChild() {
 
   maxVelocity_ = GetMaxVelocity();
 
-  double effortRight = rightSteerPID_.Update(
-      rightSteeringJoint_->Position() - GetRightToeAngle(steering_),
-      seconds_since_last_update);
-  double effortLeft = leftSteerPID_.Update(
-      leftSteeringJoint_->Position() - GetLeftToeAngle(steering_),
-      seconds_since_last_update);
+  double effortRight = rightSteerPID_.Update(rightSteeringJoint_->Position() -
+                                                 GetRightToeAngle(steering_),
+                                             seconds_since_last_update);
+  double effortLeft = leftSteerPID_.Update(leftSteeringJoint_->Position() -
+                                               GetLeftToeAngle(steering_),
+                                           seconds_since_last_update);
   leftSteeringJoint_->SetForce(0, effortLeft);
   rightSteeringJoint_->SetForce(0, effortRight);
   WheelForces();
@@ -190,17 +190,9 @@ void GazeboRosRWD::UpdateChild() {
   tuw_vehicle_msgs::ChassisState chassisStateMsg;
   chassisStateMsg.header.stamp = ros::Time(current_time.sec, current_time.nsec);
   chassisStateMsg.header.frame_id = "0";
-  chassisStateMsg.steeringAngle      = steeringAngleNoise_.sim(steering_, seconds_since_last_update.Double());
-  chassisStateMsg.steeringAngleRight = GetLeftToeAngle(chassisStateMsg.steeringAngle);
-  chassisStateMsg.steeringAngleLeft  = GetRightToeAngle(chassisStateMsg.steeringAngle);
-  gazebo::math::Pose woldPose =  parent_ ->GetWorldPose();
-  const float yaw     = woldPose .rot.GetYaw();
-  math::Vector3 linear = parent_->GetWorldLinearVel();
-  chassisStateMsg.vx  = cos ( yaw ) * linear.x + sin ( yaw ) * linear.y;
-  chassisStateMsg.vy  = cos ( yaw ) * linear.y - sin ( yaw ) * linear.x;
-  chassisStateMsg.omg = parent_->GetWorldAngularVel().z;
-  
-  chassis_state_publisher_.publish(chassisStateMsg);
+  chassisStateMsg.steeringAngle =
+      steeringAngleNoise_.sim(steering_, seconds_since_last_update.Double());
+  chassis_state_.publish(chassisStateMsg);
 
   last_update_time_ = current_time;
 }
@@ -226,8 +218,7 @@ void GazeboRosRWD::WheelForces() {
   double brakeTorqueFront = pascalPressure * frontBrakeCoefficient_;
   double brakeTorqueRear =
       pascalPressure * brakeBalance_ * rearBrakeCoefficient_;
-      
-  double leftTorque  = torqueLeft_  * powertrainEfficiency_;
+  double leftTorque = torqueLeft_ * powertrainEfficiency_;
   double rightTorque = torqueRight_ * powertrainEfficiency_;
   double resistanceConstant = 5;
   if (fabs(leftTorque) < 0.1) {
