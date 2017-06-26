@@ -1,5 +1,3 @@
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
 #include <nav_msgs/Odometry.h>
 #include <ros/advertise_options.h>
 #include <ros/callback_queue.h>
@@ -10,6 +8,8 @@
 #include <tuw_vehicle_msgs/BatteryState.h>
 #include <tuw_vehicle_msgs/ChassisState.h>
 #include <tuw_vehicle_msgs/RWDControl.h>
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
 
 namespace gazebo {
 GazeboRosRWD::GazeboRosRWD() {
@@ -95,8 +95,6 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   // inverter calcs /12 instead of /gearTransmission
   powertrainEfficiency_ = (1.0 / 12.0) * gearTransmission_ * gearboxEfficiency;
 
-  ROS_INFO("%f", powertrainEfficiency_);
-
   leftRearJoint_ = gazebo_ros_->getJoint(parent_, "leftRearJoint",
                                          "rear_left_powertrain_joint");
   rightRearJoint_ = gazebo_ros_->getJoint(parent_, "rightRearJoint",
@@ -120,9 +118,9 @@ void GazeboRosRWD::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   baseLink_ = parent_->GetLink(baseLinkName_);
 
   leftSteerPID_ =
-      common::PID(250.0, 200.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(250.0,300.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
   rightSteerPID_ =
-      common::PID(250.0, 200.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
+      common::PID(250.0,300.0, 10.0, 1000.0, -1000.0, 1000.0, -1000.0);
 
   if (this->update_rate_ > 0.0) {
     this->update_period_ = 1.0 / this->update_rate_;
