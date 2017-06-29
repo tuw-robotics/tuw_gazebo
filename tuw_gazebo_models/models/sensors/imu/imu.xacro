@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<!-- Front Laser --> 
-<xacro:macro name="imu_sensor" params="name parent xyz rpy model_dir:=^" >
-  
+  <!-- Front Laser -->
+  <xacro:macro name="imu_sensor" params="name parent xyz rpy ns model_dir:=^">
+
     <joint name="${parent}_${name}_joint" type="fixed">
-      <axis xyz="0 0 1" />
+      <axis xyz="0 0 1"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <parent link="${parent}"/>
       <child link="${name}"/>
     </joint>
-    
+
     <link name="${name}">
       <collision>
         <origin xyz="0 0 0.0015" rpy="0 0 0"/>
@@ -25,63 +25,69 @@
         </geometry>
       </visual>
       <inertial>
-        <mass value="1e-5" />
+        <mass value="1e-5"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9" />
+        <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
       </inertial>
     </link>
-    
-    <xacro:property name="imu_noise_lin"> 
-	<noise type="tuw_advanced"> 
-	    <meanWhiteNoise   value="0"/> 
-	    <sigmaWhiteNoise  value="0.003"/>
-	    <tauCutOff        value="${1/250}"/>
-	    <sigmaRandWalk    value="${9.8 * 0.00005}"/>
-	    <sigmaGaussMarkov value="${9.8 * 0.002}"/>
-	    <freqGaussMarkov  value="${1/100}"/>
-	</noise> 
+
+    <xacro:property name="imu_noise_lin">
+      <noise type="tuw_advanced">
+        <meanWhiteNoise value="0"/>
+        <sigmaWhiteNoise value="0.003"/>
+        <tauCutOff value="${1/250}"/>
+        <sigmaRandWalk value="${9.8 * 0.00005}"/>
+        <sigmaGaussMarkov value="${9.8 * 0.002}"/>
+        <freqGaussMarkov value="${1/100}"/>
+      </noise>
     </xacro:property>
-    <xacro:property name="imu_noise_ang"> 
-	<noise type="tuw_advanced"> 
-	    <meanWhiteNoise   value="0"/> 
-	    <sigmaWhiteNoise  value="0.00024"/>
-	    <tauCutOff        value="${1/133}"/>
-	    <sigmaRandWalk    value="${1/180 * 0.00001}"/>
-	    <sigmaGaussMarkov value="${1/180 * 0.0003}"/>
-	    <freqGaussMarkov  value="${1/40}"/>
-	</noise> 
+    <xacro:property name="imu_noise_ang">
+      <noise type="tuw_advanced">
+        <meanWhiteNoise value="0"/>
+        <sigmaWhiteNoise value="0.00024"/>
+        <tauCutOff value="${1/133}"/>
+        <sigmaRandWalk value="${1/180 * 0.00001}"/>
+        <sigmaGaussMarkov value="${1/180 * 0.0003}"/>
+        <freqGaussMarkov value="${1/40}"/>
+      </noise>
     </xacro:property>
-    <xacro:property name="mag_noise"> 
-	<noise type="tuw_advanced"> 
-	    <meanWhiteNoise   value="0"/> 
-	    <sigmaWhiteNoise  value="0.00024"/>
-	    <tauCutOff        value="${1/110}"/>
-	    <sigmaRandWalk    value="${1e-4 * 0.000006}"/>
-	    <sigmaGaussMarkov value="${1e-4 * 0.00003}"/>
-	    <freqGaussMarkov  value="${1/70}"/>
-	</noise> 
+    <xacro:property name="mag_noise">
+      <noise type="tuw_advanced">
+        <meanWhiteNoise value="0"/>
+        <sigmaWhiteNoise value="0.00024"/>
+        <tauCutOff value="${1/110}"/>
+        <sigmaRandWalk value="${1e-4 * 0.000006}"/>
+        <sigmaGaussMarkov value="${1e-4 * 0.00003}"/>
+        <freqGaussMarkov value="${1/70}"/>
+      </noise>
     </xacro:property>
-    
+
     <gazebo>
-	<plugin name="gazebo_ros_imu9dof" filename="libtuw_gazebo_ros_imu9dof.so" >
-	    <rosDebugLevel>Debug</rosDebugLevel>
-	    <robotNamespace></robotNamespace>
-	    <updateRate>50.0</updateRate>
-	    <alwaysOn>true</alwaysOn>
-	    
-	    <origin xyz="${xyz}" rpy="${rpy}"/>
-	    <link_name>${name}</link_name>
-	    <imu>
-		<topic>${name}/imu</topic>
-		<angular_velocity>    <xacro:insert_block name="imu_noise_ang"/> </angular_velocity>
-		<linear_acceleration> <xacro:insert_block name="imu_noise_lin"/> </linear_acceleration>
-	    </imu>
-	    <magnetometer>  
-		<topic>${name}/mag</topic>
-		<magnetic_field> <xacro:insert_block name="mag_noise"/> </magnetic_field>
-	    </magnetometer>
-	</plugin>
+      <plugin name="gazebo_ros_imu9dof" filename="libtuw_gazebo_ros_imu9dof.so">
+        <rosDebugLevel>Debug</rosDebugLevel>
+        <robotNamespace>${ns}</robotNamespace>
+        <updateRate>50.0</updateRate>
+        <alwaysOn>true</alwaysOn>
+
+        <origin xyz="${xyz}" rpy="${rpy}"/>
+        <link_name>${name}</link_name>
+        <imu>
+          <topic>${name}/imu</topic>
+          <angular_velocity>
+            <xacro:insert_block name="imu_noise_ang"/>
+          </angular_velocity>
+          <linear_acceleration>
+            <xacro:insert_block name="imu_noise_lin"/>
+          </linear_acceleration>
+        </imu>
+        <magnetometer>
+          <topic>${name}/mag</topic>
+          <magnetic_field>
+            <xacro:insert_block name="mag_noise"/>
+          </magnetic_field>
+        </magnetometer>
+      </plugin>
     </gazebo>
-</xacro:macro>
+  </xacro:macro>
 
 </robot>
