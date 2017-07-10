@@ -219,7 +219,7 @@ int sgn(T val) {
 }
 
 void TireModel::UpdateChild() {
-  double Fz = - tireJoint_->GetForceTorque(0).body1Force.Z();  // 600;
+  double Fz = fmax(- tireJoint_->GetForceTorque(0).body1Force.Z(),10);  // 600;
   ignition::math::Vector3d linearVehicleVelocity = parent_->RelativeLinearVel();
   ignition::math::Vector3d angularVehicleVelocity =
       parent_->RelativeAngularVel();
