@@ -76,6 +76,7 @@ catkin_package(
     tuw_gazebo_ros_encoder
     tuw_gazebo_ros_rwd
     tuw_gazebo_tire_model
+    tuw_gazebo_ros_joint_state_publisher
     map_common
     cone_detection_sim
     tuw_gazebo_ros_map
@@ -147,6 +148,13 @@ target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils map_common ${GAZEB
 
 add_library(tuw_gazebo_ros_odom src/gazebo_ros_odom.cpp)
 target_link_libraries(tuw_gazebo_ros_odom tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+
+add_library(tuw_gazebo_ros_joint_state_publisher src/gazebo_ros_joint_state_publisher.cpp)
+set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES LINK_FLAGS "${ld_flags}")
+set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES COMPILE_FLAGS "${cxx_flags}")
+add_dependencies(tuw_gazebo_ros_joint_state_publisher ${catkin_EXPORTED_TARGETS})
+target_link_libraries(tuw_gazebo_ros_joint_state_publisher ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS
   tuw_gazebo_ros_utils
