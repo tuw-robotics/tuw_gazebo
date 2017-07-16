@@ -1,7 +1,7 @@
 #include "tuw_gazebo_plugins/gazebo_ros_odom.h"
 #include <ros/advertise_options.h>
 #include <ros/callback_queue.h>
-#include <ros/ros.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
@@ -10,7 +10,7 @@ namespace gazebo {
 GazeboRosOdom::GazeboRosOdom() { pubOdom_.shutdown(); }
 
 GazeboRosOdom::~GazeboRosOdom() {
-  event::Events::DisconnectWorldUpdateBegin(this->update_connection_);
+  this->update_connection_.reset();
 }
 
 void GazeboRosOdom::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
@@ -18,10 +18,13 @@ void GazeboRosOdom::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_ = GazeboRosPtr(new GazeboRos(parent, sdf, "Odom"));
   gazebo_ros_->isInitialized();
 
+  int updateRate;
+
   gazebo_ros_->getParameter<std::string>(odomTopic_, "odomTopic", "odom_gt");
   gazebo_ros_->getParameter<std::string>(odomFrame_, "odomFrame", "odom_gt");
-  gazebo_ros_->getParameter<std::string>(baseLinkFrame_, "baseLinkFrame",
-                                         "base_link_gt");
+  gazebo_ros_->getParameter<int>(updateRate, "updateRate", 50);
+
+  updatePeriod_ = 1. / (double)updateRate;
 
   lastUpdateTime_ = parent_->GetWorld()->SimTime();
 
@@ -29,8 +32,6 @@ void GazeboRosOdom::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   ROS_INFO("%s: Advertising odom on %s", gazebo_ros_->info(),
            odomTopic_.c_str());
 
-  // this->callback_queue_thread_ =
-  //     boost::thread(boost::bind(&GazeboRosOdom::QueueThread, this));
   this->update_connection_ = event::Events::ConnectWorldUpdateBegin(
       boost::bind(&GazeboRosOdom::UpdateChild, this));
 }
@@ -44,32 +45,42 @@ void GazeboRosOdom::Reset() {
 
 void GazeboRosOdom::UpdateChild() {
   common::Time current_time = parent_->GetWorld()->SimTime();
-  common::Time dt_sec = (current_time - lastUpdateTime_);
-  lastUpdateTime_ = current_time;
-  publishOdometry();
+
+  if ((current_time - lastUpdateTime_).Double() > updatePeriod_) {
+    publishOdometry();
+    lastUpdateTime_ = current_time;
+  }
 }
 
 void GazeboRosOdom::publishOdometry() {
+
   ros::Time current_time = ros::Time::now();
   std::string mapFrame = "map";
 
-  tf::Quaternion qt;
-  tf::Vector3 vt;
-
-  // getting data form gazebo world
   ignition::math::Pose3d pose = parent_->WorldPose();
-  qt = tf::Quaternion(pose.Rot().X(), pose.Rot().Y(), pose.Rot().Z(),
-                      pose.Rot().W());
-  vt = tf::Vector3(pose.Pos().X(), pose.Pos().Y(), pose.Pos().Z());
 
-  odom_.pose.pose.position.x = vt.x();
-  odom_.pose.pose.position.y = vt.y();
-  odom_.pose.pose.position.z = vt.z();
+  double px = pose.Pos().X(), py = pose.Pos().Y(), pz = pose.Pos().Z();
+  double qx = pose.Rot().X(), qy = pose.Rot().Y(), qz = pose.Rot().Z(), qw = pose.Rot().W();
 
-  odom_.pose.pose.orientation.x = qt.x();
-  odom_.pose.pose.orientation.y = qt.y();
-  odom_.pose.pose.orientation.z = qt.z();
-  odom_.pose.pose.orientation.w = qt.w();
+  geometry_msgs::TransformStamped tfStamped;
+  tfStamped.header.stamp = current_time;
+  tfStamped.header.frame_id = "map";
+  tfStamped.child_frame_id = odomFrame_;
+  tfStamped.transform.translation.x = px;
+  tfStamped.transform.translation.y = py;
+  tfStamped.transform.translation.z = pz;
+  tfStamped.transform.rotation.x = qx;
+  tfStamped.transform.rotation.y = qy;
+  tfStamped.transform.rotation.z = qz;
+  tfStamped.transform.rotation.w = qw;
+
+  odom_.pose.pose.position.x = px;
+  odom_.pose.pose.position.y = py;
+  odom_.pose.pose.position.z = pz;
+  odom_.pose.pose.orientation.x = qx;
+  odom_.pose.pose.orientation.y = qy;
+  odom_.pose.pose.orientation.z = qz;
+  odom_.pose.pose.orientation.w = qw;
 
   // get velocity in /odom frame
   ignition::math::Vector3d linear;
@@ -82,16 +93,6 @@ void GazeboRosOdom::publishOdometry() {
       (cosf(yaw) * linear.X() + sinf(yaw) * linear.Y());
   odom_.twist.twist.linear.y =
       (cosf(yaw) * linear.Y() - sinf(yaw) * linear.X());
-
-  tf::Transform base_footprint_to_odom(qt, vt);
-  tfBroadcaster_.sendTransform(tf::StampedTransform(
-      base_footprint_to_odom, current_time, mapFrame, odomFrame_));
-
-  tf::Transform zeroTf;
-  zeroTf.setOrigin(tf::Vector3(0, 0, 0));
-  zeroTf.setRotation(tf::Quaternion(0, 0, 0, 1));
-  tfBroadcaster_.sendTransform(
-      tf::StampedTransform(zeroTf, current_time, odomFrame_, baseLinkFrame_));
 
   // set covariance
   odom_.pose.covariance[0] = 0.00001;
@@ -106,6 +107,7 @@ void GazeboRosOdom::publishOdometry() {
   odom_.header.frame_id = mapFrame;
   odom_.child_frame_id = odomFrame_;
 
+  tfBroadcaster_.sendTransform(tfStamped);
   pubOdom_.publish(odom_);
 }
 

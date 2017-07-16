@@ -25,16 +25,42 @@
           </cylinder>
         </geometry>
       </collision>
-      <visual name="visual">
+      <visual name="visual_btm">
         <geometry>
           <mesh>
-            <uri>model://cone/cone.stl</uri>
+            <uri>model://cone_yellow/cone_btm.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1 1 0.05 1</ambient>
+          <diffuse>1 1 0.05 1</diffuse>
+          <specular>1 1 0.05 1</specular>
+          <emissive>0 0 0 0</emissive>
+        </material>
+      </visual>
+      <visual name="visual_mid">
+        <geometry>
+          <mesh>
+            <uri>model://cone_yellow/cone_mid.stl</uri>
           </mesh>
         </geometry>
         <material>
           <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 0</emissive>
+        </material>
+      </visual>
+      <visual name="visual_top">
+        <geometry>
+          <mesh>
+            <uri>model://cone_yellow/cone_top.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1 1 0.05 1</ambient>
           <diffuse>1 1 0.05 1</diffuse>
-          <specular>0.1 0.1 0.1 1</specular>
+          <specular>1 1 0.05 1</specular>
           <emissive>0 0 0 0</emissive>
         </material>
       </visual>

@@ -1,11 +1,11 @@
-#ifndef ODOM_PLUGIN_H
-#define ODOM_PLUGIN_H
+#ifndef GAZEBO_ROS_ODOM_PLUGIN_H
+#define GAZEBO_ROS_ODOM_PLUGIN_H
 
 #include <gazebo/common/common.hh>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
 #include <tf/tf.h>
-#include <tf/transform_broadcaster.h>
+#include <tf2_ros/transform_broadcaster.h>
 #include <tuw_gazebo_plugins/gazebo_ros_utils.h>
 
 namespace gazebo {
@@ -30,13 +30,12 @@ private:
   event::ConnectionPtr update_connection_;
 
   ros::Publisher pubOdom_;
-  tf::TransformBroadcaster tfBroadcaster_;
+  tf2_ros::TransformBroadcaster tfBroadcaster_;
 
-  std::string baseLinkFrame_;
   std::string odomFrame_;
   std::string odomTopic_;
+  double updatePeriod_;
 
-  // ros::CallbackQueue queue_;
   boost::mutex lock;
   common::Time lastUpdateTime_;
 
