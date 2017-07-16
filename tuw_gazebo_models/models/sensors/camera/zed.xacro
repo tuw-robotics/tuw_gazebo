@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="zed" params="name parent xyz rpy">
+<xacro:macro name="zed" params="name parent frame_name robot_ns='' xyz rpy">
 
   <joint name="${parent}_${name}_joint" type="fixed">
       <axis xyz="0 0 1" />
@@ -37,7 +37,7 @@
   </gazebo>
 
   <gazebo reference="${name}">
-    <sensor type="camera" name="zed_left">
+    <sensor type="camera" name="${name}_left">
       <update_rate>30.0</update_rate>
       <camera name="head">
         <pose>0 0 0 0 0 0</pose>
@@ -61,13 +61,13 @@
         </noise>
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-        <robotNamespace></robotNamespace>
+        <robotNamespace>${robot_ns}</robotNamespace>
         <alwaysOn>true</alwaysOn>
         <updateRate>30.0</updateRate>
         <cameraName>${name}</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>${name}</frameName>
+        <imageTopicName>left/image_raw</imageTopicName>
+        <cameraInfoTopicName>left/camera_info</cameraInfoTopicName>
+        <frameName>${frame_name}/left_frame</frameName>
         <hackBaseline>0.06</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>
