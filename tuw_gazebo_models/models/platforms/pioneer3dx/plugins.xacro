@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-  <!--xacro:macro name="pioneer3dx_joints_state_publisher">        
+  <xacro:macro name="diff_joints_state_publisher" params="ns">        
     <gazebo>
         <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-          <robotNamespace></robotNamespace>
+          <robotNamespace>${ns}</robotNamespace>
           <jointName>chassis_swivel_joint, swivel_wheel_joint, left_hub_joint, right_hub_joint</jointName>
           <updateRate>10.0</updateRate>
           <alwaysOn>true</alwaysOn>
         </plugin>
     </gazebo>
-  </xacro:macro -->
+  </xacro:macro>
       
   <xacro:macro name="differential_drive">
     <gazebo>
@@ -47,6 +47,17 @@
   </xacro:macro>
   
   
+  <xacro:macro name="iws_joints_state_publisher" params="ns">        
+	<gazebo>
+	  <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+		<robotNamespace>${ns}</robotNamespace>
+		<jointName>chassis_swivel_joint, swivel_wheel_joint</jointName>
+		<updateRate>50.0</updateRate>
+		<alwaysOn>true</alwaysOn>
+	  </plugin>
+	</gazebo>
+  </xacro:macro>
+  
   <xacro:include filename="plugins_param.xacro"/>
     
   <xacro:macro name="iws_drive">
@@ -57,15 +68,5 @@
 	</gazebo>
   </xacro:macro>
 
-  <xacro:macro name="p3dx_joints_state_publisher" params="ns">        
-	<gazebo>
-	  <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-		<robotNamespace>${ns}</robotNamespace>
-		<jointName>   chassis_swivel_joint, swivel_wheel_joint</jointName>
-		<updateRate>50.0</updateRate>
-		<alwaysOn>true</alwaysOn>
-	  </plugin>
-	</gazebo>
-  </xacro:macro>
   
 </robot>

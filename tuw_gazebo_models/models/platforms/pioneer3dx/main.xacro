@@ -20,15 +20,19 @@
   <xacro:include filename="${model_dir}/plugins.xacro" />
   
   <xacro:if value="${motor_plugin == 'diff_iws'}"> 
-    <xacro:iws_drive/> <!-- Motor  plugin -->
+    <!-- Motor  plugin -->
+    <xacro:iws_drive/>
+    <!-- Joints plugin -->
+    <xacro:iws_joints_state_publisher ns=""/>
+    <xacro:iws_joints_state_publisher ns="${namespace}/ground_truth"/>
   </xacro:if>
-  <xacro:if value="${motor_plugin == 'diff_twist'}"> 
-    <xacro:differential_drive/> <!-- Motor  plugin -->
+  <xacro:if value="${motor_plugin == 'diff_twist'}">  
+    <!-- Motor  plugin -->
+    <xacro:differential_drive/>
+    <!-- Joints plugin -->
+	<xacro:diff_joints_state_publisher ns="${namespace}"/>
   </xacro:if>
   
-  <!-- Joints plugin -->
-  <xacro:p3dx_joints_state_publisher ns=""/>
-  <xacro:p3dx_joints_state_publisher ns="${namespace}/ground_truth"/>
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
