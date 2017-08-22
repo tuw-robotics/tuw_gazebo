@@ -9,7 +9,7 @@
   <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
     
   <!-- Import platform -->
-  <xacro:property name="model_dir" value="$(arg model_dir)/pioneer3dx_body"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/body"/>
   <xacro:include filename="${model_dir}/body.xacro"/>
   <xacro:pioneer3dx_body name="chassis" parent="base_link"/>
   
@@ -17,13 +17,13 @@
   <xacro:property name="model_dir"   value="$(arg model_dir)"/>
   <xacro:property name="namespace"   value="$(arg namespace)"/>
   <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
-  <xacro:include filename="${model_dir}/pioneer3dx_plugins.xacro" />
+  <xacro:include filename="${model_dir}/plugins.xacro" />
   
   <xacro:if value="${motor_plugin == 'diff_iws'}"> 
-    <xacro:P3dxRosBridgeModelPlugin/> <!-- Motor  plugin -->
+    <xacro:iws_drive/> <!-- Motor  plugin -->
   </xacro:if>
   <xacro:if value="${motor_plugin == 'diff_twist'}"> 
-    <xacro:pioneer3dx_diff_drive/> <!-- Motor  plugin -->
+    <xacro:differential_drive/> <!-- Motor  plugin -->
   </xacro:if>
   
   <!-- Joints plugin -->
