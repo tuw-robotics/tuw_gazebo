@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:property name="IWSPluginsData"> 
+	<rosDebugLevel>Debug</rosDebugLevel>
+	<robotNamespace></robotNamespace>
+	<publish_joints_states>true</publish_joints_states>
+	<publish_tfs>false</publish_tfs>
+	<alwaysOn>true</alwaysOn>
+	<updateRate>100.0</updateRate>
+	
+	<revolute_joints_names>right_hub_joint, left_hub_joint</revolute_joints_names>
+	<revolute_max_torque>        10.0</revolute_max_torque> <!-- Nm  -->
+	<revolute_max_vel>           50.0</revolute_max_vel>    <!--rad/s-->
+	<revolute_damping>            0.1</revolute_damping>    <!--Nms/rad-->
+	<revolute_friction>           0.0</revolute_friction>   <!--Nm   -->
+	
+	<revolute_measures_type>measured_velocity</revolute_measures_type>
+	
+	<publish_odom_ground_truth>true</publish_odom_ground_truth>
+	<model_base_frame>ground_truth/base_link</model_base_frame>
+	<joints_states_topic>ground_truth/joint_states</joints_states_topic>
+	<odom_topic>ground_truth/odom</odom_topic>
+	<odom_frame>/map</odom_frame>
+	
+	<joints_measures_topic>joint_measures</joints_measures_topic>
+	<base_cmd_topic>base_cmds</base_cmd_topic>
+	<joints_cmd_topic>joint_cmds</joints_cmd_topic>	
+  </xacro:property>
+</robot>

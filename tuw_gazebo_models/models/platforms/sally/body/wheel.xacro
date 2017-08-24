@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot  
+  xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="pioneer_wheel" params="side parent xyz rpy radius model_dir:=^ **contact_data">   
+
+    <!-- Hubcap Mount -->
+      <joint name="${side}_hub_mount_joint" type="fixed">
+	<origin xyz="${xyz}" rpy="${rpy}"/>
+	<parent link="${parent}"/>
+	<child link="${side}_hub_mount"/>
+	<axis xyz="0 1 0"/>
+    </joint>
+    <link name="${side}_hub_mount">
+	<cylinder_inertial_with_origin radius="0.01" length="0.01" mass="0.01"> <origin xyz="0 0 0" rpy="0 0 0"/> </cylinder_inertial_with_origin>
+	<visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry> <box size="0.001 0.001 0.001"/> </geometry>
+	</visual>
+	<collision>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry> <box size="0.001 0.001 0.001"/> </geometry>
+	</collision>
+    </link>
+  
+    <!-- Hubcap -->
+    <joint name="${side}_hub_joint" type="continuous">
+	<origin xyz="0 0 0" rpy="0 0 0"/>
+	<parent link="${side}_hub_mount"/>
+	<child link="${side}_hub"/>
+	<axis xyz="0 1 0"/>
+    </joint>
+    <link name="${side}_hub">
+	<cylinder_inertial_with_origin radius="${radius}" length="0.03" mass="0.5"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
+	<visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry> <mesh filename="file://${model_dir}/meshes/hubcap.dae"/> </geometry>
+	    <material name="HubcapYellow"> <color rgba="1.0 0.811 0.151 1.0"/> </material>
+	</visual>
+	<collision>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry> <box size="0.001 0.001 0.001"/> </geometry>
+	</collision>
+    </link>
+    <gazebo reference="${side}_hub">
+	<material value="Gazebo/Yellow"/>
+    </gazebo>
+
+    <!-- Wheel -->
+    <joint name="${side}_wheel_joint" type="fixed">
+	<axis xyz="0 1 0"/>
+	<origin xyz="0 0 0" rpy="0 0 0"/>
+	<parent link="${side}_hub"/>
+	<child link="${side}_wheel"/>
+    </joint>
+    <link name="${side}_wheel">
+	<cylinder_inertial_with_origin radius="${radius}" length="0.03" mass="0.5"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
+	<visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry> <mesh filename="file://${model_dir}/meshes/wheel.dae"/> </geometry>
+	    <material name="WheelBlack"> <color rgba="0.117 0.117 0.117 1"/> </material>
+	</visual>
+	<collision>
+	    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+	    <geometry> <cylinder radius="${radius}" length="0.001"/> <!--<mesh filename="${meshes}/${side}_wheel.stl"/>--> </geometry>
+	</collision>
+    </link>
+    <gazebo reference="${side}_wheel">
+	<material value="Gazebo/Black"/>
+	<xacro:insert_block name="contact_data"/>
+    </gazebo>
+
+  
+  </xacro:macro>
+
+</robot>

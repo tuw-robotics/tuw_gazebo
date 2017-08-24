@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <xacro:macro name="chassis" params="name parent xyz rpy model_dir:=^">   
+        
+    <material name="SallyWhite">
+	<color rgba="${200/255} ${200/255} ${200/255} 1.0"/>
+    </material>
+        
+  <!-- Chassis -->
+  <joint name="${parent}_${name}_joint" type="fixed">
+    <origin xyz="${xyz}" rpy="${rpy}"/>
+    <parent link="${parent}"/>
+    <child link="${name}"/>
+  </joint>
+  <link name="${name}">
+    <visual>
+      <origin xyz="-0.045 0 0.085" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+      </geometry>
+      <material name="SallyWhite">
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0.09" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+      <!--origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
+      <geometry>  
+	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+      </geometry-->
+    </collision>
+    <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> </box_inertial_with_origin>
+  </link>
+  
+  <!-- Top -->
+  <joint name="${name}_top_joint" type="fixed">
+    <origin xyz="0 0 0.245" rpy="0 0 0"/>
+    <parent link="${parent}"/>
+    <child link="top"/>
+  </joint>
+  <link name="top">
+    <visual>
+      <origin xyz="-0.045 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${model_dir}/meshes/top.dae"/>
+      </geometry>
+      <material name="TopBlack">
+        <color rgba="0.038 0.038 0.038 1.0"/>
+      </material>
+    </visual>
+    <collision>
+    <origin xyz="${-0.045-0.05} 0 ${-0.235+0.15}" rpy="0 0 0"/>
+    <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+    <!--origin xyz="0.0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${model_dir}/meshes/top.dae"/>
+      </geometry-->
+    </collision>
+    <box_inertial_with_origin x="0.45" y="0.35"  z="0.001" mass="1.0"> <origin xyz="0.00 0 0.00" rpy="0 0 0"/> </box_inertial_with_origin>
+  </link>
+  <gazebo reference="top">
+    <material value="Gazebo/Black"/>
+  </gazebo>
+  
+  </xacro:macro>
+
+</robot>
