@@ -16,11 +16,11 @@
     <link name="${side}_wheel">
 	<cylinder_inertial_with_origin radius="${radius}" length="0.03" mass="0.5"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
 	<visual>
-	    <origin xyz="0 0 0.015" rpy="${pi/2} 0 0"/>
+	    <origin xyz="0 0 0.0" rpy="${pi/2} 0 0"/>
 	    <geometry> <cylinder radius="${radius}" length="0.03"/> <!--<mesh filename="${meshes}/${side}_wheel.stl"/>--> </geometry>
 	</visual>
 	<collision>
-	    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+	    <origin xyz="0 0 0.0" rpy="${pi/2} 0 0"/>
 	    <geometry> <cylinder radius="${radius}" length="0.001"/> <!--<mesh filename="${meshes}/${side}_wheel.stl"/>--> </geometry>
 	</collision>
     </link>

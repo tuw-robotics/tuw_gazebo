@@ -16,7 +16,7 @@
   </joint>
   <link name="${name}">
     <visual>
-      <origin xyz="-0.0 0 -0.04" rpy="0 0 ${M_PI}"/>
+      <origin xyz="-0.0 0 -0.04" rpy="0 0 0"/>
       <geometry>
 	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
@@ -24,8 +24,10 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="0.01 0 0.09" rpy="0 0 0"/>
-      <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+      <origin xyz="-0.0 0 -0.04" rpy="0 0 0"/>
+      <geometry>  
+	  <mesh filename="file://${model_dir}/meshes/chassis.dae"/>>
+      </geometry>
       <!--origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
       <geometry>  
 	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
@@ -41,7 +43,7 @@
     <child link="top"/>
   </joint>
   <link name="top">
-    <visual name="${name}_visual">
+    <!--visual name="${name}_visual">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry name="${name}_geometry">
         <box size="0.6 0.4 0.01"/>
@@ -49,7 +51,7 @@
       <material name="${name}_material">
         <color rgba="0.038 0.038 0.038 1.0"/>
       </material>
-    </visual>
+    </visual-->
   </link>
   <gazebo reference="top">
     <material value="Gazebo/Black"/>

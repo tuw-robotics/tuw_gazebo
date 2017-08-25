@@ -43,7 +43,7 @@
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan" parent="top" xyz="0.15 0.0 -0.20" rpy="${pi} 0 0" driver="cpu"/> 
+  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan" parent="top" xyz="0.25 0.0 -0.20" rpy="${pi} 0 0" driver="cpu"/> 
   
   <!-- xyz="0.16 0 0.125" -->
   
