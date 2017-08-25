@@ -9,7 +9,7 @@
 	<alwaysOn>true</alwaysOn>
 	<updateRate>100.0</updateRate>
 	
-	<revolute_joints_names>right_hub_joint, left_hub_joint</revolute_joints_names>
+	<revolute_joints_names>right_wheel_joint, left_wheel_joint</revolute_joints_names>
 	<revolute_max_torque>        10.0</revolute_max_torque> <!-- Nm  -->
 	<revolute_max_vel>           50.0</revolute_max_vel>    <!--rad/s-->
 	<revolute_damping>            0.1</revolute_damping>    <!--Nms/rad-->

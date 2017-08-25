@@ -2,19 +2,19 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_swivel" params="parent xyz rpy model_dir:=^ **contact_data">   
+  <xacro:macro name="swivel" params="side parent xyz rpy model_dir:=^ **contact_data">   
   
   <!-- Swivel -->
-  <joint name="chassis_swivel_joint" type="continuous">
+  <joint name="${side}_swivel_joint" type="continuous">
     <origin xyz="${xyz}" rpy="${rpy}"/>
     <axis xyz="0 0 1"/>
     <anchor xyz="0 0 0"/>
     <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.1" friction="0.0"/>
     <parent link="${parent}"/>
-    <child link="swivel"/>
+    <child link="${side}_swivel"/>
   </joint>
-  <link name="swivel">
+  <link name="${side}_swivel">
     <box_inertial_with_origin x="0.07" y="0.07" z="0.05" mass="0.1"> <origin xyz="0 0 0" rpy="0 0 0"/> </box_inertial_with_origin>
     <!--inertial>
       <mass value="0.1"/>
@@ -42,16 +42,16 @@
   </gazebo>
   
   <!-- Center Wheel -->
-  <joint name="swivel_wheel_joint" type="continuous">
+  <joint name="${side}_swivel_wheel_joint" type="continuous">
     <origin xyz="-0.026 0 -0.016" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <anchor xyz="0 0 0"/>
     <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.0" friction="0.0"/>
-    <parent link="swivel"/>
-    <child link="center_wheel"/>
+    <parent link="${side}_swivel"/>
+    <child link="${side}_center_wheel"/>
   </joint>
-  <link name="center_wheel">
+  <link name="${side}_center_wheel">
     <cylinder_inertial_with_origin radius="0.0375" length="0.03" mass="0.1"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
     <!--inertial>
       <mass value="0.1"/>
@@ -82,12 +82,12 @@
   </gazebo>
     
   <!-- Center Hubcap -->
-  <joint name="wheel_hubcap_joint" type="fixed">
+  <joint name="${side}_wheel_hubcap_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="center_wheel"/>
-    <child link="center_hubcap"/>
+    <parent link="${side}_center_wheel"/>
+    <child link="${side}_center_hubcap"/>
   </joint>
-  <link name="center_hubcap">
+  <link name="${side}_center_hubcap">
     <cylinder_inertial_with_origin radius="0.01" length="0.03" mass="0.01"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
     <!--inertial>
       <mass value="0.01"/>
