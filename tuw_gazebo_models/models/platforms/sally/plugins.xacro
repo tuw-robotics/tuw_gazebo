@@ -30,7 +30,7 @@
           <!-- odom source world or encoder, world uses the simulated ground truth and encoder the wheel odometry -->
           <odometrySource>encoder</odometrySource>
 	    
-          <leftJoint>left_wheel_jointt</leftJoint>
+          <leftJoint>left_wheel_joint</leftJoint>
           <rightJoint>right_wheel_joint</rightJoint>
 	    
           <wheelSeparation>0.3</wheelSeparation>

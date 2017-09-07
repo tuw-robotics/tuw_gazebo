@@ -30,7 +30,7 @@
     <!-- Motor  plugin -->
     <xacro:differential_drive/>
     <!-- Joints plugin -->
-	<xacro:diff_joints_state_publisher ns="${namespace}"/>
+	<!-- xacro:diff_joints_state_publisher ns="${namespace}"/-->
   </xacro:if>
   
   
