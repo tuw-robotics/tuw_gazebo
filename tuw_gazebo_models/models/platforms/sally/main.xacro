@@ -22,9 +22,9 @@
   <xacro:if value="${motor_plugin == 'diff_iws'}"> 
     <!-- Motor  plugin -->
     <xacro:iws_drive/>
-    <!-- Joints plugin -->
+    <!-- Joints plugin-->
     <xacro:iws_joints_state_publisher ns=""/>
-    <xacro:iws_joints_state_publisher ns="${namespace}/ground_truth"/>
+    <xacro:iws_joints_state_publisher ns="${namespace}/ground_truth"/> 
   </xacro:if>
   <xacro:if value="${motor_plugin == 'diff_twist'}">  
     <!-- Motor  plugin -->
