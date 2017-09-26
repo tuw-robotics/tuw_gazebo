@@ -56,7 +56,7 @@
 		<noise>
 		    <type>gaussian</type>
 		    <mean>0.0</mean>
-		    <stddev>0.03</stddev>
+		    <stddev>0.01</stddev>
 		</noise>
 	    </ray>
 	    
