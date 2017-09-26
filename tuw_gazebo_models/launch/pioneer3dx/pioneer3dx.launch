@@ -4,7 +4,7 @@
   <arg name="rviz" default="0" />
   <arg name="room" default="cave" />
   <arg name="position" default="-x -7.0 -y -7.0 -z 0.01 -Y 0.78" />
-  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  <arg name="physics" default="dart"/> <!-- ode, bullet, dart -->
   <arg name="robot_name" default="r1"/>
   <arg name="motor_plugin" default="diff_twist" /> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
   

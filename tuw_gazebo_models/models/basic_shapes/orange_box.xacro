@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
+
+<xacro:arg name="name"   default="box_orange"/>
+
+    <xacro:property name="xx"  value="100" />
+    <xacro:property name="yy"  value="100" />
+    <xacro:property name="zz"  value="2" />
+
+    <xacro:property name="ParrentLink2ThisLink"> <!--parrent link to this joint tf-->
+	<origin xyz="${xx} ${yy} ${zz}"  rpy="0 0 0"/>
+    </xacro:property>
+
+    <xacro:property name="ThisLink2Inert"> <!--this link 2 inertial center tf, mass data-->
+	<box_inertial_with_origin x="1" y="1" z="1" mass="100"> <origin xyz="0 0 0" rpy="0 0 0"/> </box_inertial_with_origin>
+    </xacro:property>
+
+    <xacro:property name="ThisLink2XML"> <!--this link 2 mesh center tf, file-->
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  	<geometry> <box size="1 1 1"/> </geometry>
+  	<material name="green"/>
+    </xacro:property>
+
+    <!-- joint and link definition
+    <joint name="${parent}2${name}${fb}${lr}_joint" type="fixed">
+	<parent link="${parent}_link"/>
+	<child  link="${name}${fb}${lr}_link" />
+	<xacro:insert_block name="ParrentLink2ThisLink" />
+    </joint>
+ -->
+    <link name="box">
+  	<xacro:insert_block name="ThisLink2Inert"/>
+  	<visual>    <xacro:insert_block name="ThisLink2XML"/> </visual>
+  	<collision> <xacro:insert_block name="ThisLink2XML"/> </collision>
+    </link>
+    <gazebo reference="box">
+	<material>Gazebo/Orange</material>
+	<selfCollide>false</selfCollide>
+    </gazebo>
+
+</robot>
