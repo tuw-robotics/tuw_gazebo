@@ -32,7 +32,7 @@
 #include <tuw_object_msgs/ObjectWithCovarianceArray.h>
 #include <std_msgs/String.h>
 
-#include <tuw_gazebo_plugins/human_receiverConfig.h>
+#include <tuw_gazebo_plugins/GazeboRosHumanReceiverConfig.h>
 
 namespace gazebo
 {
@@ -50,7 +50,7 @@ public:
    * @param msg received message
    */
   void humanCallback(const tuw_object_msgs::ObjectWithCovarianceArrayConstPtr &msg);
-  void callbackParameters(gazebo_human_receiver::human_receiverConfig &config, uint32_t level);
+  void callbackParameters(tuw_gazebo_plugins::GazeboRosHumanReceiverConfig &config, uint32_t level);
 
 private:
   double map_offset_x_;
@@ -71,8 +71,8 @@ private:
   std::string robot_namespace_;
   ros::Subscriber subHumanObject_;
   ros::Subscriber subCommand_;
-  dynamic_reconfigure::Server<gazebo_human_receiver::human_receiverConfig> reconfigureServer_;
-  dynamic_reconfigure::Server<gazebo_human_receiver::human_receiverConfig>::CallbackType reconfigureFnc_;
+  dynamic_reconfigure::Server<tuw_gazebo_plugins::GazeboRosHumanReceiverConfig> reconfigureServer_;
+  dynamic_reconfigure::Server<tuw_gazebo_plugins::GazeboRosHumanReceiverConfig>::CallbackType reconfigureFnc_;
   
   /*
    * create Cylinder as SDF model and insert into world

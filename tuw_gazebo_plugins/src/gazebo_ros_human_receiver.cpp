@@ -10,7 +10,7 @@ GazeboRosHumanReceiver::GazeboRosHumanReceiver() : reconfigureServer_(ros::NodeH
 {
 }
 
-void GazeboRosHumanReceiver::callbackParameters(gazebo_human_receiver::human_receiverConfig &config, uint32_t level)
+void GazeboRosHumanReceiver::callbackParameters(tuw_gazebo_plugins::GazeboRosHumanReceiverConfig &config, uint32_t level)
 {
   map_offset_x_ = config.map_offset_x;
   map_offset_y_ = config.map_offset_y;

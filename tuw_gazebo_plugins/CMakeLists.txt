@@ -109,6 +109,7 @@ target_link_libraries(tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIE
 
 add_definitions(-fPIC) # what is this for?
 
+
 ## Plugins
 add_library(tuw_gazebo_ros_diff_drive src/gazebo_ros_diff_drive.cpp)
 target_link_libraries(tuw_gazebo_ros_diff_drive tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
@@ -126,6 +127,7 @@ add_library(tuw_gazebo_ros_bridge_model src/gazebo_ros_bridge_model.cpp)
 target_link_libraries(tuw_gazebo_ros_bridge_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_human_receiver src/gazebo_ros_human_receiver.cpp)
+add_dependencies(tuw_gazebo_ros_human_receiver ${PROJECT_NAME}_gencfg ${catkin_EXPORTED_TARGETS})
 target_link_libraries(tuw_gazebo_ros_human_receiver ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_tire_model src/tire_model.cpp)
@@ -155,7 +157,6 @@ set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES LINK_FLAGS
 set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES COMPILE_FLAGS "${cxx_flags}")
 add_dependencies(tuw_gazebo_ros_joint_state_publisher ${catkin_EXPORTED_TARGETS})
 target_link_libraries(tuw_gazebo_ros_joint_state_publisher ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
 install(TARGETS
   tuw_gazebo_ros_utils
   tuw_gazebo_ros_diff_drive
