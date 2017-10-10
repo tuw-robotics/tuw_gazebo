@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot_name"/>
+    <arg name="x0"   default="2.51"/>
+    <arg name="y0"   default="-3.85"/>
+    <arg name="th0"  default="0"/>
+    
+    <arg name="cosTh" value="$(eval cos(th0*pi/180/2) )"/>
+    <arg name="sinTh" value="$(eval sin(th0*pi/180/2) )"/>
+    
+    <node pkg="rosservice" type="rosservice" name="reset_$(arg robot_name)_pose" args="call /gazebo/set_model_state 
+	  '{ model_state: { model_name     : $(arg robot_name), 
+	                    pose           : { position   : { x: $(arg x0), y: $(arg y0), z: 0.0 }, 
+	                                       orientation: { x: 0.0      , y: 0.0      , z: $(arg sinTh), w: $(arg cosTh) } }, 
+	                    twist          : { linear     : { x: 0.0      , y: 0.0      , z: 0.0 } , 
+	                                       angular    : { x: 0.0      , y: 0.0      , z: 0.0 } } , 
+	                    reference_frame: world } }'"/>
+    
+</launch>
