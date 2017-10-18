@@ -110,15 +110,21 @@ namespace gazebo
     /// \brief previous iteration controller update time
     private: common::Time last_update_time_;
     /// \brief offset from model base_link to sensor link
-    private: math::Pose offset_;
+    //private: math::Pose offset_;					//DEPRECATED
+    private: ignition::math::Pose3d offset_;
     /// \brief sensor link name
     private: std::string sensor_link_name_;
     
-    private: math::Vector3    model_velocity_;
-    private: math::Quaternion sns_orient_;
-    private: math::Vector3    imu_acc_lin_;
-    private: math::Vector3    imu_vel_ang_;
-    private: math::Vector3    mag_fld_lin_;
+//     private: math::Vector3    model_velocity_;
+//     private: math::Quaternion sns_orient_;
+//     private: math::Vector3    imu_acc_lin_;
+//     private: math::Vector3    imu_vel_ang_;
+//     private: math::Vector3    mag_fld_lin_;
+    private: ignition::math::Vector3<double>    model_velocity_;
+    private: ignition::math::Quaternion<double> sns_orient_;
+    private: ignition::math::Vector3<double>    imu_acc_lin_;
+    private: ignition::math::Vector3<double>    imu_vel_ang_;
+    private: ignition::math::Vector3<double>    mag_fld_lin_;
     
     /// \brief imu linear accelerations noise models
     private: tuw::NoiseSimModel noise_imu_acc_lin_[3];

@@ -9,7 +9,7 @@ namespace gazebo {
 TireModel::TireModel() {}
 
 TireModel::~TireModel() {
-  event::Events::DisconnectWorldUpdateBegin(this->update_connection_);
+  //event::Events::DisconnectWorldUpdateBegin(this->update_connection_);		//DEPRECATED
   alive_ = false;
 }
 

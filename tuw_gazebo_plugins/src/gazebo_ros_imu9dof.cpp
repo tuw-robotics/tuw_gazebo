@@ -106,10 +106,11 @@ void GazeboRosImu9Dof::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
     }
     gazebo_ros_->Sdf() = gazebo_ros_->baseSdf();
     
-    offset_ = math::Pose();
+    //offset_ = math::Pose();				//DEPRECATED
+    offset_ = ignition::math::Pose3d();
     if( _sdf->HasElement("origin") ) {
-	offset_.pos = _sdf->GetElement("origin")->Get<math::Vector3>( "xyz" );
-	offset_.rot = math::Quaternion(_sdf->GetElement("origin")->Get<math::Vector3>( "rpy" ) );
+	offset_.Pos() = _sdf->GetElement("origin")->Get<ignition::math::Vector3<double>>( "xyz" );							//DEPRECATED
+	offset_.Rot() = ignition::math::Quaternion<double>(_sdf->GetElement("origin")->Get<ignition::math::Vector3<double>>( "rpy" ) );			//DEPRECATED
     } else { ROS_WARN ( "%s: missing <%s> default is %s", gazebo_ros_->info(), "origin", "<0 0 0 , 0 0 0>" ); }
     
     gazebo_ros_->getParameter<double> ( update_period_   , "updateRate", 100.0 ); update_period_ = 1./update_period_;
@@ -129,37 +130,44 @@ void GazeboRosImu9Dof::Reset() {
 
 
 void GazeboRosImu9Dof::Update() {
-    common::Time current_time = model_->GetWorld()->GetSimTime();
+    //common::Time current_time = model_->GetWorld()->GetSimTime();			//DEPRECATED
+    common::Time current_time = model_->GetWorld()->SimTime();
     double dt = ( current_time - last_update_time_ ).Double();
     if ( dt < update_period_ ) { return; }
     
-    math::Vector3 gravity            = model_->GetWorld()->GetPhysicsEngine()->GetGravity();
-    math::Pose    model_pose         = model_->GetWorldPose();
-    math::Vector3 model_velocity_new = model_->GetWorldLinearVel();
+//     math::Vector3 gravity            = model_->GetWorld()->GetPhysicsEngine()->GetGravity();		//DEPRECATED
+//     math::Pose    model_pose         = model_->GetWorldPose();
+//     math::Vector3 model_velocity_new = model_->GetWorldLinearVel();
+    ignition::math::Vector3<double> gravity = model_->GetWorld()->Gravity();
+    ignition::math::Pose3d model_pose = model_->WorldPose();
+    ignition::math::Vector3<double> model_velocity_new = model_->WorldLinearVel();
      // get velocity in world frame
     
-    math::Quaternion sns_orient_new = offset_.rot * model_pose.rot; sns_orient_new.Normalize();
+//     math::Quaternion sns_orient_new = offset_.rot * model_pose.Rot(); sns_orient_new.Normalize();		//DEPRECATED
+    ignition::math::Quaternion<double> sns_orient_new = offset_.Rot() * model_pose.Rot(); sns_orient_new.Normalize();
     
     if ( (use_imu_)&&(dt > 0.0) ) { 
-	math::Quaternion delta_orient       = sns_orient_.GetInverse() * sns_orient_new;
-	imu_acc_lin_ = offset_.rot.RotateVectorReverse((model_velocity_new - model_velocity_) / update_period_/* - gravity*/);
-	imu_vel_ang_ = 2.0 * acos(std::max(std::min(delta_orient.w, 1.0), -1.0)) * math::Vector3(delta_orient.x, delta_orient.y, delta_orient.z).Normalize() / update_period_;
+//	math::Quaternion delta_orient       = sns_orient_.Inverse() * sns_orient_new;		//DEPRECATED
+	ignition::math::Quaternion<double> delta_orient       = sns_orient_.Inverse() * sns_orient_new;
+	imu_acc_lin_ = offset_.Rot().RotateVectorReverse((model_velocity_new - model_velocity_) / update_period_/* - gravity*/);
+	//imu_vel_ang_ = 2.0 * acos(std::max(std::min(delta_orient.w, 1.0), -1.0)) * math::Vector3(delta_orient.x, delta_orient.y, delta_orient.z).Normalize() / update_period_;	//DEPRECATED
+	imu_vel_ang_ = 2.0 * acos(std::max(std::min(delta_orient.W(), 1.0), -1.0)) * ignition::math::Vector3<double>(delta_orient.X(), delta_orient.Y(), delta_orient.Z()).Normalize() / update_period_;	
 	
-	imu_acc_lin_.x = noise_imu_acc_lin_[X].sim( imu_acc_lin_.x, dt );
-	imu_acc_lin_.y = noise_imu_acc_lin_[Y].sim( imu_acc_lin_.y, dt );
-	imu_acc_lin_.z = noise_imu_acc_lin_[Z].sim( imu_acc_lin_.z, dt );
+	imu_acc_lin_.X() = noise_imu_acc_lin_[X].sim( imu_acc_lin_.X(), dt );		//DEPRECATED ??
+	imu_acc_lin_.Y() = noise_imu_acc_lin_[Y].sim( imu_acc_lin_.Y(), dt );		//DEPRECATED ??
+	imu_acc_lin_.Z() = noise_imu_acc_lin_[Z].sim( imu_acc_lin_.Z(), dt );		//DEPRECATED ??
 	
-	imu_vel_ang_.x = noise_imu_vel_ang_[X].sim( imu_vel_ang_.x, dt );
-	imu_vel_ang_.y = noise_imu_vel_ang_[Y].sim( imu_vel_ang_.y, dt );
-	imu_vel_ang_.z = noise_imu_vel_ang_[Z].sim( imu_vel_ang_.z, dt );
+	imu_vel_ang_.X() = noise_imu_vel_ang_[X].sim( imu_vel_ang_.X(), dt );		//DEPRECATED ??
+	imu_vel_ang_.Y() = noise_imu_vel_ang_[Y].sim( imu_vel_ang_.Y(), dt );		//DEPRECATED ??
+	imu_vel_ang_.Z() = noise_imu_vel_ang_[Z].sim( imu_vel_ang_.Z(), dt );		//DEPRECATED ??
 	publishImu( current_time );
     }
     if( (use_mag_) ) {
 	mag_fld_lin_ = sns_orient_new.RotateVectorReverse( model_->GetWorld()->MagneticField() );
 	
-	mag_fld_lin_.x = noise_mag_fld_lin_[X].sim( mag_fld_lin_.x, dt );
-	mag_fld_lin_.y = noise_mag_fld_lin_[X].sim( mag_fld_lin_.y, dt );
-	mag_fld_lin_.z = noise_mag_fld_lin_[X].sim( mag_fld_lin_.z, dt );
+	mag_fld_lin_.X() = noise_mag_fld_lin_[X].sim( mag_fld_lin_.X(), dt );		//DEPRECATED ??
+	mag_fld_lin_.Y() = noise_mag_fld_lin_[X].sim( mag_fld_lin_.Y(), dt );		//DEPRECATED ??
+	mag_fld_lin_.Z() = noise_mag_fld_lin_[X].sim( mag_fld_lin_.Z(), dt );		//DEPRECATED ??
 	publishMag( current_time );
     }
     model_velocity_   = model_velocity_new;
@@ -171,16 +179,16 @@ void GazeboRosImu9Dof::publishImu( common::Time& _current_time ) {
     sensor_msgs::Imu imu_msg;
     imu_msg.header.stamp    = ros::Time ( _current_time.sec, _current_time.nsec );
     imu_msg.header.frame_id = gazebo_ros_->getNamespace() + sensor_link_name_;
-    imu_msg.linear_acceleration.x = imu_acc_lin_.x;
-    imu_msg.linear_acceleration.y = imu_acc_lin_.y;
-    imu_msg.linear_acceleration.z = imu_acc_lin_.z;
-    imu_msg.angular_velocity.x    = imu_vel_ang_.x;
-    imu_msg.angular_velocity.y    = imu_vel_ang_.y;
-    imu_msg.angular_velocity.z    = imu_vel_ang_.z;
-    imu_msg.orientation.w         = sns_orient_.w;
-    imu_msg.orientation.x         = sns_orient_.x;
-    imu_msg.orientation.y         = sns_orient_.y;
-    imu_msg.orientation.z         = sns_orient_.z;
+    imu_msg.linear_acceleration.x = imu_acc_lin_.X();
+    imu_msg.linear_acceleration.y = imu_acc_lin_.Y();
+    imu_msg.linear_acceleration.z = imu_acc_lin_.Z();
+    imu_msg.angular_velocity.x    = imu_vel_ang_.X();
+    imu_msg.angular_velocity.y    = imu_vel_ang_.Y();
+    imu_msg.angular_velocity.z    = imu_vel_ang_.Z();
+    imu_msg.orientation.w         = sns_orient_.W();
+    imu_msg.orientation.x         = sns_orient_.X();
+    imu_msg.orientation.y         = sns_orient_.Y();
+    imu_msg.orientation.z         = sns_orient_.Z();
     
     for(size_t i = 0; i < 9; i++) { imu_msg.linear_acceleration_covariance[i] = 0; }
     imu_msg.linear_acceleration_covariance[0] = noise_imu_acc_lin_[X].sigmaWhiteNoise();
@@ -199,9 +207,9 @@ void GazeboRosImu9Dof::publishMag ( common::Time& _current_time ) {
     sensor_msgs::MagneticField mag_msg;
     mag_msg.header.stamp    = ros::Time ( _current_time.sec, _current_time.nsec );
     mag_msg.header.frame_id = gazebo_ros_->getNamespace() + sensor_link_name_;
-    mag_msg.magnetic_field.x = mag_fld_lin_.x;
-    mag_msg.magnetic_field.y = mag_fld_lin_.y;
-    mag_msg.magnetic_field.z = mag_fld_lin_.z;
+    mag_msg.magnetic_field.x = mag_fld_lin_.X();
+    mag_msg.magnetic_field.y = mag_fld_lin_.Y();
+    mag_msg.magnetic_field.z = mag_fld_lin_.Z();
     
     pub_queue_mag_->push ( mag_msg, ros_pub_mag_ );
 }

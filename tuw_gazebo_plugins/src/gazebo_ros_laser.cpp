@@ -51,7 +51,7 @@ GazeboRosLaser::GazeboRosLaser() {
 ////////////////////////////////////////////////////////////////////////////////
 // Destructor
 GazeboRosLaser::~GazeboRosLaser() {
-  parent_ray_sensor_->DisconnectUpdated(laser_connection_);
+  //parent_ray_sensor_->DisconnectUpdated(laser_connection_);		//DEPRECATED
   pub_queue_.reset();
   for ( auto& ros_pub_laserI : ros_pub_laser_) { ros_pub_laserI.shutdown(); }
 }
@@ -98,7 +98,7 @@ void GazeboRosLaser::LaserConnect() {
 ////////////////////////////////////////////////////////////////////////////////
 // Decrement count
 void GazeboRosLaser::LaserDisconnect() {
-    if ( --laser_connect_count_ == 0 ) { parent_ray_sensor_->DisconnectUpdated(laser_connection_); }
+    //if ( --laser_connect_count_ == 0 ) { parent_ray_sensor_->DisconnectUpdated(laser_connection_); }	//DEPRECATED
 }
 
 ////////////////////////////////////////////////////////////////////////////////
