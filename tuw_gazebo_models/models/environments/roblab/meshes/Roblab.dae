@@ -4881,7 +4881,7 @@
         </geometry>
     </library_geometries>
     <library_materials>
-        <material id="ID10" name="Carrera_Marble">
+        <material id="ID10" name="wall_putz">
             <instance_effect url="#ID11" />
         </material>
         <material id="ID27" name="Formica_Laminate_Light">
@@ -5091,7 +5091,7 @@
     </library_effects>
     <library_images>
         <image id="ID12">
-            <init_from>Roblab/Carrera_Marble.jpg</init_from>
+            <init_from>Roblab/wall_putz.jpg</init_from>
         </image>
         <image id="ID29">
             <init_from>Roblab/Formica_Laminate_Light.jpg</init_from>
