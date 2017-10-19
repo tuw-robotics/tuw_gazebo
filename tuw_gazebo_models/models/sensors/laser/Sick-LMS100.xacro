@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
 <!-- Front Laser -->
-<xacro:macro name="laser" params="name frame_names topic_names parent xyz rpy driver:=cpu model_dir:=^">
+<xacro:macro name="laser" params="name frame_names topic_names parent xyz rpy driver:=cpu visualize:=true model_dir:=^">
 
     <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
     <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
@@ -48,7 +48,7 @@
 	    <pose>0 0 0 0 0 0</pose>
 	    <update_rate>25</update_rate>
 	    <always_on>1</always_on>
-	    <visualize>false</visualize>
+	    <visualize>${visualize}</visualize>
 	    <ray>
 		<scan>
 		    <horizontal>

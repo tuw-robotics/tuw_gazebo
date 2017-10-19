@@ -19,7 +19,7 @@
     <!-- Laser -->
     <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
     <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-    <xacro:laser name="front_laser" frame_names="front_laser" topic_names="front_laser/scan" parent="base_link" xyz="0.16 0 0.4" rpy="0 0 0" driver="cpu"/>
+    <xacro:laser name="front_laser" frame_names="front_laser" topic_names="front_laser/scan" parent="base_link" xyz="0.16 0 0.4" rpy="0 0 0" driver="cpu"  visualize="true"/>
 
     <!--gazebo>
 	<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
