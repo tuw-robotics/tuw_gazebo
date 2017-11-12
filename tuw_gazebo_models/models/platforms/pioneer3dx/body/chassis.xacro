@@ -15,7 +15,7 @@
     <visual>
       <origin xyz="-0.045 0 0.085" rpy="0 0 0"/>
       <geometry>
-	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+        <mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
       <material name="ChassisRed">
         <color rgba="0.851 0.0 0.0 1.0"/>
@@ -23,13 +23,17 @@
     </visual>
     <collision>
       <origin xyz="0.01 0 0.09" rpy="0 0 0"/>
-      <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
+      <geometry>
+          <cylinder radius="0.17" length="0.17"/> 
+      </geometry>
       <!--origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
       <geometry>  
-	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+        <mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry-->
     </collision>
-    <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> </box_inertial_with_origin>
+    <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> 
+        <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> 
+    </box_inertial_with_origin>
   </link>
   <gazebo reference="${name}">
     <material value="Gazebo/Red"/>

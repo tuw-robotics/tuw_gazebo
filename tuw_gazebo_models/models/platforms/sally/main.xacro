@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="sally" >
     
   <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/sally"/>
-  <xacro:arg name="namespace"   default="sally"/>
+  <xacro:arg name="namespace"   default="r1"/>
   <xacro:arg name="motor_plugin" default="diff_twist"/> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
