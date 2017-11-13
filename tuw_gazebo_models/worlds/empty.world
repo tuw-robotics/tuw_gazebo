@@ -2,6 +2,11 @@
 <sdf version="1.5">
   <world name="human_receiver">
     <!--    -->
+    <gui>
+      <camera name="user_camera">
+        <pose>4.0 -6.0 30.0 0.0 1.5 1.6</pose>
+      </camera>
+    </gui>
     <physics name="ode" type="ode">
       <ode>
         <solver>
