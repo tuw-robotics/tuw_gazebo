@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
+  <xacro:include filename="chassis.xacro"/>
+  <xacro:include filename="wheel.xacro"/>
+  <xacro:include filename="battery_block.xacro"/>
+  <xacro:include filename="swivel.xacro"/>
+  <xacro:include filename="zr300.xacro" />
+  <xacro:property name="wheel_radius" value="0.104" />
+  
+  <xacro:macro name="sally_body" params="name parent">
+        
+    <!-- base_link -->
+    <link name="${parent}"/>
+    
+    <!-- Camera -->
+    <xacro:sensor_zr300 parent="${parent}">
+      <origin xyz="-0.240 0 1.145" rpy="0 0 0"/>
+    </xacro:sensor_zr300>
+    
+    <!-- Chassis -->
+    <xacro:chassis name="${name}" parent="${parent}" xyz="0 0 0.068" rpy="0 0 0"/>
+    
+    <!-- Akku0 -->
+    <xacro:battery_block name="battery0" parent="${name}" x="-0.14" y="0.00"  z="${0.13-0.068}" mass="2.5" />  
+    
+    <!-- Wheels -->
+    <xacro:property name="contact_data">
+        <mu1 value="0.7"/>
+	<mu2 value="0.7"/>
+	<minDepth value="0.002"/>
+	<!--kp value="1000000.0"/-->
+	<!--kd value="10.0"/-->
+    </xacro:property>
+    <xacro:swivel side="front" parent="${parent}"  xyz=" 0.200 0    0.055" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:swivel>
+    <xacro:swivel side="back"  parent="${parent}"  xyz="-0.200 0    0.055" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:swivel>
+    <xacro:wheel  side="right" parent="${parent}"  xyz=" 0    -0.225 ${wheel_radius}" rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:wheel>
+    <xacro:wheel  side="left"  parent="${parent}"  xyz=" 0     0.225 ${wheel_radius}" rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:wheel>
+    
+  </xacro:macro>
+</robot>

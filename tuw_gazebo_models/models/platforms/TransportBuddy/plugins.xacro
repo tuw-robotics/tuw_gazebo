@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:macro name="diff_joints_state_publisher" params="ns">        
+    <gazebo>
+        <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+          <robotNamespace>${ns}</robotNamespace>
+          <jointName>front_swivel_joint, back_swivel_joint, front_swivel_wheel_joint, back_swivel_wheel_joint</jointName>
+          <updateRate>10.0</updateRate>
+          <alwaysOn>true</alwaysOn>
+        </plugin>
+    </gazebo>
+  </xacro:macro>
+      
+  <xacro:macro name="differential_drive">
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libtuw_gazebo_ros_diff_drive.so">
+	      <robotNamespace></robotNamespace>
+          <rosDebugLevel>Debug</rosDebugLevel>
+          <legacyMode>false</legacyMode>
+          <alwaysOn>true</alwaysOn>
+          <alwaysOn>true</alwaysOn>
+	      <updateRate>10.0</updateRate>
+	    
+	      <robotBaseFrame>base_link</robotBaseFrame>
+	      <odometryFrame>odom</odometryFrame>
+	    
+	      <commandTopic>cmd_vel</commandTopic>
+          <odometryTopic>odom</odometryTopic>
+          <!-- odom source world or encoder, world uses the simulated ground truth and encoder the wheel odometry -->
+          <odometrySource>encoder</odometrySource>
+	    
+          <leftJoint>left_wheel_joint</leftJoint>
+          <rightJoint>right_wheel_joint</rightJoint>
+	    
+          <wheelSeparation>0.3</wheelSeparation>
+          <wheelDiameter>0.18</wheelDiameter>
+          <wheelTorque>10</wheelTorque>
+          <wheelAcceleration>1.5</wheelAcceleration>
+            
+          <publishTf>true</publishTf>
+	      <publishWheelTF>true</publishWheelTF>
+          <publishWheelJointState>true</publishWheelJointState>
+            
+        </plugin>
+    </gazebo>    
+  </xacro:macro>
+  
+  
+  <xacro:macro name="iws_joints_state_publisher" params="ns">        
+	<gazebo>
+	  <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+		<robotNamespace>${ns}</robotNamespace>
+          <jointName>front_swivel_joint, back_swivel_joint, front_swivel_wheel_joint, back_swivel_wheel_joint</jointName>
+		<updateRate>50.0</updateRate>
+		<alwaysOn>true</alwaysOn>
+	  </plugin>
+	</gazebo>
+  </xacro:macro>
+  
+  <xacro:include filename="plugins_param.xacro"/>
+    
+  <xacro:macro name="iws_drive">
+	<gazebo>
+	  <plugin name="tuw_gazebo_ros_bridge_model_plugin" filename="libtuw_gazebo_ros_bridge_model.so">
+        <xacro:insert_block name="IWSPluginsData" /> 
+	  </plugin>
+	</gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="camera_zr300_rgb">
+  <!-- camera -->
+  <gazebo reference="camera_rgb_frame">
+    <sensor type="camera" name="zr300_rgb">
+      <update_rate>30.0</update_rate>
+      <camera name="camera">
+        <horizontal_fov>1.02974425868</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller_rgb" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera</cameraName>
+        <imageTopicName>rgb/image_raw</imageTopicName>
+        <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+        <frameName>camera_rgb_frame</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  </xacro:macro>
+  
+</robot>

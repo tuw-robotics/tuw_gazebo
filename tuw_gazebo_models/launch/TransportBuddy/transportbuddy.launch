@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="rviz" default="0" />
+  <arg name="room" default="cave" />
+  <arg name="position" default="-x 5.3 -y 6.0 -z 0.01 -Y 0.0" />
+  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
+  <arg name="robot_name" default="r1"/>
+  <arg name="motor_plugin" default="diff_twist" /> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
+  
+  <!-- Gazebo world with environment -->
+  <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
+     <arg name="physics" value="$(arg physics)" />
+     <arg name="room"    value="$(arg room)"    />
+     <arg name="world_name" value="tuw" />
+  </include>
+
+  <!-- Robot with diff drive -->
+  <include file="$(find tuw_gazebo_models)/launch/TransportBuddy/transportbuddy.gazebo.launch">
+     <arg name="robot_name" value="$(arg robot_name)" />
+     <arg name="position" value="$(arg position)" />
+     <arg name="motor_plugin" value="$(arg motor_plugin)" />
+   </include>
+  
+  <!-- RVIZ   -->
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo_models)/launch/TransportBuddy/transportbuddy.rviz" />
+  </group>
+  
+</launch>
