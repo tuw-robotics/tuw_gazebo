@@ -3,7 +3,7 @@
 
   <arg name="rviz" default="0" />
   <arg name="room" default="cave" />
-  <arg name="position" default="-x 5.3 -y 6.0 -z 0.01 -Y 0.0" />
+  <arg name="position" default="-x 0 -y 0 -z 0.01 -Y 0.0" />
   <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
   <arg name="robot_name" default="r1"/>
   <arg name="motor_plugin" default="diff_twist" /> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
@@ -12,7 +12,7 @@
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
      <arg name="physics" value="$(arg physics)" />
      <arg name="room"    value="$(arg room)"    />
-     <arg name="world_name" value="tuw" />
+     <arg name="world_name" value="empty" />
   </include>
 
   <!-- Robot with diff drive -->
