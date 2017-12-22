@@ -16,7 +16,7 @@
     
     <!-- Camera -->
     <xacro:sensor_zr300 parent="${parent}">
-      <origin xyz="-0.240 0 1.160" rpy="0 0 0"/>
+      <origin xyz="-0.220 0 1.300" rpy="0 0.20 0"/>
     </xacro:sensor_zr300>
     
     <!-- Chassis -->
