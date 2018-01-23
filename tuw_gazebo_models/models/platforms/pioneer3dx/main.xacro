@@ -37,7 +37,7 @@
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
   <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser_front_right" frame_names="laser_front_right" topic_names="laser_front_right/scan/raw" parent="top" xyz="0.06 -0.14 0.08" rpy="0 0 ${-pi/4}" driver="cpu" visualize="true"/> 
+  <xacro:laser name="laser_front_right" frame_names="laser_front_right" topic_names="laser_front_right/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
