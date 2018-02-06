@@ -77,6 +77,7 @@ catkin_package(
     tuw_gazebo_ros_rwd
     tuw_gazebo_tire_model
     tuw_gazebo_ros_joint_state_publisher
+    tuw_gazebo_ros_door_plugin
     map_common
     cone_detection_sim
     tuw_gazebo_ros_map
@@ -113,6 +114,9 @@ add_definitions(-fPIC) # what is this for?
 ## Plugins
 add_library(tuw_gazebo_ros_diff_drive src/gazebo_ros_diff_drive.cpp)
 target_link_libraries(tuw_gazebo_ros_diff_drive tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_library(tuw_gazebo_ros_door_plugin src/gazebo_ros_door_plugin.cpp)
+target_link_libraries(tuw_gazebo_ros_door_plugin tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(tuw_gazebo_ros_laser src/gazebo_ros_laser.cpp)
 target_link_libraries(tuw_gazebo_ros_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
@@ -160,6 +164,7 @@ target_link_libraries(tuw_gazebo_ros_joint_state_publisher ${catkin_LIBRARIES} $
 install(TARGETS
   tuw_gazebo_ros_utils
   tuw_gazebo_ros_diff_drive
+  tuw_gazebo_ros_door_plugin
   tuw_gazebo_ros_laser
   tuw_gazebo_ros_gpu_laser
   tuw_gazebo_ros_imu9dof

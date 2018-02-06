@@ -6,12 +6,18 @@
   <xacro:include filename="wheel.xacro"/>
   <xacro:include filename="battery_block.xacro"/>
   <xacro:include filename="swivel.xacro"/>
+  <xacro:include filename="zr300.xacro" />
   <xacro:property name="wheel_radius" value="0.104" />
   
   <xacro:macro name="sally_body" params="name parent">
         
     <!-- base_link -->
     <link name="${parent}"/>
+    
+    <!-- Camera -->
+    <xacro:sensor_zr300 parent="${parent}">
+      <origin xyz="-0.220 0 1.300" rpy="0 0.20 0"/>
+    </xacro:sensor_zr300>
     
     <!-- Chassis -->
     <xacro:chassis name="${name}" parent="${parent}" xyz="0 0 0.068" rpy="0 0 0"/>

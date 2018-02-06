@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="sally" >
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="TransportBuddy" >
     
-  <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/sally"/>
-  <xacro:arg name="namespace"   default="sally"/>
+  <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/TransportBuddy"/>
+  <xacro:arg name="namespace"   default="TransportBuddy"/>
   <xacro:arg name="motor_plugin" default="diff_twist"/> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
@@ -33,6 +33,8 @@
     <xacro:diff_joints_state_publisher ns=""/>
   </xacro:if>
   
+  <!-- camera plugin -->
+  <xacro:camera_zr300_rgb />
   
   <!-- Laser
   <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
