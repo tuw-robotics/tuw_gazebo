@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
     
-  <xacro:arg name="model_dir"   default="$(find tuw_gazebo_models)/models/platforms/pioneer3dx"/>
-  <xacro:arg name="namespace"   default="p3dx"/>
+  <xacro:arg name="model_dir"      default=""/>
+  <xacro:arg name="platform_dir"   default=""/>
+  <xacro:arg name="namespace"      default="r1"/>
   <xacro:arg name="motor_plugin" default="diff_twist"/> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find tuw_gazebo_models)/models/materials.xacro" />
+  <xacro:include filename="$(arg model_dir)/materials.xacro" />
     
   <!-- Import platform -->
-  <xacro:property name="model_dir" value="$(arg model_dir)/body"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/$(arg platform_dir)/body"/>
   <xacro:include filename="${model_dir}/body.xacro"/>
   <xacro:pioneer3dx_body name="chassis" parent="base_link"/>
   
   <!-- Import platform plugins -->
-  <xacro:property name="model_dir"   value="$(arg model_dir)"/>
+  <xacro:property name="model_dir"   value="$(arg model_dir)/$(arg platform_dir)"/>
   <xacro:property name="namespace"   value="$(arg namespace)"/>
   <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
   <xacro:include filename="${model_dir}/plugins.xacro" />
@@ -35,29 +36,29 @@
   
   
   <!-- Laser -->
-  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser_front_right" frame_names="laser_front_right" topic_names="laser_front_right/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
   
   <!-- Laser -->
-  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/laser"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
+  <xacro:laser name="laser_front_top" frame_names="laser_front_top" topic_names="laser_front_top/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
   
   <!-- xyz="0.16 0 0.125" -->
   
   <!-- IMU 
-  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/imu"/>
-  <xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu.xacro"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/imu"/>
+  <xacro:include filename="$(arg model_dir)/sensors/imu/imu.xacro"/>
   <xacro:imu_sensor name="imu9dof" parent="chassis" xyz="0.05 0.0 0.262" rpy="0 0 0"/>
   -->
   <!-- Camera  
-  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/camera"/>
   <xacro:include filename="${model_dir}/camera.xacro"/>
   <xacro:cam name="front_camera" parent="top" xyz="0 0 1" rpy="${-pi/2}  0 ${-pi/2}" />
    -->
   <!-- Depth Camera  
-  <xacro:property name="model_dir" value="$(find tuw_gazebo_models)/models/sensors/camera"/>
+  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/camera"/>
   <xacro:include filename="${model_dir}/depth_camera.xacro"/>
   <xacro:cam name="front_depth_camera" parent="top" xyz="0 0 1" rpy="0  0 0" />
  -->
