@@ -126,6 +126,8 @@ class GAZEBO_VISIBLE GazeboRosBridgeModelPlugin : public ModelPlugin {
     private  : double       update_rate_;
     private  : double       update_period_;
     private  : common::Time last_update_time_;
+    private  : double       timeout_cmd_;        /// timeout in [sec] on joints_cmd_topic_ to stop vehicle 
+    private  : common::Time last_cmd_received_;  /// time of last recived joints_cmd_topic_ or last stop msgs was created
     
     // Flags
     private  : bool alive_;
@@ -165,6 +167,7 @@ class GAZEBO_VISIBLE GazeboRosBridgeModelPlugin : public ModelPlugin {
     private  : boost::shared_ptr<tf::TransformBroadcaster> transform_broadcaster_;
     private  : sensor_msgs::JointState  joint_state_;
     private  : tuw_nav_msgs::JointsIWS  jointsCmd_;
+    private  : boost::shared_ptr<tuw_nav_msgs::JointsIWS> joints_measure_; 
     
     //topic, namespaces & joint/link names
     private  : std::string robot_namespace_   ;

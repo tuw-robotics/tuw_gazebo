@@ -161,7 +161,8 @@ void GazeboRosBridgeModelPlugin::loadParameters ( physics::ModelPtr _parent, sdf
     gazeboRos_->getParameter<double> ( constr_damping_   [REVOL],       "revolute_damping"   ,                             1.0 );
     gazeboRos_->getParameter<double> ( constr_friction_  [REVOL],       "revolute_friction"  ,                             0.0 );
 
-    gazeboRos_->getParameter<double> ( update_rate_,                "updateRate",                            100.0 );
+    gazeboRos_->getParameter<double> ( update_rate_,                    "updateRate"         ,                            100.0 );
+    gazeboRos_->getParameter<double> ( timeout_cmd_,                    "timeout_cmd"        ,                             10.0 );
 
 
     gazeboRos_->getParameter ( jointsMeasureType_[STEER],    "steering_measures_type", std::string ( "measured_position" ) );
@@ -169,7 +170,6 @@ void GazeboRosBridgeModelPlugin::loadParameters ( physics::ModelPtr _parent, sdf
 
 
     for ( size_t i = 0; i < jointsMeasureType_.size(); ++i ) {
-        //if      ( !jointsMeasureType_[i].compare("measured_position") ) { getJointMeasure[i] = []( physics::JointPtr& _joint ){ return _joint->GetAngle   ( 0 ).Radian(); }; }    //DEPRECATED
         if ( !jointsMeasureType_[i].compare ( "measured_position" ) ) {
             getJointMeasure[i] = [] ( physics::JointPtr& _joint ) {
                 return _joint->Position ( 0 );
@@ -197,6 +197,9 @@ void GazeboRosBridgeModelPlugin::loadParameters ( physics::ModelPtr _parent, sdf
     jointsCmd_.type_revolute = "cmd_position";
     setCmdMode ( STEER, jointsCmd_.type_steering );
     setCmdMode ( REVOL, jointsCmd_.type_revolute );
+    
+    joints_measure_ = boost::shared_ptr<tuw_nav_msgs::JointsIWS> ( new tuw_nav_msgs::JointsIWS );
+    last_cmd_received_ = parent_->GetWorld()->SimTime();
 }
 
 void GazeboRosBridgeModelPlugin::setCmdMode ( size_t _jointsTypeIdx, const std::string& _mode ) {
@@ -211,7 +214,8 @@ void GazeboRosBridgeModelPlugin::setCmdMode ( size_t _jointsTypeIdx, const std::
         };
     } else if ( !_mode.compare ( "cmd_velocity" ) ) {
         setJointCmd[_jointsTypeIdx] = [] ( physics::JointPtr& _joint, double _cmd ) {
-            /*_joint->SetForce   ( 0, 1 * (_cmd - _joint->GetVelocity(0)) ); ROS_INFO("err=%lf, vel_des=%lf, vel_now=%lf, damping=%lf",_cmd - _joint->GetVelocity(0), _cmd, _joint->GetVelocity(0), _joint->GetDamping(0) );*/ _joint->SetVelocity ( 0, _cmd );
+            /*_joint->SetForce   ( 0, 1 * (_cmd - _joint->GetVelocity(0)) ); ROS_INFO("err=%lf, vel_des=%lf, vel_now=%lf, damping=%lf",_cmd - _joint->GetVelocity(0), _cmd, _joint->GetVelocity(0), _joint->GetDamping(0) );*/ 
+            _joint->SetVelocity ( 0, _cmd );
         };
     } else if ( !_mode.compare ( "cmd_torque  " ) ) {
         setJointCmd[_jointsTypeIdx] = [] ( physics::JointPtr& _joint, double _cmd ) {
@@ -266,11 +270,8 @@ void GazeboRosBridgeModelPlugin::loadJoints() {
 
 void GazeboRosBridgeModelPlugin::setJointsConstraints() {
     for ( auto& steerJointI : joints_[STEER] ) {
-        //gazebo::math::Angle angle;      //DEPRECATED
         ignition::math::Angle angle;
-        //angle.SetFromRadian(constr_hi_stop_steering_); steerJointI->SetHighStop(0, angle );  //DEPRECATED
         steerJointI->SetUpperLimit ( 0, constr_hi_stop_steering_ );
-        //angle.SetFromRadian(constr_lo_stop_steering_); steerJointI->SetLowStop (0, angle );  //DEPRECATED
         steerJointI->SetLowerLimit ( 0, constr_lo_stop_steering_ );
     }
     for ( size_t i = 0; i < joints_.size(); ++i ) {
@@ -329,6 +330,25 @@ void GazeboRosBridgeModelPlugin::UpdateChild() {
             publishJointsStates();
         }
     }
+    double seconds_since_last_cmd = (current_time - last_cmd_received_).Double();    
+    if ( seconds_since_last_cmd > timeout_cmd_ ) {
+        ROS_WARN ( "%s joint_cmd timeout %lf sec reached", gazeboRos_->info(), timeout_cmd_ );
+        last_cmd_received_ = current_time;
+        jointsCmd_.type_steering = "cmd_velocity";
+        jointsCmd_.type_revolute = "cmd_velocity";
+        setCmdMode ( STEER, jointsCmd_.type_steering );
+        setCmdMode ( REVOL, jointsCmd_.type_revolute );
+        for ( size_t i = 0; i < jointsCmd_.steering.size(); ++i ) {
+            jointsCmd_.steering[i] = 0.;
+            ROS_WARN ( "%s jointsCmd_.steering[%zu] = %lf", gazeboRos_->info(), i, jointsCmd_.steering[i]  );
+        }
+        for ( size_t i = 0; i < jointsCmd_.revolute.size(); ++i ) {
+            jointsCmd_.revolute[i]  = 0.;
+            ROS_WARN ( "%s jointsCmd_.revolute[%zu] = %lf", gazeboRos_->info(), i, jointsCmd_.revolute[i]  );
+        }
+    }
+    
+    
     for ( size_t i = 0; i < jointsCmd_.steering.size(); ++i ) {
         setJointCmd[STEER] ( joints_[STEER][i], jointsCmd_.steering[i] );
     }
@@ -343,6 +363,7 @@ void GazeboRosBridgeModelPlugin::callbackConfig ( tuw_gazebo_plugins::GazeboRosB
 }
 
 void GazeboRosBridgeModelPlugin::jointsCmdCallback ( const tuw_nav_msgs::JointsIWS::ConstPtr& _msgJointsCmd ) {
+    last_cmd_received_ = parent_->GetWorld()->SimTime();
     jointsCmd_ = *_msgJointsCmd;
     if ( jointsCmd_.steering.size() != joints_[STEER].size() ) {
         ROS_WARN ( "%s Received a meesage with \"steering\" field size not equal to %lu", gazeboRos_->info(), joints_[STEER].size() );
@@ -382,7 +403,6 @@ void GazeboRosBridgeModelPlugin::publishJointsStates() {
 void GazeboRosBridgeModelPlugin::publishJointMeasurements() {
     ros::Time current_time = ros::Time::now();
 
-    boost::shared_ptr<tuw_nav_msgs::JointsIWS> joints_measure_ ( new tuw_nav_msgs::JointsIWS );
     joints_measure_->header.stamp = current_time;
 
     joints_measure_->type_revolute = jointsMeasureType_[REVOL];
