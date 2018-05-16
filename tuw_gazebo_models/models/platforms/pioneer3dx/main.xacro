@@ -38,12 +38,12 @@
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser_front_center" frame_names="laser_front_center" topic_names="laser_front_center/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+  <xacro:laser name="laser0" frame_names="laser0" topic_names="laser_front_center/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-  <xacro:laser name="laser_front_top" frame_names="laser_front_top" topic_names="laser_front_top/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
+  <xacro:laser name="laser1" frame_names="laser1" topic_names="laser_front_top/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
   
   <!-- xyz="0.16 0 0.125" -->
   
