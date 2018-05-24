@@ -190,7 +190,7 @@ void GazeboRosRWD::UpdateChild() {
   tuw_vehicle_msgs::ChassisState chassisStateMsg;
   chassisStateMsg.header.stamp = ros::Time(current_time.sec, current_time.nsec);
   chassisStateMsg.header.frame_id = "0";
-  chassisStateMsg.steeringAngle =
+  chassisStateMsg.steering_angle =
       steeringAngleNoise_.sim(steering_, seconds_since_last_update.Double());
   chassis_state_.publish(chassisStateMsg);
 

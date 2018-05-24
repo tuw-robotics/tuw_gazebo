@@ -85,11 +85,11 @@ void HVBattery::SetBatteryState(tuw::ros_msgs::BatteryState &msg) {
   double voltagePerCell =
       minVoltage_ + (currentCapacity_ / totalCapacity_) * (voltageRange_);
 
-  msg.cellVoltages.resize(cellCount_);
-  msg.cellTemperatures.resize(cellCount_);
+  msg.cell_voltages.resize(cellCount_);
+  msg.cell_temperatures.resize(cellCount_);
   for (size_t i = 0; i < cellCount_; i++) {
-    msg.cellVoltages[i] = voltagePerCell;
-    msg.cellTemperatures[i] = temperature_;
+    msg.cell_voltages[i] = voltagePerCell;
+    msg.cell_temperatures[i] = temperature_;
   }
   msg.current = lastAppliedCurrent_;
 }
