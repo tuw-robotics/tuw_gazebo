@@ -3,8 +3,8 @@
     
   <xacro:arg name="model_dir"      default=""/>
   <xacro:arg name="platform_dir"   default=""/>
-  <xacro:arg name="namespace"      default="r1"/>
-  <xacro:arg name="motor_plugin" default="diff_twist"/> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
+  <xacro:arg name="namespace"      default="r0"/>
+  <xacro:arg name="motor_plugin"   default="diff_twist"/> <!-- diffdrive or diff_iws. If something else is set, no plugin will be loaded-->
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(arg model_dir)/materials.xacro" />
@@ -12,7 +12,7 @@
   <!-- Import platform -->
   <xacro:property name="model_dir" value="$(arg model_dir)/$(arg platform_dir)/body"/>
   <xacro:include filename="${model_dir}/body.xacro"/>
-  <xacro:pioneer3dx_body name="chassis" parent="base_link"/>
+  <xacro:vehicle_body name="chassis" parent="base_link"/>
   
   <!-- Import platform plugins -->
   <xacro:property name="model_dir"   value="$(arg model_dir)/$(arg platform_dir)"/>
@@ -31,19 +31,18 @@
     <!-- Motor  plugin -->
     <xacro:differential_drive/>
     <!-- Joints plugin -->
-	<xacro:diff_joints_state_publisher ns="${namespace}"/>
+    <xacro:diff_joints_state_publisher ns="${namespace}"/>
   </xacro:if>
-  
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser0" frame_names="laser0" topic_names="laser_front_center/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+  <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
   
   <!-- Laser -->
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
-  <xacro:laser name="laser1" frame_names="laser1" topic_names="laser_front_top/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
+  <xacro:laser name="laser1" frame_names="laser1" topic_names="laser1/scan/raw" parent="top" xyz="0.08 0.0 0.26" rpy="${pi} 0 0" driver="cpu" visualize="false"/> 
   
   <!-- xyz="0.16 0 0.125" -->
   
