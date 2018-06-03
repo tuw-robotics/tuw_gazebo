@@ -35,7 +35,6 @@
 
 #include <tuw_gazebo_plugins/gazebo_ros_bridge_model.h>
 
-#include <ignition/math3/ignition/math.hh>
 #include <sdf/sdf.hh>
 #include <boost/graph/graph_concepts.hpp>
 
