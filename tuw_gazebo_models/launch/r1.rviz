@@ -81,7 +81,7 @@ Visualization Manager:
           Value: true
         r1/ground_truth/laser_front_center_chassis:
           Value: true
-        r1/ground_truth/laser_front_right:
+        r1/ground_truth/laser0:
           Value: true
         r1/ground_truth/left_hub:
           Value: true
@@ -109,7 +109,7 @@ Visualization Manager:
           Value: true
         r1/laser_front_center_chassis:
           Value: true
-        r1/laser_front_right:
+        r1/laser0:
           Value: true
         r1/left_hub:
           Value: true
@@ -162,7 +162,7 @@ Visualization Manager:
               r1/ground_truth/laser_front_center_chassis:
                 r1/ground_truth/laser_front_center:
                   {}
-              r1/ground_truth/laser_front_right:
+              r1/ground_truth/laser0:
                 {}
               r1/ground_truth/mount_bottom_left:
                 {}
@@ -186,7 +186,7 @@ Visualization Manager:
             r1/laser_front_center_chassis:
               r1/laser_front_center:
                 {}
-            r1/laser_front_right:
+            r1/laser0:
               {}
             r1/mount_bottom_left:
               {}
@@ -237,7 +237,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        laser_front_right:
+        laser0:
           Alpha: 1
           Show Axes: false
           Show Trail: false
