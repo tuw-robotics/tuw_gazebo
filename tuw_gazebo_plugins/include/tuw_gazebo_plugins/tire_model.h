@@ -64,7 +64,7 @@ class TireModel : public ModelPlugin {
   bool isRear_;
 
   double radius_;
-  double FZ0_;
+  double FNOMIN_;
   double LFZ0_;
   double PDX1_;
   double PDX2_;

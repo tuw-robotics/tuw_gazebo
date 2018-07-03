@@ -24,7 +24,7 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
                                          "base_link");
   gazebo_ros_->getParameter<double>(update_rate_, "updateRate", 100.0);
   gazebo_ros_->getParameter<double>(radius_, "radius", 0.312);
-  gazebo_ros_->getParameter<double>(FZ0_, "FZ0", 500.0);
+  gazebo_ros_->getParameter<double>(FNOMIN_, "FNOMIN", 700.0);
   gazebo_ros_->getParameter<double>(LFZ0_, "LFZ0", 1.0);
   gazebo_ros_->getParameter<double>(PDX1_, "PDX1", 1.13);
   gazebo_ros_->getParameter<double>(PDX2_, "PDX2", -0.119);
@@ -149,7 +149,7 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(SSZ2_, "SSZ2", 0.02);
   gazebo_ros_->getParameter<double>(SSZ3_, "SSZ3", 0.001);
   gazebo_ros_->getParameter<double>(SSZ4_, "SSZ4", 0.001);
-  
+
   if (sdf->HasElement("staticCamber")) {
     useDynamicCamber_ = false;
     gazebo_ros_->getParameter<double>(camber_, "staticCamber", 0.0);
@@ -172,7 +172,7 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
 
   wheelCollides_ = false;
 
-  FZ0T_ = FZ0_ * LFZ0_;
+  FZ0T_ = FNOMIN_ * LFZ0_;
   CX_ = PCX1_ * LCX_;
   CY_ = PCY1_ * LCY_;
 
@@ -351,7 +351,7 @@ double TireModel::GetFy0(double slipAngle, double Fz, double dFz,
       Fz * ((PVY1_ + PVY2_ * dFz) * LVY_ + (PVY3_ + PVY4_ * dFz) * camberY) *
       LMUY_;
   double slipY = slipAngle + SHy;
-  double Ky = PKY1_ * FZ0_ * sin(2 * atan(Fz / (PKY2_ * FZ0_ * LFZ0_))) *
+  double Ky = PKY1_ * FZ0T_ * sin(2 * atan(Fz / (PKY2_ * FZ0T_))) *
               (1 - PKY3_ * fabs(camberY)) * LFZ0_ * LKY_;
   double By = Ky / (CY_ * Dy);
   double BySlipY = By * slipY;
@@ -417,7 +417,7 @@ double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
       atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * sgn(alphar);
   double Dt = Fz * (QDZ1_ + QDZ2_ * dFz) *
               (1 + QDZ3_ * camberz + QDZ4_ * camberzcamberz) *
-              (radius_ / FZ0_) * LTR_;
+              (radius_ / FZ0T_) * LTR_;
   double Bt = (QBZ1_ + QBZ2_ * dFz + QBZ3_ * dFz * dFz) *
               (1 + QBZ4_ * camberzcamberz + QBZ5_ * fabs(camberz)) *
               (LKY_ / LMUY_);
@@ -432,7 +432,7 @@ double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
               radius_ * LMUY_;
   double Br = QBZ9_ * (LKY_ / LMUY_) + QBZ10_ * By_ * CY_;
   double Mzr = Dr * cos(atan(Br * alphareq)) * cos(slipAngle);
-  double s = (SSZ1_ + SSZ2_ * (Fy / FZ0_) + (SSZ3_ + SSZ4_ * dFz) * camber) *
+  double s = (SSZ1_ + SSZ2_ * (Fy / FZ0T_) + (SSZ3_ + SSZ4_ * dFz) * camber) *
              radius_ * LS_;
   double Mz = -t * Fy + Mzr + s * Fx;
   return Mz;
@@ -443,7 +443,7 @@ double TireModel::GetRollingResistance(double Fz, double wheelVelocity,
   // TODO radius to calculate Vx should be effective tire radius
   double Vx = wheelVelocity * radius_;
   double My =
-      radius_ * Fz * (QSY1_ + QSY2_ * Fx / FZ0_ + QSY3_ * fabs(Vx / LONGVL_) +
+      radius_ * Fz * (QSY1_ + QSY2_ * Fx / FNOMIN_ + QSY3_ * fabs(Vx / LONGVL_) +
                       pow(QSY4_ * (Vx / LONGVL_), 4));
   return My;
 }
