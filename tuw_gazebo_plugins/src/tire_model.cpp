@@ -17,8 +17,6 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   this->parent_ = parent;
   gazebo_ros_ = GazeboRosPtr(new GazeboRos(parent, sdf, "TireModel"));
   gazebo_ros_->isInitialized();
-  int isRear;
-  gazebo_ros_->getParameterBoolean(isRear_, "isRear", false);
 
   gazebo_ros_->getParameter<std::string>(tireLinkName_, "tireLink",
                                          "tire_link");
@@ -151,11 +149,24 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(SSZ2_, "SSZ2", 0.02);
   gazebo_ros_->getParameter<double>(SSZ3_, "SSZ3", 0.001);
   gazebo_ros_->getParameter<double>(SSZ4_, "SSZ4", 0.001);
-  gazebo_ros_->getParameter<double>(camber_, "staticCamber", 0.0);
-  gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
-  gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
-  gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
-  gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
+  
+  if (sdf->HasElement("staticCamber")) {
+    useDynamicCamber_ = false;
+    gazebo_ros_->getParameter<double>(camber_, "staticCamber", 0.0);
+  }
+  else if (sdf->HasElement("CC1") && sdf->HasElement("CC2")
+  && sdf->HasElement("CC3") && sdf->HasElement("CC4")) {
+    useDynamicCamber_ = true;
+    gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
+    gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
+    gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
+    gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
+  }
+  else {
+    useDynamicCamber_ = true;
+    camber_ = 0;
+    ROS_INFO("No static camber of camber function coefficients found, fallback to static camber 0");
+  }
 
   camber_ = TO_RADIANS(camber_);
 
@@ -239,7 +250,8 @@ void TireModel::UpdateChild() {
         angularVehicleVelocity.Cross(anchorPose_);
     ignition::math::Quaternion<double> tireRotation =
         tireJoint_->GetChild()->RelativePose().Rot();
-    double toeAngle = isRear_ ? 0 : -tireRotation.Euler().Z();
+    double toeAngle = -tireRotation.Euler().Z();
+    if (fabs(toeAngle) < 0.0001) { toeAngle = 0; } //gazebo reports -0.000001
     if (toeAngle > ( M_PI / 2.0)) { toeAngle = toeAngle - M_PI; }
     if (toeAngle < (-M_PI / 2.0)) { toeAngle = M_PI + toeAngle; }
     ignition::math::Vector3d vb1 =
@@ -256,7 +268,7 @@ void TireModel::UpdateChild() {
         atan(velocityTireFrame.Y() / fabs(wheelVelocity * radius_));
     //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
-    if (!isRear_) {
+    if (useDynamicCamber_) {
       camber_ = GetCamberFromToeAngle(-toeAngle);
     }
     double Fx = GetCombinedFx(slip, Fz, dFz, camber_);
@@ -265,16 +277,12 @@ void TireModel::UpdateChild() {
         0, 0, GetSelfAligningTorque(slipAngle, dFz, camber_, slip, Fz, Fy, Fx));
     ignition::math::Vector3d tireFrameForce(Fx, Fy, 0);
     ignition::math::Vector3d carFrameForce;
-    if (isRear_) {
-      carFrameForce = tireFrameForce;
-    } else {
-      carFrameForce =
-          ignition::math::Vector3d(tireFrameForce.X() * cos(-toeAngle) +
-                                       tireFrameForce.Y() * -sin(-toeAngle),
-                                   tireFrameForce.X() * sin(-toeAngle) +
-                                       tireFrameForce.Y() * cos(-toeAngle),
-                                   0);
-    }
+    carFrameForce =
+        ignition::math::Vector3d(tireFrameForce.X() * cos(-toeAngle) +
+                                      tireFrameForce.Y() * -sin(-toeAngle),
+                                  tireFrameForce.X() * sin(-toeAngle) +
+                                      tireFrameForce.Y() * cos(-toeAngle),
+                                  0);
     if (!ignition::math::isnan(carFrameForce.X()) &&
         !ignition::math::isnan(carFrameForce.Y())) {  // TODO why nan at start?
       carLink_->AddLinkForce(carFrameForce, anchorPose_);

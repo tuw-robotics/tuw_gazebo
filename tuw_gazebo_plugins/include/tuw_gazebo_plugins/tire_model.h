@@ -209,6 +209,7 @@ class TireModel : public ModelPlugin {
   double CX_;
   double CY_;
   double camber_;
+  bool useDynamicCamber_;
 };
 }
 
