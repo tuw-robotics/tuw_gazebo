@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="rviz" default="0" />
-  <arg name="room" default="cave" />
-  <arg name="position" default="-x 0.0 -y 0.0 -z 0.01 -Y 0.0" />
-  <arg name="physics" default="ode"/> <!-- ode, bullet, dart -->
-  <arg name="robot_name" default="r1"/>
-  <arg name="motor_plugin" default="diff_twist" /> <!-- diffdrive or iws. If something else is set, no plugin will be loaded-->
+  <arg name="robot_name"                                    default="r0"/>
+  <arg name="room"                                          default="cave" />
+  <arg name="rviz"                                          default="false" />
+  <arg name="position"                                      default="-x 0.0 -y 0.0 -z 0.01 -Y 0.0" />
+  <arg name="physics"                                       default="ode"/> <!-- ode, bullet, dart -->
+  <arg name="motor_plugin"                                  default="diff_twist" /> <!-- diff_twist or diff_iws. If something else is set, no plugin will be loaded-->
+  <arg name="launch_robot_state_publisher"                  default="true" />
+  <arg name="launch_ground_truth_robot_state_publisher"     default="true" />
+  
+  <param name ="/use_sim_time" value="true"/>
   
   <!-- Gazebo world with environment -->
   <include file="$(find tuw_gazebo_models)/launch/room_world.launch">
@@ -20,6 +24,8 @@
      <arg name="robot_name" value="$(arg robot_name)" />
      <arg name="position" value="$(arg position)" />
      <arg name="motor_plugin" value="$(arg motor_plugin)" />
+     <arg name="launch_robot_state_publisher" value="$(arg launch_robot_state_publisher)" />
+     <arg name="launch_ground_truth_robot_state_publisher" value="$(arg launch_ground_truth_robot_state_publisher)" />
    </include>
   
   <!-- RVIZ   -->

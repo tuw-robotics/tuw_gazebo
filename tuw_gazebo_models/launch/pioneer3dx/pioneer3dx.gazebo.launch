@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="robot_name" default="r1" />
-  <arg name="position" default="-x 0.0 -y 0.0 -z 0.01" />
-  <arg name="model_dir" default="$(find tuw_gazebo_models)/models"/>
-  <arg name="platform_dir" default="/platforms/pioneer3dx" />
-  <arg name="motor_plugin" default="diff_twist" /> <!-- diff_twist or iws. If something else is set, no plugin will be loaded-->
+  <arg name="robot_name"                                 default="r0" />
+  <arg name="position"                                   default="-x 0.0 -y 0.0 -z 0.01" />
+  <arg name="model_dir"                                  default="$(find tuw_gazebo_models)/models"/>
+  <arg name="platform_dir"                               default="/platforms/pioneer3dx" />
+  <arg name="motor_plugin"                               default="diff_twist" /> <!-- diff_twist or diff_iws. If something else is set, no plugin will be loaded-->
+  <arg name="launch_robot_state_publisher"               default="true" />
+  <arg name="launch_ground_truth_robot_state_publisher"  default="true" />
     
   <group ns="$(arg robot_name)">
 
@@ -15,16 +17,21 @@
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a robot -->
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -unpause -urdf -param robot_description -model $(arg robot_name)" respawn="false"/>
 
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" type="double" value="30.0"/>
-      <param name="tf_prefix" type="string" value="$(arg robot_name)"/>
-    </node>
-    <group ns="ground_truth">
-	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-	    <param name="publish_frequency" type="double" value="100.0"/>
-	    <param name="tf_prefix" type="string" value="$(arg robot_name)/ground_truth"/>
-	</node>
+    <!-- Run robot state publisher -->
+    <group if="$(arg launch_robot_state_publisher)">
+      <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="30.0"/>
+        <param name="tf_prefix" type="string" value="$(arg robot_name)"/>
+      </node>
+      <group if="$(arg launch_ground_truth_robot_state_publisher)">
+        <group ns="ground_truth">
+          <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="100.0"/>
+            <param name="tf_prefix" type="string" value="$(arg robot_name)/ground_truth"/>
+          </node>
+        </group>
+      </group>
     </group>
-  </group>
+  </group> 
   
 </launch>
