@@ -148,7 +148,7 @@ void GazeboRosHumanReceiver::createHumansFnc()
       ROS_INFO("createHumansFnc: Could not get pointer to %s", name.c_str());
     }
   }
-  ROS_INFO("indexed humans:");
+  ROS_INFO("indexed humans done");
 }
 
 void GazeboRosHumanReceiver::updateHumansFnc()
