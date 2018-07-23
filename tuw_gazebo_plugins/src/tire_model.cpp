@@ -150,25 +150,10 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(SSZ3_, "SSZ3", 0.001);
   gazebo_ros_->getParameter<double>(SSZ4_, "SSZ4", 0.001);
 
-  if (sdf->HasElement("staticCamber")) {
-    useDynamicCamber_ = false;
-    gazebo_ros_->getParameter<double>(camber_, "staticCamber", 0.0);
-  }
-  else if (sdf->HasElement("CC1") && sdf->HasElement("CC2")
-  && sdf->HasElement("CC3") && sdf->HasElement("CC4")) {
-    useDynamicCamber_ = true;
-    gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
-    gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
-    gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
-    gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
-  }
-  else {
-    useDynamicCamber_ = true;
-    camber_ = 0;
-    ROS_INFO("No static camber of camber function coefficients found, fallback to static camber 0");
-  }
-
-  camber_ = TO_RADIANS(camber_);
+  gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
+  gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
+  gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
+  gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
 
   wheelCollides_ = false;
 
@@ -220,9 +205,8 @@ void TireModel::OnContacts(ConstContactsPtr &contactsMsg) {
   wheelCollides_ = contactsMsg->contact_size() > 0;
 }
 
-double TireModel::GetCamberFromToeAngle(double leftToeAngle) {
-  double x = TO_DEGREES(leftToeAngle);
-  return TO_RADIANS(CC1_ + CC2_ * x + CC3_ * (x * x) + CC4_ * (x * x * x));
+double TireModel::GetCamberFromToeAngle(double angle) {
+  return CC1_ + CC2_ * angle + CC3_ * (angle * angle) + CC4_ * (angle * angle * angle);
 }
 
 void TireModel::UpdateChild() {
@@ -267,13 +251,12 @@ void TireModel::UpdateChild() {
         atan(velocityTireFrame.Y() / fabs(wheelVelocity * radius_));
     //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
-    if (useDynamicCamber_) {
-      camber_ = GetCamberFromToeAngle(-toeAngle);
-    }
-    double Fx = GetCombinedFx(slip, Fz, dFz, camber_);
-    double Fy = GetCombinedFy(slipAngle, slip, Fz, dFz, camber_);
+    
+    double camber = GetCamberFromToeAngle(-toeAngle);
+    double Fx = GetCombinedFx(slip, Fz, dFz, camber);
+    double Fy = GetCombinedFy(slipAngle, slip, Fz, dFz, camber);
     ignition::math::Vector3d torque(
-        0, 0, GetSelfAligningTorque(slipAngle, dFz, camber_, slip, Fz, Fy, Fx));
+        0, 0, GetSelfAligningTorque(slipAngle, dFz, camber, slip, Fz, Fy, Fx));
     ignition::math::Vector3d tireFrameForce(Fx, Fy, 0);
     ignition::math::Vector3d carFrameForce;
     carFrameForce =
@@ -392,7 +375,7 @@ double TireModel::GetCombinedFx(double slip, double Fz, double dFz,
 double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
                                         double camber, double slip, double Fz,
                                         double Fy, double Fx) {
-  double camberz = camber_ * LGAZ_;
+  double camberz = camber * LGAZ_;
   double SHt = QHZ1_ + QHZ2_ * dFz + (QHZ3_ + QHZ4_ * dFz) * camberz;
   double alphat = slipAngle + SHt;
   double tanalphat = tan(alphat);
