@@ -4,12 +4,12 @@
 #include <gazebo/common/common.hh>
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
+#include <tuw_gazebo_plugins/gazebo_ros_physics_utils.h>
 
 namespace gazebo {
 TireModel::TireModel() {}
 
 TireModel::~TireModel() {
-  //event::Events::DisconnectWorldUpdateBegin(this->update_connection_);		//DEPRECATED
   alive_ = false;
 }
 
@@ -212,6 +212,7 @@ void TireModel::Init() { gazebo::ModelPlugin::Init(); }
 
 void TireModel::Reset() {
   gazebo::ModelPlugin::Reset();
+  last_update_time_ = parent_->GetWorld()->SimTime();
   this->contactSub_.reset();
 }
 
@@ -224,12 +225,10 @@ double TireModel::GetCamberFromToeAngle(double leftToeAngle) {
   return TO_RADIANS(CC1_ + CC2_ * x + CC3_ * (x * x) + CC4_ * (x * x * x));
 }
 
-template <typename T>
-int sgn(T val) {
-  return (T(0) < val) - (val < T(0));
-}
-
 void TireModel::UpdateChild() {
+  common::Time current_time = parent_->GetWorld()->SimTime();
+  double elapsedTime = (current_time - last_update_time_).Double();
+  last_update_time_ = current_time;
   double Fz = fmax(- tireJoint_->GetForceTorque(0).body1Force.Z(),10);  // 600;
   ignition::math::Vector3d linearVehicleVelocity = parent_->RelativeLinearVel();
   ignition::math::Vector3d angularVehicleVelocity =
@@ -288,36 +287,28 @@ void TireModel::UpdateChild() {
       carLink_->AddLinkForce(carFrameForce, anchorPose_);
       carLink_->AddTorque(torque);
       double torque = -tireFrameForce.X() * radius_;
-      double smoothing = 0.5;
+
       double rollingResistance =
-          -fabs(GetRollingResistance(Fz, wheelVelocity, tireFrameForce.X())) *
-          ignition::math::clamp(wheelVelocity / smoothing, -1.0, 1.0);
+          -fabs(GetRollingResistance(Fz, wheelVelocity, tireFrameForce.X())) * physics_utils::fsgn(wheelVelocity);
+      rollingResistance = physics_utils::limit_brake_torque(wheelVelocity, tireLink_->GetInertial()->IZZ(), 
+        rollingResistance, torque, elapsedTime);
       torque += rollingResistance;
       tireJoint_->SetForce(0, torque);
     }
   }
 }
 
-double TireModel::GetSlip(double vehicleVelocity, double wheelVelocity) {
-  if (0 == vehicleVelocity || ignition::math::isnan(vehicleVelocity)) {
-    vehicleVelocity = 0.000000001;
+double TireModel::GetSlip(double velocityTireFrameX, double wheelVelocity) {
+  if (0 == velocityTireFrameX || ignition::math::isnan(velocityTireFrameX)) {
+    velocityTireFrameX = 0.01; //this small epsilon is suggested to prevent singularity
   }
-
   if (ignition::math::isnan(wheelVelocity)) {
     wheelVelocity = 0;
   }
-  // at very low wheel-velocities the sign changes between positive and negative
-  // in every cycle
-  // this makes it unpossible to stop the car as it is accelerated/decelerated
-  // by the same ammount
-  // all the time. therefore if the speed is very slow it should always be
-  // against the cars movement
-  if (fabs(wheelVelocity) < 0.5) {
-    wheelVelocity = -sgn(vehicleVelocity) * fabs(wheelVelocity);
-  }
   // TODO radius here should be effective tire radius
-  double slip =
-      ((wheelVelocity * radius_) - vehicleVelocity) / fabs(vehicleVelocity);
+  double effectiveTireRadius = radius_;
+  double Vsx = velocityTireFrameX - wheelVelocity * effectiveTireRadius;
+  double slip = (-Vsx) / fabs(velocityTireFrameX);
   //slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
   return slip;
 }
@@ -334,7 +325,7 @@ double TireModel::GetFx0(double slip, double Fz, double dFz, double camber) {
   double Bx = Kx / (CX_ * Dx);
   double BxSlipX = Bx * slipx;
   double Ex = (PEX1_ + PEX2_ * dFz + PEX3_ * (dFz * dFz)) *
-              (1 - PEX4_ * sgn(slipx)) * LEX_;
+              (1 - PEX4_ * physics_utils::fsgn(slipx)) * LEX_;
   double Fx0 =
       Dx * sin(CX_ * atan(BxSlipX - Ex * (BxSlipX - atan(BxSlipX)))) + SVx;
   Kx_ = Kx;
@@ -356,7 +347,7 @@ double TireModel::GetFy0(double slipAngle, double Fz, double dFz,
   double By = Ky / (CY_ * Dy);
   double BySlipY = By * slipY;
   double Ey = (PEY1_ + PEY2_ * dFz) *
-              (1 - (PEY3_ + PEY4_ * camberY) * sgn(slipY)) * LEY_;
+              (1 - (PEY3_ + PEY4_ * camberY) * physics_utils::fsgn(slipY)) * LEY_;
   double Fy0 =
       Dy * sin(CY_ * atan(BySlipY - Ey * (BySlipY - atan(BySlipY)))) + SVy;
   Ky_ = Ky;
@@ -408,13 +399,13 @@ double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
   double KxKy = (Kx_ / Ky_);
   double KxKyKxKyslipslip = KxKy * KxKy * slip * slip;
   double alphateq =
-      atan(sqrt(tanalphat * tanalphat + KxKyKxKyslipslip)) * sgn(alphat);
+      atan(sqrt(tanalphat * tanalphat + KxKyKxKyslipslip)) * physics_utils::fsgn(alphat);
   double SHr = SHy_ + SVy_ / Ky_;
   double alphar = slipAngle + SHr;
   double tanalphar = tan(alphar);
   double camberzcamberz = camberz * camberz;
   double alphareq =
-      atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * sgn(alphar);
+      atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * physics_utils::fsgn(alphar);
   double Dt = Fz * (QDZ1_ + QDZ2_ * dFz) *
               (1 + QDZ3_ * camberz + QDZ4_ * camberzcamberz) *
               (radius_ / FZ0T_) * LTR_;

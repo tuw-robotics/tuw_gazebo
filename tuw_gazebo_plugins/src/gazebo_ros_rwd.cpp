@@ -10,6 +10,7 @@
 #include <tuw_vehicle_msgs/RWDControl.h>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
+#include <tuw_gazebo_plugins/gazebo_ros_physics_utils.h>
 
 namespace gazebo {
 GazeboRosRWD::GazeboRosRWD() {
@@ -166,10 +167,9 @@ void GazeboRosRWD::Reset() {
 void GazeboRosRWD::UpdateChild() {
   common::Time current_time = parent_->GetWorld()->SimTime();
   common::Time seconds_since_last_update = (current_time - last_update_time_);
-  hvBattery.Update(seconds_since_last_update.Double());
-
+  double elapsedSeconds = seconds_since_last_update.Double();
+  hvBattery.Update(elapsedSeconds);
   maxVelocity_ = GetMaxVelocity();
-
   double effortRight = rightSteerPID_.Update(rightSteeringJoint_->Position() -
                                                  GetRightToeAngle(steering_),
                                              seconds_since_last_update);
@@ -178,7 +178,7 @@ void GazeboRosRWD::UpdateChild() {
                                            seconds_since_last_update);
   leftSteeringJoint_->SetForce(0, effortLeft);
   rightSteeringJoint_->SetForce(0, effortRight);
-  WheelForces();
+  WheelForces(elapsedSeconds);
   aeroModel_.AddForces(parent_->RelativeLinearVel().X(), baseLink_);
   tuw::ros_msgs::BatteryState batteryStateMsg;
   batteryStateMsg.header.stamp = ros::Time(current_time.sec, current_time.nsec);
@@ -202,59 +202,47 @@ double GazeboRosRWD::GetMaxVelocity() {
          gearTransmission_;
 }
 
-void GazeboRosRWD::WheelForces() {
+void GazeboRosRWD::WheelForces(double elapsedSeconds) {
   double secSinceUpdate =
       (parent_->GetWorld()->SimTime() - lastRWDTime_).Double();
+  const double stopTorque = 30;
   if (secSinceUpdate > 1) {
     // if no rwd received, just stop
-    SetWheelForce(leftRearJoint_, 30, 0);
-    SetWheelForce(rightRearJoint_, 30, 0);
-    SetWheelForce(leftFrontJoint_, 30, 0);
-    SetWheelForce(rightFrontJoint_, 30, 0);
+    SetWheelForce(leftRearJoint_, stopTorque, 0, elapsedSeconds);
+    SetWheelForce(rightRearJoint_, stopTorque, 0, elapsedSeconds);
+    SetWheelForce(leftFrontJoint_, stopTorque, 0, elapsedSeconds);
+    SetWheelForce(rightFrontJoint_, stopTorque, 0, elapsedSeconds);
     return;
   }
-
   double pascalPressure = TO_PASCAL(brakePressure_);
   double brakeTorqueFront = pascalPressure * frontBrakeCoefficient_;
   double brakeTorqueRear =
       pascalPressure * brakeBalance_ * rearBrakeCoefficient_;
   double leftTorque = torqueLeft_ * powertrainEfficiency_;
   double rightTorque = torqueRight_ * powertrainEfficiency_;
-  double resistanceConstant = 5;
-  if (fabs(leftTorque) < 0.1) {
-    double vel = leftRearJoint_->GetVelocity(0);
-    leftTorque =
-        -resistanceConstant * ignition::math::clamp(vel / 1.0, -1.0, 1.0);
-  }
-  if (fabs(rightTorque) < 0.1) {
-    double vel = rightRearJoint_->GetVelocity(0);
-    rightTorque =
-        -resistanceConstant * ignition::math::clamp(vel / 1.0, -1.0, 1.0);
-  }
-  SetWheelForce(leftRearJoint_, brakeTorqueRear, leftTorque);
-  SetWheelForce(rightRearJoint_, brakeTorqueRear, rightTorque);
-  SetWheelForce(leftFrontJoint_, brakeTorqueFront, 0);
-  SetWheelForce(rightFrontJoint_, brakeTorqueFront, 0);
+  SetWheelForce(leftRearJoint_, brakeTorqueRear, leftTorque, elapsedSeconds);
+  SetWheelForce(rightRearJoint_, brakeTorqueRear, rightTorque, elapsedSeconds);
+  SetWheelForce(leftFrontJoint_, brakeTorqueFront, 0, elapsedSeconds);
+  SetWheelForce(rightFrontJoint_, brakeTorqueFront, 0, elapsedSeconds);
 }
 
+static double sgn(double val) {
+  return (0 < val) - (val < 0);
+}
 void GazeboRosRWD::SetWheelForce(physics::JointPtr &wheel, double brakeTorque,
-                                 double torque) {
+                                 double drivingTorque, double elapsedSeconds) {
   double vel = wheel->GetVelocity(0);
   if (ignition::math::isnan(vel)) {
     vel = 0;
   }
-  double smoothing = 1;
-  // weil es keine Bremskraft sondern eine Gegenkraft zur Rotation ist,
-  // braucht man das smoothing um ein vorwärts/rückwärts Zirkulieren zu
-  // verhindern
-  // Gegenkraft bei Rädern mit Drehzahl < smoothing rad/s verringert
-  brakeTorque *= -1 * ignition::math::clamp(vel / smoothing, -1.0, 1.0);
   if (vel >= maxVelocity_) {
-    torque = 0;
+    drivingTorque = 0;
   }
-  double outTorque = torque + brakeTorque;
-  wheel->SetForce(0, outTorque);
-  hvBattery.AddDischargeWithMotor(torque, vel);
+  brakeTorque *= -1 * physics_utils::fsgn(vel);
+  brakeTorque = physics_utils::limit_brake_torque(vel, wheel->GetJointLink(0)->GetInertial()->IZZ(), brakeTorque,
+  wheel->GetForce(0), elapsedSeconds);
+  wheel->SetForce(0,  drivingTorque + brakeTorque);
+  hvBattery.AddDischargeWithMotor(drivingTorque, vel);
 }
 
 void GazeboRosRWD::FiniChild() {

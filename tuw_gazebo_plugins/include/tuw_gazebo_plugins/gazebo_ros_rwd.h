@@ -35,9 +35,9 @@ class GazeboRosRWD : public ModelPlugin {
   double GetLeftToeAngle(double steeringAngle);
   double GetRightToeAngle(double steeringAngle);
   double GetMaxVelocity();
-  void WheelForces();
+  void WheelForces(double elapsedTime);
   void SetWheelForce(physics::JointPtr &wheel, double brakeTorque,
-                     double torque);
+                     double torque, double elapsedTime);
 
   GazeboRosPtr gazebo_ros_;
   physics::ModelPtr parent_;
