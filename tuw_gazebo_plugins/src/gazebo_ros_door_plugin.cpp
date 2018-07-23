@@ -52,7 +52,6 @@
 
 #include <tuw_gazebo_plugins/gazebo_ros_door_plugin.h>
 
-#include <gazebo/math/gzmath.hh>
 #include <sdf/sdf.hh>
 
 #include <ros/ros.h>

@@ -1,5 +1,6 @@
 #include <tuw_gazebo_plugins/gazebo_ros_human_receiver.h>
 #include <tuw_gazebo_plugins/gazebo_model_templates.h>
+#include <gazebo/plugins/ActorPlugin.hh>
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -114,6 +115,8 @@ void GazeboRosHumanReceiver::createHuman(const std::string &name, const ignition
   double half_length_collision = length_collision_ / 2.0;
   std::string modelStr = GazeboModelTemplates::cylinderTemplate(name, pose, radius_, mass,
                                                                 length_visual_, half_length_collision);
+//  std::string modelStr = GazeboModelTemplates::personTemplate(name, pose, radius_, mass,
+//                                                                length_visual_, half_length_collision);
   sdf::SDF sdfModel;
   sdfModel.SetFromString(modelStr);
   this->world_->InsertModelSDF(sdfModel);
@@ -139,6 +142,7 @@ void GazeboRosHumanReceiver::createHumansFnc()
   {
     std::string name = idToName(id);
     physics::ModelPtr p = this->world_->ModelByName(name);
+    std::cout << "name " << name << std::endl;
     if (p)
     {
       humansInactive_[id] = p;
@@ -148,7 +152,7 @@ void GazeboRosHumanReceiver::createHumansFnc()
       ROS_INFO("createHumansFnc: Could not get pointer to %s", name.c_str());
     }
   }
-  ROS_INFO("indexed humans:");
+  ROS_INFO("indexed humans done");
 }
 
 void GazeboRosHumanReceiver::updateHumansFnc()
