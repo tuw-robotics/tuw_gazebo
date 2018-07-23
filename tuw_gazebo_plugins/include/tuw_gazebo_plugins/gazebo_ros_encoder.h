@@ -40,6 +40,7 @@ private:
   ros::Publisher pub_;
   std::string topic_name_;
   bool directionKnown_;
+  bool foundNoiseSdf_;
 
   tuw::NoiseSimModel noise_[4];
 };
