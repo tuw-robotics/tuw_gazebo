@@ -248,12 +248,12 @@ void TireModel::UpdateChild() {
     double slip = GetSlip(velocityTireFrame.X(), wheelVelocity);
 
     double slipAngle =
-        atan(velocityTireFrame.Y() / fabs(wheelVelocity * radius_));
+        velocityTireFrame.Y() / fabs(velocityTireFrame.X());
     //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
     
     double camber = GetCamberFromToeAngle(-toeAngle);
-    double Fx = GetCombinedFx(slip, Fz, dFz, camber);
+    double Fx = GetCombinedFx(slipAngle, slip, Fz, dFz, camber);
     double Fy = GetCombinedFy(slipAngle, slip, Fz, dFz, camber);
     ignition::math::Vector3d torque(
         0, 0, GetSelfAligningTorque(slipAngle, dFz, camber, slip, Fz, Fy, Fx));
@@ -359,12 +359,12 @@ double TireModel::GetCombinedFy(double slipAngle, double slip, double Fz,
   return fy;
 }
 
-double TireModel::GetCombinedFx(double slip, double Fz, double dFz,
+double TireModel::GetCombinedFx(double slipAngle, double slip, double Fz, double dFz,
                                 double camber) {
   double fx0 = GetFx0(slip, Fz, dFz, camber);
   double Exa = REX1_ + REX2_ * dFz;
   double Bxa = RBX1_ * cos(tan(RBX2_ * slip)) * LXAL_;
-  double as = slip + RHX1_;
+  double as = slipAngle + RHX1_;
   double Bxaas = Bxa * as;
   double BxaShxa = Bxa * RHX1_;
   double Gxa = cos(RCX1_ * atan(Bxaas - Exa * (Bxaas - atan(Bxaas)))) /
