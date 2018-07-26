@@ -4,12 +4,12 @@
 #include <gazebo/common/common.hh>
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
+#include <tuw_gazebo_plugins/gazebo_ros_physics_utils.h>
 
 namespace gazebo {
 TireModel::TireModel() {}
 
 TireModel::~TireModel() {
-  //event::Events::DisconnectWorldUpdateBegin(this->update_connection_);		//DEPRECATED
   alive_ = false;
 }
 
@@ -150,25 +150,10 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(SSZ3_, "SSZ3", 0.001);
   gazebo_ros_->getParameter<double>(SSZ4_, "SSZ4", 0.001);
 
-  if (sdf->HasElement("staticCamber")) {
-    useDynamicCamber_ = false;
-    gazebo_ros_->getParameter<double>(camber_, "staticCamber", 0.0);
-  }
-  else if (sdf->HasElement("CC1") && sdf->HasElement("CC2")
-  && sdf->HasElement("CC3") && sdf->HasElement("CC4")) {
-    useDynamicCamber_ = true;
-    gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
-    gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
-    gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
-    gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
-  }
-  else {
-    useDynamicCamber_ = true;
-    camber_ = 0;
-    ROS_INFO("No static camber of camber function coefficients found, fallback to static camber 0");
-  }
-
-  camber_ = TO_RADIANS(camber_);
+  gazebo_ros_->getParameter<double>(CC1_, "CC1", 0.0);
+  gazebo_ros_->getParameter<double>(CC2_, "CC2", 0.0);
+  gazebo_ros_->getParameter<double>(CC3_, "CC3", 0.0);
+  gazebo_ros_->getParameter<double>(CC4_, "CC4", 0.0);
 
   wheelCollides_ = false;
 
@@ -212,6 +197,7 @@ void TireModel::Init() { gazebo::ModelPlugin::Init(); }
 
 void TireModel::Reset() {
   gazebo::ModelPlugin::Reset();
+  last_update_time_ = parent_->GetWorld()->SimTime();
   this->contactSub_.reset();
 }
 
@@ -219,17 +205,14 @@ void TireModel::OnContacts(ConstContactsPtr &contactsMsg) {
   wheelCollides_ = contactsMsg->contact_size() > 0;
 }
 
-double TireModel::GetCamberFromToeAngle(double leftToeAngle) {
-  double x = TO_DEGREES(leftToeAngle);
-  return TO_RADIANS(CC1_ + CC2_ * x + CC3_ * (x * x) + CC4_ * (x * x * x));
-}
-
-template <typename T>
-int sgn(T val) {
-  return (T(0) < val) - (val < T(0));
+double TireModel::GetCamberFromToeAngle(double angle) {
+  return CC1_ + CC2_ * angle + CC3_ * (angle * angle) + CC4_ * (angle * angle * angle);
 }
 
 void TireModel::UpdateChild() {
+  common::Time current_time = parent_->GetWorld()->SimTime();
+  double elapsedTime = (current_time - last_update_time_).Double();
+  last_update_time_ = current_time;
   double Fz = fmax(- tireJoint_->GetForceTorque(0).body1Force.Z(),10);  // 600;
   ignition::math::Vector3d linearVehicleVelocity = parent_->RelativeLinearVel();
   ignition::math::Vector3d angularVehicleVelocity =
@@ -265,16 +248,15 @@ void TireModel::UpdateChild() {
     double slip = GetSlip(velocityTireFrame.X(), wheelVelocity);
 
     double slipAngle =
-        atan(velocityTireFrame.Y() / fabs(wheelVelocity * radius_));
+        velocityTireFrame.Y() / fabs(velocityTireFrame.X());
     //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
-    if (useDynamicCamber_) {
-      camber_ = GetCamberFromToeAngle(-toeAngle);
-    }
-    double Fx = GetCombinedFx(slip, Fz, dFz, camber_);
-    double Fy = GetCombinedFy(slipAngle, slip, Fz, dFz, camber_);
+    
+    double camber = GetCamberFromToeAngle(-toeAngle);
+    double Fx = GetCombinedFx(slipAngle, slip, Fz, dFz, camber);
+    double Fy = GetCombinedFy(slipAngle, slip, Fz, dFz, camber);
     ignition::math::Vector3d torque(
-        0, 0, GetSelfAligningTorque(slipAngle, dFz, camber_, slip, Fz, Fy, Fx));
+        0, 0, GetSelfAligningTorque(slipAngle, dFz, camber, slip, Fz, Fy, Fx));
     ignition::math::Vector3d tireFrameForce(Fx, Fy, 0);
     ignition::math::Vector3d carFrameForce;
     carFrameForce =
@@ -288,36 +270,28 @@ void TireModel::UpdateChild() {
       carLink_->AddLinkForce(carFrameForce, anchorPose_);
       carLink_->AddTorque(torque);
       double torque = -tireFrameForce.X() * radius_;
-      double smoothing = 0.5;
+
       double rollingResistance =
-          -fabs(GetRollingResistance(Fz, wheelVelocity, tireFrameForce.X())) *
-          ignition::math::clamp(wheelVelocity / smoothing, -1.0, 1.0);
+          -fabs(GetRollingResistance(Fz, wheelVelocity, tireFrameForce.X())) * physics_utils::fsgn(wheelVelocity);
+      rollingResistance = physics_utils::limit_brake_torque(wheelVelocity, tireLink_->GetInertial()->IZZ(), 
+        rollingResistance, torque, elapsedTime);
       torque += rollingResistance;
       tireJoint_->SetForce(0, torque);
     }
   }
 }
 
-double TireModel::GetSlip(double vehicleVelocity, double wheelVelocity) {
-  if (0 == vehicleVelocity || ignition::math::isnan(vehicleVelocity)) {
-    vehicleVelocity = 0.000000001;
+double TireModel::GetSlip(double velocityTireFrameX, double wheelVelocity) {
+  if (0 == velocityTireFrameX || ignition::math::isnan(velocityTireFrameX)) {
+    velocityTireFrameX = 0.01; //this small epsilon is suggested to prevent singularity
   }
-
   if (ignition::math::isnan(wheelVelocity)) {
     wheelVelocity = 0;
   }
-  // at very low wheel-velocities the sign changes between positive and negative
-  // in every cycle
-  // this makes it unpossible to stop the car as it is accelerated/decelerated
-  // by the same ammount
-  // all the time. therefore if the speed is very slow it should always be
-  // against the cars movement
-  if (fabs(wheelVelocity) < 0.5) {
-    wheelVelocity = -sgn(vehicleVelocity) * fabs(wheelVelocity);
-  }
   // TODO radius here should be effective tire radius
-  double slip =
-      ((wheelVelocity * radius_) - vehicleVelocity) / fabs(vehicleVelocity);
+  double effectiveTireRadius = radius_;
+  double Vsx = velocityTireFrameX - wheelVelocity * effectiveTireRadius;
+  double slip = (-Vsx) / fabs(velocityTireFrameX);
   //slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
   return slip;
 }
@@ -334,7 +308,7 @@ double TireModel::GetFx0(double slip, double Fz, double dFz, double camber) {
   double Bx = Kx / (CX_ * Dx);
   double BxSlipX = Bx * slipx;
   double Ex = (PEX1_ + PEX2_ * dFz + PEX3_ * (dFz * dFz)) *
-              (1 - PEX4_ * sgn(slipx)) * LEX_;
+              (1 - PEX4_ * physics_utils::fsgn(slipx)) * LEX_;
   double Fx0 =
       Dx * sin(CX_ * atan(BxSlipX - Ex * (BxSlipX - atan(BxSlipX)))) + SVx;
   Kx_ = Kx;
@@ -356,7 +330,7 @@ double TireModel::GetFy0(double slipAngle, double Fz, double dFz,
   double By = Ky / (CY_ * Dy);
   double BySlipY = By * slipY;
   double Ey = (PEY1_ + PEY2_ * dFz) *
-              (1 - (PEY3_ + PEY4_ * camberY) * sgn(slipY)) * LEY_;
+              (1 - (PEY3_ + PEY4_ * camberY) * physics_utils::fsgn(slipY)) * LEY_;
   double Fy0 =
       Dy * sin(CY_ * atan(BySlipY - Ey * (BySlipY - atan(BySlipY)))) + SVy;
   Ky_ = Ky;
@@ -385,12 +359,12 @@ double TireModel::GetCombinedFy(double slipAngle, double slip, double Fz,
   return fy;
 }
 
-double TireModel::GetCombinedFx(double slip, double Fz, double dFz,
+double TireModel::GetCombinedFx(double slipAngle, double slip, double Fz, double dFz,
                                 double camber) {
   double fx0 = GetFx0(slip, Fz, dFz, camber);
   double Exa = REX1_ + REX2_ * dFz;
   double Bxa = RBX1_ * cos(tan(RBX2_ * slip)) * LXAL_;
-  double as = slip + RHX1_;
+  double as = slipAngle + RHX1_;
   double Bxaas = Bxa * as;
   double BxaShxa = Bxa * RHX1_;
   double Gxa = cos(RCX1_ * atan(Bxaas - Exa * (Bxaas - atan(Bxaas)))) /
@@ -401,20 +375,20 @@ double TireModel::GetCombinedFx(double slip, double Fz, double dFz,
 double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
                                         double camber, double slip, double Fz,
                                         double Fy, double Fx) {
-  double camberz = camber_ * LGAZ_;
+  double camberz = camber * LGAZ_;
   double SHt = QHZ1_ + QHZ2_ * dFz + (QHZ3_ + QHZ4_ * dFz) * camberz;
   double alphat = slipAngle + SHt;
   double tanalphat = tan(alphat);
   double KxKy = (Kx_ / Ky_);
   double KxKyKxKyslipslip = KxKy * KxKy * slip * slip;
   double alphateq =
-      atan(sqrt(tanalphat * tanalphat + KxKyKxKyslipslip)) * sgn(alphat);
+      atan(sqrt(tanalphat * tanalphat + KxKyKxKyslipslip)) * physics_utils::fsgn(alphat);
   double SHr = SHy_ + SVy_ / Ky_;
   double alphar = slipAngle + SHr;
   double tanalphar = tan(alphar);
   double camberzcamberz = camberz * camberz;
   double alphareq =
-      atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * sgn(alphar);
+      atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * physics_utils::fsgn(alphar);
   double Dt = Fz * (QDZ1_ + QDZ2_ * dFz) *
               (1 + QDZ3_ * camberz + QDZ4_ * camberzcamberz) *
               (radius_ / FZ0T_) * LTR_;

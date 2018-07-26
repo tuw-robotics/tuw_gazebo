@@ -30,7 +30,7 @@ class TireModel : public ModelPlugin {
   double GetFy0(double slipAngle, double Fz, double dFz, double camber);
   double GetCombinedFy(double slipAngle, double slip, double Fz, double dFz,
                        double camber);
-  double GetCombinedFx(double slip, double Fz, double dFz, double camber);
+  double GetCombinedFx(double slipAngle, double slip, double Fz, double dFz, double camber);
   double GetRollingResistance(double Fz, double wheelVelocity, double Fx);
   double GetSlip(double vehicleVelocity, double wheelVelocity);
   double GetSelfAligningTorque(double slipAngle, double dFz, double camber,
@@ -208,8 +208,6 @@ class TireModel : public ModelPlugin {
   double FZ0T_;
   double CX_;
   double CY_;
-  double camber_;
-  bool useDynamicCamber_;
 };
 }
 

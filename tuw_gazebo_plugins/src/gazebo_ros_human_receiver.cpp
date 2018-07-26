@@ -1,5 +1,6 @@
 #include <tuw_gazebo_plugins/gazebo_ros_human_receiver.h>
 #include <tuw_gazebo_plugins/gazebo_model_templates.h>
+#include <gazebo/plugins/ActorPlugin.hh>
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -141,6 +142,7 @@ void GazeboRosHumanReceiver::createHumansFnc()
   {
     std::string name = idToName(id);
     physics::ModelPtr p = this->world_->ModelByName(name);
+    std::cout << "name " << name << std::endl;
     if (p)
     {
       humansInactive_[id] = p;

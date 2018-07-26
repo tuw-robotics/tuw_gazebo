@@ -105,7 +105,10 @@ link_directories(
 )
 
 ## Utils
-add_library(tuw_gazebo_ros_utils src/gazebo_ros_utils.cpp src/noise_sim_model.cpp)
+add_library(tuw_gazebo_ros_utils 
+src/gazebo_ros_utils.cpp 
+src/noise_sim_model.cpp 
+src/gazebo_ros_physics_utils.cpp)
 target_link_libraries(tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_definitions(-fPIC) # what is this for?

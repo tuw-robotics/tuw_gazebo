@@ -73,6 +73,32 @@ public:
         boost::replace_all(modelStr, "${izz}", boost::lexical_cast<std::string>(izz));
         return modelStr;
     }
+
+    static std::string personTemplate(const std::string &name, const ignition::math::Pose3d &pose, double radius, double mass, double length_visual, double length_collision)
+    {
+      std::string modelStr("<sdf version ='1.6'>\
+                              <pose>${pose}</pose>\
+                              <model name='${name}'>\
+                                <include>\
+                                   <uri>model://sun</uri>\
+                                </include>\
+                                <actor name='actor'>\
+                                  <skin>\
+                                    <filename>walk.dae</filename>\
+                                  </skin>\
+                                </actor>\
+                               </model>\
+                             </sdf>");
+      std::stringstream poseStr;
+      double ixx = 0.0833333 * mass * (3 * radius * radius + length_collision * length_collision);
+      double iyy = 0.0833333 * mass * (3 * radius * radius + length_collision * length_collision);
+      double izz = 0.5 * mass * radius * radius;
+      poseStr << pose.Pos().X() << " " << pose.Pos().Y() << " " << pose.Pos().Z() << " 0 0 0";
+      boost::replace_all(modelStr, "${name}", name);
+      boost::replace_all(modelStr, "${pose}", poseStr.str());
+      return modelStr;
+    }
+
     static std::string cylinderTemplate(const std::string &name, const ignition::math::Pose3d &pose, double radius, double mass, double length_visual, double length_collision) {
         std::string modelStr(
             "<sdf version ='1.6'>\
