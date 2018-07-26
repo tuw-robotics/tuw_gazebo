@@ -544,13 +544,13 @@
     <plugin name="plugin_door_2" filename="libtuw_gazebo_ros_door_plugin.so">
         <topic>roblab/kitchen</topic>
         <joint>joint_2</joint>
-        <value>0</value>
+        <value>0.95</value>
         <angle_max>-3.1416</angle_max>
     </plugin>
     <plugin name="plugin_door_3" filename="libtuw_gazebo_ros_door_plugin.so">
         <topic>roblab/library</topic>
         <joint>joint_3</joint>
-        <value>0</value>
+        <value>0.95</value>
         <angle_max>-1.8</angle_max>
     </plugin>
     <plugin name="plugin_main_1_b" filename="libtuw_gazebo_ros_door_plugin.so">

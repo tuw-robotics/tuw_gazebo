@@ -15,7 +15,7 @@
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/$(arg platform_dir)/main.xacro' model_dir:=$(arg model_dir) platform_dir:=$(arg platform_dir) namespace:=$(arg robot_name) motor_plugin:=$(arg motor_plugin)"/>
   
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a robot -->
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -unpause -urdf -param robot_description -model $(arg robot_name)" respawn="false"/>
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -urdf -param robot_description -model $(arg robot_name)" respawn="false"/>
 
     <!-- Run robot state publisher -->
     <group if="$(arg launch_robot_state_publisher)">
