@@ -136,20 +136,21 @@ void GazeboRosHumanReceiver::createHumansFnc()
     createHuman(name, pose);
   }
   ROS_INFO("create  %i humans:", max_humans_);
-  sleep(5);
+  //sleep(5);
   humansInactive_.resize(max_humans_);
   for (std::size_t id = 0; id < humansInactive_.size(); id++)
   {
     std::string name = idToName(id);
     physics::ModelPtr p = this->world_->ModelByName(name);
+    while(!p)
+    {
+      sleep(1);
+      p = this->world_->ModelByName(name);
+    }
     std::cout << "name " << name << std::endl;
     if (p)
     {
       humansInactive_[id] = p;
-    }
-    else
-    {
-      ROS_INFO("createHumansFnc: Could not get pointer to %s", name.c_str());
     }
   }
   ROS_INFO("indexed humans done");
