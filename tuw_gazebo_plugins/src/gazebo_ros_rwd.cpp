@@ -239,7 +239,7 @@ void GazeboRosRWD::SetWheelForce(physics::JointPtr &wheel, double brakeTorque,
     drivingTorque = 0;
   }
   brakeTorque *= -1 * physics_utils::fsgn(vel);
-  brakeTorque = physics_utils::limit_brake_torque(vel, wheel->GetJointLink(0)->GetInertial()->IZZ(), brakeTorque,
+  brakeTorque = physics_utils::limit_brake_torque(vel, wheel->GetJointLink(0)->GetInertial()->IYY(), brakeTorque,
   wheel->GetForce(0), elapsedSeconds);
   wheel->SetForce(0,  drivingTorque + brakeTorque);
   hvBattery.AddDischargeWithMotor(drivingTorque, vel);
