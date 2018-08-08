@@ -173,6 +173,80 @@ public:
         boost::replace_all(modelStr, "${izz}", boost::lexical_cast<std::string>(izz));
         return modelStr;
     }
+    
+    static std::string personTemplate(const std::string &name, const ignition::math::Pose3d &pose)
+    {
+      std::string modelStr(
+        "<sdf version='1.6'>\
+          <model name ='${name}'>\
+            <pose>${pose}</pose>\
+              <link name='link'>\
+                <inertial>\
+                  <pose>0 -0.1 0.95 0 -0 0</pose>\
+                  <mass>80</mass>\
+                  <inertia>\
+                    <ixx>24.88</ixx>\
+                    <ixy>0</ixy>\
+                    <ixz>0</ixz>\
+                    <iyy>25.73</iyy>\
+                    <iyz>0</iyz>\
+                    <izz>2.48</izz>\
+                  </inertia>\
+                </inertial>\
+                <collision name='bottom'>\
+                  <pose>0 -0.1 0.01 0 -0 0</pose>\
+                  <surface>\
+                    <friction>\
+                      <ode>\
+                        <mu>0.0</mu>\
+                        <mu2>0.0</mu2>\
+                      </ode>\
+                    </friction>\
+                  </surface>\
+                  <geometry>\
+                    <box>\
+                      <size>0.5 0.35 0.02</size>\
+                    </box>\
+                  </geometry>\
+                </collision>\
+                <collision name='person'>\
+                  <pose>0 0 0.02 0.04 -0 0</pose>\
+                  <surface>\
+                    <friction>\
+                      <ode>\
+                        <mu>0.0</mu>\
+                        <mu2>0.0</mu2>\
+                      </ode>\
+                    </friction>\
+                  </surface>\
+                  <geometry>\
+                    <mesh>\
+                      <uri>model://person_standing/meshes/standing.dae</uri>\
+                      <scale>0.8 0.8 0.8</scale>\
+                    </mesh>\
+                  </geometry>\
+                </collision>\
+                <visual name='visual'>\
+                  <pose>0 0 0.02 0.04 -0 0</pose>\
+                  <geometry>\
+                    <mesh>\
+                      <uri>model://person_standing/meshes/standing.dae</uri>\
+                      <scale>0.8 0.8 0.8</scale>\
+                    </mesh>\
+                  </geometry>\
+                </visual>\
+              </link>\
+          </model>\
+        </sdf>");
+      
+        std::stringstream poseStr;
+        
+        poseStr << pose.Pos().X() << " " << pose.Pos().Y() << " " << pose.Pos().Z() << " 0 0 0";
+        boost::replace_all(modelStr, "${name}", name);
+        boost::replace_all(modelStr, "${pose}", poseStr.str());
+        
+        return modelStr;
+    }
 };
 
 }

@@ -113,10 +113,9 @@ void GazeboRosHumanReceiver::createHuman(const std::string &name, const ignition
   //double radius = 0.2, length_viusal = 1.8, length_collision = 0.4, mass = 10;
   double half_length_visual = length_visual_ / 2.0;
   double half_length_collision = length_collision_ / 2.0;
-  std::string modelStr = GazeboModelTemplates::cylinderTemplate(name, pose, radius_, mass,
-                                                                length_visual_, half_length_collision);
-//  std::string modelStr = GazeboModelTemplates::personTemplate(name, pose, radius_, mass,
+//  std::string modelStr = GazeboModelTemplates::cylinderTemplate(name, pose, radius_, mass,
 //                                                                length_visual_, half_length_collision);
+  std::string modelStr = GazeboModelTemplates::personTemplate(name, pose);
   sdf::SDF sdfModel;
   sdfModel.SetFromString(modelStr);
   this->world_->InsertModelSDF(sdfModel);
@@ -124,6 +123,7 @@ void GazeboRosHumanReceiver::createHuman(const std::string &name, const ignition
 
 void GazeboRosHumanReceiver::createHumansFnc()
 {
+  world_->SetPaused(true); // pause until humans are instantiated (ensures that mped does not start beforehand)
   boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutexHumans_);
   sleep(2);
   int cols = ceil(sqrt(max_humans_));
@@ -136,23 +136,26 @@ void GazeboRosHumanReceiver::createHumansFnc()
     createHuman(name, pose);
   }
   ROS_INFO("create  %i humans:", max_humans_);
-  sleep(2);
+  //sleep(5);
   humansInactive_.resize(max_humans_);
   for (std::size_t id = 0; id < humansInactive_.size(); id++)
   {
     std::string name = idToName(id);
     physics::ModelPtr p = this->world_->ModelByName(name);
+    while(!p)
+    {
+      sleep(1);
+      p = this->world_->ModelByName(name);
+    }
     std::cout << "name " << name << std::endl;
     if (p)
     {
       humansInactive_[id] = p;
     }
-    else
-    {
-      ROS_INFO("createHumansFnc: Could not get pointer to %s", name.c_str());
-    }
   }
   ROS_INFO("indexed humans done");
+  
+  world_->SetPaused(false);
 }
 
 void GazeboRosHumanReceiver::updateHumansFnc()
@@ -178,8 +181,6 @@ void GazeboRosHumanReceiver::updateHumansFnc()
       humansActive_.clear();
       for (std::size_t i = 0; i < msgHumans_.objects.size(); i++)
       {
-        //if (msgHumans_.poses[i].valid == false)
-        //  continue;
         if(msgHumans_.objects[i].object.ids.empty())
         {
           ROS_WARN("object with no ids received");
@@ -187,17 +188,21 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         }
         const geometry_msgs::Point &pos = msgHumans_.objects[i].object.pose.position;
         const geometry_msgs::Twist &twist = msgHumans_.objects[i].object.twist;
+        const geometry_msgs::Quaternion &quat = msgHumans_.objects[i].object.pose.orientation;
         double xw = ca * pos.x - sa * pos.y + map_offset_x_;
         double yw = sa * pos.x + ca * pos.y + map_offset_y_;
         double zw = 0.0;
         xw = pos.x;
         yw = pos.y;
         zw = 0;
-        ignition::math::Pose3d poseModel(xw, yw, zw, 0, 0, 0);
         
         double vx = twist.linear.x;
         double vy = twist.linear.y;
         double vz = 0.0;
+        
+        // M_PI_2 seems to be necessary for this particular human model
+        ignition::math::Pose3d poseModel(xw, yw, zw, 0, 0, atan2(vy, vx) + M_PI_2);
+        
         it = lasthumansActive.find(msgHumans_.objects[i].object.ids[0]);
         if (it == lasthumansActive.end())
         {
@@ -210,6 +215,7 @@ void GazeboRosHumanReceiver::updateHumansFnc()
           {
             p = humansInactive_.back();
             humansInactive_.pop_back();
+            std::cout << "set world pose " << std::endl;
             p->SetWorldPose(poseModel);
             p->SetStatic(false);
           }
@@ -221,11 +227,11 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         }
         humansActive_[msgHumans_.objects[i].object.ids[0]] = p;
         const ignition::math::Pose3d &current = p->WorldPose();
-        //ignition::math::Vector3d diff = poseModel.Pos() - current.Pos();
-        //p->SetLinearVel(ignition::math::Vector3d(diff.X(), diff.Y(), 0));
+        ignition::math::Vector3d diff = poseModel.Rot().Euler() - current.Rot().Euler();
         p->SetLinearVel(ignition::math::Vector3d(vx, vy, vz));
-        p->SetAngularVel(ignition::math::Vector3d::Zero);
+        p->SetAngularVel(ignition::math::Vector3d(diff.X(), diff.Y(), diff.Z()));
         p->SetAngularAccel(ignition::math::Vector3d::Zero);
+        p->SetWorldPose(poseModel);
       }
       int cols = ceil(sqrt(max_humans_));
       for (it = lasthumansActive.begin(); it != lasthumansActive.end(); ++it)

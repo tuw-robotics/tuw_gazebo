@@ -51,6 +51,9 @@ build
 *kdev*
 *.orig
 
+# Visual Studio Code
+*.vscode
+
 # ROS
 build
 devel
