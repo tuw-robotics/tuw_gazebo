@@ -23,7 +23,7 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<std::string>(baseLinkName_, "baseLink",
                                          "base_link");
   gazebo_ros_->getParameter<double>(update_rate_, "updateRate", 100.0);
-  gazebo_ros_->getParameter<double>(radius_, "radius", 0.312);
+  gazebo_ros_->getParameter<double>(UNLOADED_RADIUS_, "UNLOADED_RADIUS", 0.312);
   gazebo_ros_->getParameter<double>(FNOMIN_, "FNOMIN", 700.0);
   gazebo_ros_->getParameter<double>(LFZ0_, "LFZ0", 1.0);
   gazebo_ros_->getParameter<double>(PDX1_, "PDX1", 1.13);
@@ -96,6 +96,7 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(LGAZ_, "LGAZ", 1.0);
   gazebo_ros_->getParameter<double>(LTR_, "LTR", 1.0);
   gazebo_ros_->getParameter<double>(LS_, "LS", 1.0);
+  gazebo_ros_->getParameter<double>(LRES_, "LRES", 0.0);
 
   // Combined Fy Coefficients
   gazebo_ros_->getParameter<double>(RBY1_, "RBY1", 6.23);
@@ -145,6 +146,8 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
   gazebo_ros_->getParameter<double>(QEZ1_, "QEZ1", -5.4);
   gazebo_ros_->getParameter<double>(QEZ2_, "QEZ2", 1.1);
   gazebo_ros_->getParameter<double>(QEZ3_, "QEZ3", 0.0);
+  gazebo_ros_->getParameter<double>(QEZ4_, "QEZ4", 0.2);
+  gazebo_ros_->getParameter<double>(QEZ5_, "QEZ5", -3.0);
   gazebo_ros_->getParameter<double>(SSZ1_, "SSZ1", 0.02);
   gazebo_ros_->getParameter<double>(SSZ2_, "SSZ2", 0.02);
   gazebo_ros_->getParameter<double>(SSZ3_, "SSZ3", 0.001);
@@ -159,8 +162,13 @@ void TireModel::Load(physics::ModelPtr parent, sdf::ElementPtr sdf) {
 
   FZ0T_ = FNOMIN_ * LFZ0_;
   CX_ = PCX1_ * LCX_;
+  if (CX_ <= 0) {
+    ROS_ERROR("CX should be > 0");
+  }
   CY_ = PCY1_ * LCY_;
-
+  if (CY_ <= 0) {
+    ROS_ERROR("CY should be > 0");
+  }
   tireJoint_ = gazebo_ros_->getJoint(parent_, "tireJoint", "tireJoint");
 
   tireJoint_->SetProvideFeedback(true);
@@ -213,7 +221,7 @@ void TireModel::UpdateChild() {
   common::Time current_time = parent_->GetWorld()->SimTime();
   double elapsedTime = (current_time - last_update_time_).Double();
   last_update_time_ = current_time;
-  double Fz = fmax(- tireJoint_->GetForceTorque(0).body1Force.Z(),10);  // 600;
+  double Fz = 0 - tireJoint_->GetForceTorque(0).body1Force.Z();
   ignition::math::Vector3d linearVehicleVelocity = parent_->RelativeLinearVel();
   ignition::math::Vector3d angularVehicleVelocity =
       parent_->RelativeAngularVel();
@@ -222,8 +230,7 @@ void TireModel::UpdateChild() {
       !ignition::math::isnan(linearVehicleVelocity.X()) &&
       !ignition::math::isnan(linearVehicleVelocity.Y()) &&
       !ignition::math::isnan(linearVehicleVelocity.Z())) {
-    //Fz = ignition::math::clamp(Fz, FZMIN_, FZMAX_);
-
+    Fz = ignition::math::clamp(Fz, FZMIN_, FZMAX_);
     double wheelVelocity = tireJoint_->GetVelocity(0);
 
     angularVehicleVelocity.X(0);
@@ -246,10 +253,11 @@ void TireModel::UpdateChild() {
     double dFz = (Fz - FZ0T_) / FZ0T_;
 
     double slip = GetSlip(velocityTireFrame.X(), wheelVelocity);
-
+    
     double slipAngle =
-        velocityTireFrame.Y() / fabs(velocityTireFrame.X());
-    //slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
+      velocityTireFrame.Y() / fabs(velocityTireFrame.X());
+      //TODO epsilon
+    // slipAngle = ignition::math::clamp(slipAngle, ALPMIN_, ALPMAX_);
 
     
     double camber = GetCamberFromToeAngle(-toeAngle);
@@ -269,30 +277,31 @@ void TireModel::UpdateChild() {
         !ignition::math::isnan(carFrameForce.Y())) {  // TODO why nan at start?
       carLink_->AddLinkForce(carFrameForce, anchorPose_);
       carLink_->AddTorque(torque);
-      double torque = -tireFrameForce.X() * radius_;
+      double opposingtorque = -tireFrameForce.X() * UNLOADED_RADIUS_;
 
       double rollingResistance =
-          -fabs(GetRollingResistance(Fz, wheelVelocity, tireFrameForce.X())) * physics_utils::fsgn(wheelVelocity);
-      rollingResistance = physics_utils::limit_brake_torque(wheelVelocity, tireLink_->GetInertial()->IZZ(), 
-        rollingResistance, torque, elapsedTime);
-      torque += rollingResistance;
-      tireJoint_->SetForce(0, torque);
+          GetRollingResistance(Fz, velocityTireFrame.X(), tireFrameForce.X()) * physics_utils::fsgn(wheelVelocity);
+      rollingResistance = physics_utils::limit_brake_torque(wheelVelocity, tireLink_->GetInertial()->IYY(), 
+      rollingResistance, -opposingtorque, elapsedTime);
+      opposingtorque += rollingResistance;
+      tireJoint_->SetForce(0, opposingtorque);
     }
   }
 }
 
 double TireModel::GetSlip(double velocityTireFrameX, double wheelVelocity) {
   if (0 == velocityTireFrameX || ignition::math::isnan(velocityTireFrameX)) {
-    velocityTireFrameX = 0.01; //this small epsilon is suggested to prevent singularity
+    const double epsilon = 0.01;
+    velocityTireFrameX = epsilon; //this small epsilon is suggested to prevent singularity
   }
   if (ignition::math::isnan(wheelVelocity)) {
     wheelVelocity = 0;
   }
   // TODO radius here should be effective tire radius
-  double effectiveTireRadius = radius_;
+  double effectiveTireRadius = UNLOADED_RADIUS_;
   double Vsx = velocityTireFrameX - wheelVelocity * effectiveTireRadius;
   double slip = (-Vsx) / fabs(velocityTireFrameX);
-  //slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
+  slip = ignition::math::clamp(slip, KPUMIN_, KPUMAX_);
   return slip;
 }
 
@@ -301,17 +310,22 @@ double TireModel::GetFx0(double slip, double Fz, double dFz, double camber) {
   double muX =
       (PDX1_ + PDX2_ * dFz) * (1 - PDX3_ * (camberX * camberX)) * LMUX_;
   double Dx = muX * Fz;
-  double SHx = (PHX1_ * PHX2_ * dFz) * LHX_;
+  if (Dx <= 0) {
+    ROS_ERROR("Dx must be > 0");
+  }
+  double SHx = (PHX1_ + PHX2_ * dFz) * LHX_;
   double SVx = Fz * (PVX1_ + PVX2_ * dFz) * LVX_ * LMUX_;
-  double slipx = slip + SHx;
-  double Kx = Fz * (PKX1_ + PKX2_ * dFz) * exp(PKX3_ * dFz) * LKX_;
-  double Bx = Kx / (CX_ * Dx);
-  double BxSlipX = Bx * slipx;
+  double kappax = slip + SHx;
+  double Kxkappa = Fz * (PKX1_ + PKX2_ * dFz) * exp(PKX3_ * dFz) * LKX_;
+  const double epsilonX = 0.01; 
+  double Bx = Kxkappa / (CX_ * Dx + epsilonX);
+  double BxKappax = Bx * kappax;
   double Ex = (PEX1_ + PEX2_ * dFz + PEX3_ * (dFz * dFz)) *
-              (1 - PEX4_ * physics_utils::fsgn(slipx)) * LEX_;
+              (1 - PEX4_ * physics_utils::fsgn(kappax)) * LEX_;
+  Ex = fmin(1, Ex);
   double Fx0 =
-      Dx * sin(CX_ * atan(BxSlipX - Ex * (BxSlipX - atan(BxSlipX)))) + SVx;
-  Kx_ = Kx;
+      Dx * sin(CX_ * atan(BxKappax - Ex * (BxKappax - atan(BxKappax)))) + SVx;
+  Kxkappa_ = Kxkappa;
   return Fx0;
 }
 
@@ -324,38 +338,45 @@ double TireModel::GetFy0(double slipAngle, double Fz, double dFz,
   double SVy =
       Fz * ((PVY1_ + PVY2_ * dFz) * LVY_ + (PVY3_ + PVY4_ * dFz) * camberY) *
       LMUY_;
-  double slipY = slipAngle + SHy;
-  double Ky = PKY1_ * FZ0T_ * sin(2 * atan(Fz / (PKY2_ * FZ0T_))) *
-              (1 - PKY3_ * fabs(camberY)) * LFZ0_ * LKY_;
-  double By = Ky / (CY_ * Dy);
-  double BySlipY = By * slipY;
+  double alphay = slipAngle + SHy;
+  double Kyalpha = PKY1_ * FZ0T_ * (1 - PKY3_ * fabs(camberY)) *
+              sin(2 * atan(Fz / (PKY2_ * FZ0T_))) * LKY_;
+  const double epsilonY = 0.01;
+  double By = Kyalpha / (CY_ * Dy + epsilonY);
+  double ByAlphay = By * alphay;
   double Ey = (PEY1_ + PEY2_ * dFz) *
-              (1 - (PEY3_ + PEY4_ * camberY) * physics_utils::fsgn(slipY)) * LEY_;
+              (1 - (PEY3_ + PEY4_ * camberY) * physics_utils::fsgn(alphay)) * LEY_;
+  Ey = fmin(1,Ey);
   double Fy0 =
-      Dy * sin(CY_ * atan(BySlipY - Ey * (BySlipY - atan(BySlipY)))) + SVy;
-  Ky_ = Ky;
+      Dy * sin(CY_ * atan(ByAlphay - Ey * (ByAlphay - atan(ByAlphay)))) + SVy;
+  Kyalpha_ = Kyalpha;
   By_ = By;
   SHy_ = SHy;
   SVy_ = SVy;
+  MuY_ = muY;
   return Fy0;
+}
+
+double TireModel::GetGyk(double slipAngle, double slip, double dFz) {
+    double Byk = RBY1_ * cos(atan(RBY2_ * (slipAngle - RBY3_))) * LYKA_;
+    double SHyk = RHY1_ + RHY2_ * dFz;
+    double Eyk = REY1_ + REY2_ * dFz;
+    Eyk = fmin(1, Eyk);
+    double BykShyk = Byk * SHyk;
+    double ks = slip + SHyk;
+    double Bykks = Byk * ks;
+    double Gyk = cos(RCY1_ * atan(Bykks - Eyk * (Bykks - atan(Bykks)))) /
+               cos(RCY1_ * atan(BykShyk - Eyk * (BykShyk - atan(BykShyk))));
+    return Gyk;
 }
 
 double TireModel::GetCombinedFy(double slipAngle, double slip, double Fz,
                                 double dFz, double camber) {
   double fy0 = GetFy0(slipAngle, Fz, dFz, camber);
-  double Byk = RBY1_ * cos(atan(RBY2_ * (slipAngle - RBY3_))) * LYKA_;
-  double SHyk = RHY1_ + RHY2_ * dFz;
-  double Eyk = REY1_ + REY2_ * dFz;
-  double BykShyk = Byk * SHyk;
-  double DVyk = LMUY_ * Fz * (RVY1_ + RVY2_ * dFz + RVY3_ * camber) *
-                cos(tan(RVY4_ * slipAngle));
+  double DVyk = MuY_ * Fz * (RVY1_ + RVY2_ * dFz + RVY3_ * camber) *
+                cos(atan(RVY4_ * slipAngle));
   double SVyk = DVyk * sin(RVY5_ * atan(RVY6_ * slip)) * LVYKA_;
-  double ks = slip + SHyk;
-  double Bykks = Byk * ks;
-  double Gyk = cos(RCY1_ * atan(Bykks - Eyk * (Bykks - atan(Bykks)))) /
-               cos(RCY1_ * atan(BykShyk - Eyk * (BykShyk - atan(BykShyk))));
-  double fy = fy0 * Gyk + SVyk;
-  SVyk_ = SVyk;
+  double fy = fy0 * GetGyk(slipAngle, slip, dFz) + SVyk;
   return fy;
 }
 
@@ -363,7 +384,11 @@ double TireModel::GetCombinedFx(double slipAngle, double slip, double Fz, double
                                 double camber) {
   double fx0 = GetFx0(slip, Fz, dFz, camber);
   double Exa = REX1_ + REX2_ * dFz;
-  double Bxa = RBX1_ * cos(tan(RBX2_ * slip)) * LXAL_;
+  Exa = fmin (1, Exa);
+  double Bxa = RBX1_ * cos(atan(RBX2_ * slip)) * LXAL_;
+  if (Bxa <= 0) {
+    ROS_ERROR("Bxa should be > 0");
+  }
   double as = slipAngle + RHX1_;
   double Bxaas = Bxa * as;
   double BxaShxa = Bxa * RHX1_;
@@ -378,46 +403,49 @@ double TireModel::GetSelfAligningTorque(double slipAngle, double dFz,
   double camberz = camber * LGAZ_;
   double SHt = QHZ1_ + QHZ2_ * dFz + (QHZ3_ + QHZ4_ * dFz) * camberz;
   double alphat = slipAngle + SHt;
-  double tanalphat = tan(alphat);
-  double KxKy = (Kx_ / Ky_);
+  const double epsilonK = 0.01;
+  double KyalphaT = Kyalpha_ + epsilonK;
+  double KxKy = (Kxkappa_ / KyalphaT);
   double KxKyKxKyslipslip = KxKy * KxKy * slip * slip;
+  double tanalphat = tan(alphat);
   double alphateq =
       atan(sqrt(tanalphat * tanalphat + KxKyKxKyslipslip)) * physics_utils::fsgn(alphat);
-  double SHr = SHy_ + SVy_ / Ky_;
-  double alphar = slipAngle + SHr;
+  double SHf = SHy_ + SVy_ / KyalphaT;
+  double alphar = slipAngle + SHf;
   double tanalphar = tan(alphar);
   double camberzcamberz = camberz * camberz;
   double alphareq =
       atan(sqrt(tanalphar * tanalphar + KxKyKxKyslipslip)) * physics_utils::fsgn(alphar);
-  double Dt = Fz * (QDZ1_ + QDZ2_ * dFz) *
-              (1 + QDZ3_ * camberz + QDZ4_ * camberzcamberz) *
-              (radius_ / FZ0T_) * LTR_;
+  double Dt0 = Fz * (UNLOADED_RADIUS_ / FNOMIN_) * (QDZ1_ + QDZ2_ * dFz) * LTR_;
+  double Dt =  Dt0 *
+              (1 + QDZ3_ * camberz + QDZ4_ * camberzcamberz);
   double Bt = (QBZ1_ + QBZ2_ * dFz + QBZ3_ * dFz * dFz) *
-              (1 + QBZ4_ * camberzcamberz + QBZ5_ * fabs(camberz)) *
+              (1 + QBZ4_ * camberz + QBZ5_ * fabs(camberz)) *
               (LKY_ / LMUY_);
-  double Et = QEZ1_ + QEZ2_ * dFz + QEZ3_ * dFz * dFz;
+  double Et = (QEZ1_ + QEZ2_ * dFz + QEZ3_ * dFz * dFz) * 
+  (1 + (QEZ4_ + QEZ5_* camberz) * (2.0/M_PI)*atan(Bt*QCZ1_*alphat));
+  Et = fmin(1, Et);
   double Btalphateq = Bt * alphateq;
   double t = Dt * cos(QCZ1_ *
                       atan(Btalphateq - Et * (Btalphateq - atan(Btalphateq)))) *
              cos(slipAngle);
-  double Fycamber0 = Fy - SVyk_;
   double Dr = Fz *
-              ((QDZ6_ + QDZ7_ * dFz) * LTR_ + (QDZ8_ + QDZ9_ * dFz) * camberz) *
-              radius_ * LMUY_;
+              ((QDZ6_ + QDZ7_ * dFz) * LRES_ + (QDZ8_ + QDZ9_ * dFz) * camberz) *
+              UNLOADED_RADIUS_ * LMUY_;
   double Br = QBZ9_ * (LKY_ / LMUY_) + QBZ10_ * By_ * CY_;
   double Mzr = Dr * cos(atan(Br * alphareq)) * cos(slipAngle);
   double s = (SSZ1_ + SSZ2_ * (Fy / FZ0T_) + (SSZ3_ + SSZ4_ * dFz) * camber) *
-             radius_ * LS_;
-  double Mz = -t * Fy + Mzr + s * Fx;
+             UNLOADED_RADIUS_ * LS_;
+  double FyT = GetGyk(slipAngle, slip, dFz) * GetFy0(slipAngle,
+              Fz, dFz, 0);
+  double Mz = -t * FyT + Mzr + s * Fx;
   return Mz;
 }
 
-double TireModel::GetRollingResistance(double Fz, double wheelVelocity,
+double TireModel::GetRollingResistance(double Fz, double Vx,
                                        double Fx) {
-  // TODO radius to calculate Vx should be effective tire radius
-  double Vx = wheelVelocity * radius_;
   double My =
-      radius_ * Fz * (QSY1_ + QSY2_ * Fx / FNOMIN_ + QSY3_ * fabs(Vx / LONGVL_) +
+      UNLOADED_RADIUS_ * Fz * (QSY1_ + QSY2_ * Fx / FNOMIN_ + QSY3_ * fabs(Vx / LONGVL_) +
                       pow(QSY4_ * (Vx / LONGVL_), 4));
   return My;
 }

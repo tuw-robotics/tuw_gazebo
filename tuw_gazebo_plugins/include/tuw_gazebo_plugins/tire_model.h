@@ -31,11 +31,12 @@ class TireModel : public ModelPlugin {
   double GetCombinedFy(double slipAngle, double slip, double Fz, double dFz,
                        double camber);
   double GetCombinedFx(double slipAngle, double slip, double Fz, double dFz, double camber);
-  double GetRollingResistance(double Fz, double wheelVelocity, double Fx);
+  double GetRollingResistance(double Fz, double Vx, double Fx);
   double GetSlip(double vehicleVelocity, double wheelVelocity);
   double GetSelfAligningTorque(double slipAngle, double dFz, double camber,
                                double slip, double Fz, double Fy, double Fx);
   double GetCamberFromToeAngle(double leftToeAngle);
+  double GetGyk(double slipAngle, double slip, double dFz);
 
   GazeboRosPtr gazebo_ros_;
   physics::ModelPtr parent_;
@@ -63,7 +64,7 @@ class TireModel : public ModelPlugin {
   bool wheelCollides_;
   bool isRear_;
 
-  double radius_;
+  double UNLOADED_RADIUS_;
   double FNOMIN_;
   double LFZ0_;
   double PDX1_;
@@ -137,6 +138,7 @@ class TireModel : public ModelPlugin {
   double LGAZ_;
   double LTR_;
   double LS_;
+  double LRES_;
 
   // Combined Fy Coefficients
   double RBY1_;
@@ -186,6 +188,8 @@ class TireModel : public ModelPlugin {
   double QEZ1_;
   double QEZ2_;
   double QEZ3_;
+  double QEZ4_;
+  double QEZ5_;
   double SSZ1_;
   double SSZ2_;
   double SSZ3_;
@@ -198,12 +202,12 @@ class TireModel : public ModelPlugin {
   double CC4_;
 
   // Stored values for aligning torque
-  double Kx_;
-  double Ky_;
+  double Kxkappa_;
+  double Kyalpha_;
   double SHy_;
   double SVy_;
-  double SVyk_;
   double By_;
+  double MuY_;
 
   double FZ0T_;
   double CX_;
