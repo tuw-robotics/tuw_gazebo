@@ -230,7 +230,8 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         ignition::math::Vector3d diff = poseModel.Rot().Euler() - current.Rot().Euler();
         p->SetLinearVel(ignition::math::Vector3d(vx, vy, vz));
         p->SetAngularVel(ignition::math::Vector3d(diff.X(), diff.Y(), diff.Z()));
-        p->SetAngularAccel(ignition::math::Vector3d::Zero);
+        // p->SetAngularAccel(ignition::math::Vector3d::Zero);  //GAZEBO_DEPRECATED(9.0);
+
         p->SetWorldPose(poseModel);
       }
       int cols = ceil(sqrt(max_humans_));
@@ -244,9 +245,9 @@ void GazeboRosHumanReceiver::updateHumansFnc()
         ignition::math::Pose3d pose(min_distance_between_humans_ * r, min_distance_between_humans_ * c, 0, 0, 0, 0);
         p->SetStatic(true);
         p->SetAngularVel(ignition::math::Vector3d::Zero);
-        p->SetAngularAccel(ignition::math::Vector3d::Zero);
+        // p->SetAngularAccel(ignition::math::Vector3d::Zero);  //GAZEBO_DEPRECATED(9.0);
         p->SetLinearVel(ignition::math::Vector3d::Zero);
-        p->SetLinearAccel(ignition::math::Vector3d::Zero);
+        // p->SetLinearAccel(ignition::math::Vector3d::Zero);  //GAZEBO_DEPRECATED(9.0);
         p->SetWorldPose(pose);
       }
 
