@@ -17,7 +17,6 @@
         <plugin name="differential_drive_controller" filename="libtuw_gazebo_ros_diff_drive.so">
 	      <robotNamespace></robotNamespace>
           <rosDebugLevel>Debug</rosDebugLevel>
-          <legacyMode>false</legacyMode>
           <alwaysOn>true</alwaysOn>
           <alwaysOn>true</alwaysOn>
 	      <updateRate>10.0</updateRate>
