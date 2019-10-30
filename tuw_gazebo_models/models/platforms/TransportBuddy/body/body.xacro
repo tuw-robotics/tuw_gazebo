@@ -9,7 +9,7 @@
   <xacro:include filename="zr300.xacro" />
   <xacro:property name="wheel_radius" value="0.104" />
   
-  <xacro:macro name="sally_body" params="name parent">
+  <xacro:macro name="vehicle_body" params="name parent">
         
     <!-- base_link -->
     <link name="${parent}"/>
