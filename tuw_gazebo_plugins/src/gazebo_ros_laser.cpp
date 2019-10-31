@@ -64,11 +64,11 @@ void GazeboRosLaser::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf) {
     if ( !parent_ray_sensor_ ) { gzthrow ( "GazeboRosLaser controller requires a Ray Sensor as its parent" ); }
     this->parent_ray_sensor_->SetActive ( false );// sensor data modification during a cycle set to false
 
-    gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWLaser" ) );
+    gazebo_ros_ = GazeboRosPtr ( new GazeboRos ( _parent, _sdf, "TUWLaserCPU" ) );
     gazebo_ros_->isInitialized(); // Make sure the ROS node for Gazebo has already been initialized
     std::string frame_names, topic_names;
-    gazebo_ros_->getParameter<std::string> ( frame_names , "frameName", "front_laser" );
-    gazebo_ros_->getParameter<std::string> ( topic_names , "topicName", "front_laser/laser" );
+    gazebo_ros_->getParameter<std::string> ( frame_names , "frameName", "laser0" );
+    gazebo_ros_->getParameter<std::string> ( topic_names , "topicName", "laser0/scan" );
     gazebo_ros_->getParameter<double>      ( snsRangeMin_, "rangeMin" , 0.2 );
     
     boost::erase_all ( frame_names, " " ); boost::split ( frame_name_, frame_names, boost::is_any_of ( "," ) );
