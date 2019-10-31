@@ -69,8 +69,6 @@ catkin_package(
   LIBRARIES
     tuw_gazebo_ros_utils
     tuw_gazebo_ros_diff_drive
-    tuw_gazebo_ros_laser
-    tuw_gazebo_ros_gpu_laser
     tuw_gazebo_ros_imu9dof
     tuw_gazebo_ros_bridge_model
     tuw_gazebo_ros_encoder
@@ -121,12 +119,6 @@ target_link_libraries(tuw_gazebo_ros_diff_drive tuw_gazebo_ros_utils ${GAZEBO_LI
 add_library(tuw_gazebo_ros_door_plugin src/gazebo_ros_door_plugin.cpp)
 target_link_libraries(tuw_gazebo_ros_door_plugin tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-add_library(tuw_gazebo_ros_laser src/gazebo_ros_laser.cpp)
-target_link_libraries(tuw_gazebo_ros_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_ros_gpu_laser src/gazebo_ros_gpu_laser.cpp)
-target_link_libraries(tuw_gazebo_ros_gpu_laser tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
 add_library(tuw_gazebo_ros_imu9dof src/gazebo_ros_imu9dof.cpp)
 target_link_libraries(tuw_gazebo_ros_imu9dof tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
@@ -168,8 +160,6 @@ install(TARGETS
   tuw_gazebo_ros_utils
   tuw_gazebo_ros_diff_drive
   tuw_gazebo_ros_door_plugin
-  tuw_gazebo_ros_laser
-  tuw_gazebo_ros_gpu_laser
   tuw_gazebo_ros_imu9dof
   tuw_gazebo_ros_bridge_model
   tuw_gazebo_tire_model

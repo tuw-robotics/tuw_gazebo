@@ -4,9 +4,15 @@
 <!-- Front Laser --> 
 <xacro:macro name="laser" params="name frame_names topic_names parent xyz rpy driver:=cpu visualize:=true model_dir:=^" >
   
-    <xacro:if     value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="gpu_ray"/> <xacro:property name="driver_type" value="libtuw_gazebo_ros_gpu_laser.so"/> </xacro:if>
-    <xacro:unless value="${driver == 'gpu'}"> <xacro:property name="sensor_type" value="ray"    /> <xacro:property name="driver_type" value="libtuw_gazebo_ros_laser.so"    /> </xacro:unless>
-  
+    <xacro:if value="${driver == 'gpu'}">
+      <xacro:property name="sensor_type" value="gpu_ray"/>
+      <xacro:property name="driver_type" value="libgazebo_ros_gpu_laser.so"/>
+    </xacro:if>
+    <xacro:if value="${driver == 'cpu'}">
+      <xacro:property name="sensor_type" value="ray"/>
+      <xacro:property name="driver_type" value="libgazebo_ros_laser.so"/>
+    </xacro:if>
+    
     <joint name="${parent}_${name}_joint" type="fixed">
 	<axis xyz="0 0 1" />
 	<origin xyz="${xyz}" rpy="${rpy}"/>
