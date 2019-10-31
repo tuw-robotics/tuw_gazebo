@@ -18,7 +18,7 @@
     <visual>
       <origin xyz="-0.0 0 -0.07" rpy="0 0 ${M_PI}"/>
       <geometry>
-	<mesh filename="file://${model_dir}/meshes/TransportBuddy.dae"/>
+	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
       </geometry>
       <material name="SallyWhite">
       </material>
