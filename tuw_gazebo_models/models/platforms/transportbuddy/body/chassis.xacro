@@ -18,7 +18,7 @@
     <visual>
       <origin xyz="-0.0 0 -0.07" rpy="0 0 ${M_PI}"/>
       <geometry>
-	<mesh filename="file://${model_dir}/meshes/chassis.dae"/>
+	<mesh filename="file://${model_dir}/meshes/tb01.dae"/>
       </geometry>
       <material name="SallyWhite">
       </material>
