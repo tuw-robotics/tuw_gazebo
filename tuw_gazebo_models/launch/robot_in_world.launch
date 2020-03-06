@@ -3,6 +3,8 @@
 
   <arg name="robot_name"                                    default="r0"/>
   <arg name="robot_model"                                   default="pioneer3dx"/>  <!-- pioneer3dx, transportbuddy -->
+  <arg name="laser0"                                        default="hokuyo" />     <!-- hokuyo or velodyne -->
+  <arg name="gpu"                                           default="true" />
   <arg name="room"                                          default="roblab" />
   <arg name="rviz"                                          default="false" />
   <arg name="position"                                      default="-x 0.0 -y 0.0 -z 0.01 -Y 0.0" />
@@ -27,6 +29,8 @@
      <arg name="motor_plugin" value="$(arg motor_plugin)" />
      <arg name="launch_robot_state_publisher" value="$(arg launch_robot_state_publisher)" />
      <arg name="launch_ground_truth_robot_state_publisher" value="$(arg launch_ground_truth_robot_state_publisher)" />
+     <arg name="laser0" value="$(arg laser0)" />
+     <arg name="gpu" value="$(arg gpu)" />
    </include>
   
   <!-- RVIZ   -->
