@@ -21,7 +21,7 @@
   </include>
 
   <!-- Robot with diff drive -->
-  <include file="$(find tuw_gazebo_models)/launch/$(arg robot_model)/robot.gazebo.launch">
+  <include file="$(find tuw_gazebo_models)/launch/$(arg robot_model)/$(arg robot_model).gazebo.launch">
      <arg name="robot_name" value="$(arg robot_name)" />
      <arg name="position" value="$(arg position)" />
      <arg name="motor_plugin" value="$(arg motor_plugin)" />

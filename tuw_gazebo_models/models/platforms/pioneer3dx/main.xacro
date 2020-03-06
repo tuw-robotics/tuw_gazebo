@@ -3,6 +3,8 @@
     
   <xacro:arg name="model_dir"      default=""/>
   <xacro:arg name="platform_dir"   default=""/>
+  <xacro:arg name="laser0"         default="hokuyo"/>    <!-- hokuyo or velodyne -->
+  <xacro:arg name="gpu"            default="false"/>
   <xacro:arg name="namespace"      default="r0"/>
   <xacro:arg name="motor_plugin"   default="diff_twist"/> <!-- diffdrive or diff_iws. If something else is set, no plugin will be loaded-->
     
@@ -15,9 +17,11 @@
   <xacro:vehicle_body name="chassis" parent="base_link"/>
   
   <!-- Import platform plugins -->
-  <xacro:property name="model_dir"   value="$(arg model_dir)/$(arg platform_dir)"/>
-  <xacro:property name="namespace"   value="$(arg namespace)"/>
+  <xacro:property name="model_dir"    value="$(arg model_dir)/$(arg platform_dir)"/>
+  <xacro:property name="namespace"    value="$(arg namespace)"/>
   <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
+  <xacro:property name="laser0"       value="$(arg laser0)"/>
+  <xacro:property name="gpu"          value="$(arg gpu)"/>
   <xacro:include filename="${model_dir}/plugins.xacro" />
   
   <xacro:if value="${motor_plugin == 'diff_iws'}"> 
@@ -34,10 +38,23 @@
     <xacro:diff_joints_state_publisher ns="${namespace}"/>
   </xacro:if>
   
-  <!-- Laser -->
-  <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
-  <xacro:include filename="${model_dir}/hokuyo.xacro"/>
-  <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+  <!-- Laser0 -->
+  <xacro:if value="${laser0 == 'hokuyo'}"> 
+    <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
+    <xacro:include filename="${model_dir}/hokuyo.xacro"/>
+    <xacro:if value="${gpu}"> 
+        <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+    </xacro:if>
+    <xacro:unless value="${gpu}"> 
+        <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
+    </xacro:unless>
+  </xacro:if>
+  <xacro:if value="${laser0 == 'velodyne'}">     
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
+    <VLP-16 parent="top" name="velodyne" topic="velodyne_points" hz="10" samples="440" gpu="${gpu}">
+        <origin xyz="0.10 0.0 0.0" rpy="0 0 0" />
+    </VLP-16>
+  </xacro:if>
   
   <!-- Laser 
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
