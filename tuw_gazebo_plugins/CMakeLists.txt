@@ -71,15 +71,7 @@ catkin_package(
     tuw_gazebo_ros_diff_drive
     tuw_gazebo_ros_imu9dof
     tuw_gazebo_ros_bridge_model
-    tuw_gazebo_ros_encoder
-    tuw_gazebo_ros_rwd
-    tuw_gazebo_tire_model
-    tuw_gazebo_ros_joint_state_publisher
     tuw_gazebo_ros_door_plugin
-    map_common
-    cone_detection_sim
-    tuw_gazebo_ros_map
-    tuw_gazebo_ros_odom
   CATKIN_DEPENDS
   DEPENDS
     gazebo
@@ -105,8 +97,7 @@ link_directories(
 ## Utils
 add_library(tuw_gazebo_ros_utils 
 src/gazebo_ros_utils.cpp 
-src/noise_sim_model.cpp 
-src/gazebo_ros_physics_utils.cpp)
+src/noise_sim_model.cpp)
 target_link_libraries(tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_definitions(-fPIC) # what is this for?
@@ -125,50 +116,14 @@ target_link_libraries(tuw_gazebo_ros_imu9dof tuw_gazebo_ros_utils ${GAZEBO_LIBRA
 add_library(tuw_gazebo_ros_bridge_model src/gazebo_ros_bridge_model.cpp)
 target_link_libraries(tuw_gazebo_ros_bridge_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-add_library(tuw_gazebo_ros_human_receiver src/gazebo_ros_human_receiver.cpp)
-add_dependencies(tuw_gazebo_ros_human_receiver ${PROJECT_NAME}_gencfg ${catkin_EXPORTED_TARGETS})
-target_link_libraries(tuw_gazebo_ros_human_receiver ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_tire_model src/tire_model.cpp)
-target_link_libraries(tuw_gazebo_tire_model tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_ros_rwd src/gazebo_ros_rwd.cpp src/HV_battery.cpp src/aero_forces.cpp)
-target_link_libraries(tuw_gazebo_ros_rwd tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_ros_encoder src/gazebo_ros_encoder.cpp)
-target_link_libraries(tuw_gazebo_ros_encoder tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(map_common src/map_common.cpp)
-target_link_libraries(map_common tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(cone_detection_sim src/cone_detection_sim.cpp)
-target_link_libraries(cone_detection_sim tuw_gazebo_ros_utils map_common ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_ros_map src/gazebo_ros_map.cpp)
-target_link_libraries(tuw_gazebo_ros_map tuw_gazebo_ros_utils map_common ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_library(tuw_gazebo_ros_odom src/gazebo_ros_odom.cpp)
-target_link_libraries(tuw_gazebo_ros_odom tuw_gazebo_ros_utils ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 
-add_library(tuw_gazebo_ros_joint_state_publisher src/gazebo_ros_joint_state_publisher.cpp)
-set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES LINK_FLAGS "${ld_flags}")
-set_target_properties(tuw_gazebo_ros_joint_state_publisher PROPERTIES COMPILE_FLAGS "${cxx_flags}")
-add_dependencies(tuw_gazebo_ros_joint_state_publisher ${catkin_EXPORTED_TARGETS})
-target_link_libraries(tuw_gazebo_ros_joint_state_publisher ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 install(TARGETS
   tuw_gazebo_ros_utils
   tuw_gazebo_ros_diff_drive
   tuw_gazebo_ros_door_plugin
   tuw_gazebo_ros_imu9dof
   tuw_gazebo_ros_bridge_model
-  tuw_gazebo_tire_model
-  tuw_gazebo_ros_rwd
-  tuw_gazebo_ros_encoder
-  map_common
-  cone_detection_sim
-  tuw_gazebo_ros_map
-  tuw_gazebo_ros_odom
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
