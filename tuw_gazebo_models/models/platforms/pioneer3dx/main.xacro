@@ -56,6 +56,9 @@
     </VLP-16>
   </xacro:if>
   
+    <xacro:include filename="$(find tuw_gazebo_models)/models/sensors/imu/imu_sensor.xacro"/>
+    <xacro:imu_sensor name="imu" parent="top" topic="imu" xyz="0.0 0.0 0.1" rpy="0 0 0" />
+    
   <!-- Laser 
   <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
   <xacro:include filename="${model_dir}/Sick-LMS100.xacro"/>
