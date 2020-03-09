@@ -7,6 +7,7 @@
   <xacro:arg name="gpu"            default="false"/>
   <xacro:arg name="namespace"      default="r0"/>
   <xacro:arg name="motor_plugin"   default="diff_twist"/> <!-- diffdrive or diff_iws. If something else is set, no plugin will be loaded-->
+  <xacro:arg name="laser0_topic"   default="laser0/scan/raw"/>
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(arg model_dir)/materials.xacro" />
@@ -21,6 +22,7 @@
   <xacro:property name="namespace"    value="$(arg namespace)"/>
   <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
   <xacro:property name="laser0"       value="$(arg laser0)"/>
+  <xacro:property name="laser0_topic" value="$(arg laser0_topic)"/>
   <xacro:property name="gpu"          value="$(arg gpu)"/>
   <xacro:include filename="${model_dir}/plugins.xacro" />
   
@@ -43,10 +45,10 @@
     <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
     <xacro:include filename="${model_dir}/hokuyo.xacro"/>
     <xacro:if value="${gpu}"> 
-        <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+        <xacro:laser name="laser0" frame_names="laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
     </xacro:if>
     <xacro:unless value="${gpu}"> 
-        <xacro:laser name="laser0" frame_names="laser0" topic_names="laser0/scan/raw" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
+        <xacro:laser name="laser0" frame_names="laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
     </xacro:unless>
   </xacro:if>
   <xacro:if value="${laser0 == 'velodyne'}">     
