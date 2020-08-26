@@ -15,12 +15,11 @@
     <child link="swivel"/>
   </joint>
   <link name="swivel">
-    <box_inertial_with_origin x="0.07" y="0.07" z="0.05" mass="0.1"> <origin xyz="0 0 0" rpy="0 0 0"/> </box_inertial_with_origin>
-    <!--inertial>
+    <inertial>
       <mass value="0.1"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
-    </inertial-->
+    </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -52,12 +51,11 @@
     <child link="center_wheel"/>
   </joint>
   <link name="center_wheel">
-    <cylinder_inertial_with_origin radius="0.0375" length="0.03" mass="0.1"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
-    <!--inertial>
+    <inertial>
       <mass value="0.1"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983" iyy="0.015218160428" iyz="-0.000004273467" izz="0.011763977943"/>
-    </inertial-->
+    </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
 
@@ -88,12 +86,11 @@
     <child link="center_hubcap"/>
   </joint>
   <link name="center_hubcap">
-    <cylinder_inertial_with_origin radius="0.01" length="0.03" mass="0.01"> <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> </cylinder_inertial_with_origin>
-    <!--inertial>
+    <inertial>
       <mass value="0.01"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983" iyy="0.015218160428" iyz="-0.000004273467" izz="0.011763977943"/>
-    </inertial-->
+    </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
