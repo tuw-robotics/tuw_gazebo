@@ -45,10 +45,10 @@
     <xacro:property name="model_dir" value="$(arg model_dir)/sensors/laser"/>
     <xacro:include filename="${model_dir}/hokuyo.xacro"/>
     <xacro:if value="${gpu}"> 
-        <xacro:laser name="laser0" frame_names="laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
+        <xacro:laser name="laser0" frame_names="${namespace}/laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="cpu" visualize="true"/> 
     </xacro:if>
     <xacro:unless value="${gpu}"> 
-        <xacro:laser name="laser0" frame_names="laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
+        <xacro:laser name="laser0" frame_names="${namespace}/laser0" topic_names="${laser0_topic}" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
     </xacro:unless>
   </xacro:if>
   <xacro:if value="${laser0 == 'velodyne'}">     
