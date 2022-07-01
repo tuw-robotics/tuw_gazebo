@@ -2,8 +2,9 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 import xacro
 
@@ -23,10 +24,34 @@ def generate_launch_description():
     #     robot_desc = infp.read()
 
 
+    robot_controllers = PathJoinSubstitution(
+        [
+            FindPackageShare("tuw_gazebo_description"),
+            "config",
+            "pioneer2dx_controllers.yaml",
+        ]
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
         Node(package='tuw_gazebo_description', executable='spawn_robot.py', arguments=[robot_desc], output='screen'),
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            name="robot_state_publisher",
+            parameters=[
+                {"robot_description": robot_desc}],
+            output="screen"),
+        Node(
+            package="controller_manager",
+            executable="ros2_control_node",
+            parameters=[{"robot_description": robot_desc}, 
+                        robot_controllers],
+            output={
+                "stdout": "screen",
+                "stderr": "screen",
+                },),
     ])

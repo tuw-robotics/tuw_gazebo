@@ -28,6 +28,7 @@ install(
   DIRECTORY
     launch
     models
+    config
   DESTINATION
     share/${PROJECT_NAME}/
 )

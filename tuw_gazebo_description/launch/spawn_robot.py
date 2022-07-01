@@ -13,7 +13,7 @@ def main(args=None):
     content = sys.argv[1]
 
     req = SpawnEntity.Request()
-    req.name = "box_bot"
+    req.name = "pioneer3dx"
     req.xml = content
     req.robot_namespace = ""
     req.reference_frame = "world"
