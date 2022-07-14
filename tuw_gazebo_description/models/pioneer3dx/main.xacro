@@ -14,6 +14,6 @@
   <xacro:vehicle_body name="chassis" parent="base_link"/>
   
   <xacro:include filename="$(arg model_dir)/$(arg platform_dir)/plugins.xacro"/>
-  <xacro:differential_drive ns="r0" />
+  <xacro:differential_drive namespace="$(arg namespace)" />
   
 </robot>

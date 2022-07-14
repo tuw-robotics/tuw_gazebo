@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-  <xacro:macro name="differential_drive" params="ns">
+  <xacro:macro name="differential_drive" params="namespace">
     <gazebo>
         <plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
           <ros>
-            <namespace>/${ns}</namespace>
+            <namespace>/${namespace}</namespace>
             <remapping>cmd_vel:=cmd_vel</remapping>
             <remapping>odom:=odom</remapping>
           </ros>
 
-          <left_joint>left_hub_joint</left_joint>
-          <right_joint>right_hub_joint</right_joint>
+          <left_joint>left_wheel_joint</left_joint>
+          <right_joint>right_wheel_joint</right_joint>
           <wheel_separation>0.3</wheel_separation>
           <wheel_diameter>0.18</wheel_diameter>
           <max_wheel_torque>10</max_wheel_torque>
