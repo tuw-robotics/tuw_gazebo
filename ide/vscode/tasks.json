@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "colcon build",
+            "detail": "builds the workspace using colcon build",
+            "type": "shell",
+            "command": "source /opt/ros/galactic/setup.bash; colcon build --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc"
+      },        
+      {
+        "label": "make mxr_base",
+            "detail": "run make in build folder of mxr_base",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/install/setup.bash; make",
+            "options": {
+              "cwd": "${workspaceFolder}/build/mxr_base"
+            },
+            "problemMatcher": "$gcc"
+      },        
+      {
+        "label": "Cmake: build",
+        "command": "build",
+        "type": "cmake",
+        "options": {
+            "cwd": "${workspaceFolder}/src/mxr/mxr_base"
+        },
+        "group": "build"
+      }
+    ]
+  }
