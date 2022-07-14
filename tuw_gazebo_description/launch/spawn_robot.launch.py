@@ -45,13 +45,4 @@ def generate_launch_description():
             parameters=[
                 {"robot_description": robot_desc}],
             output="screen"),
-        Node(
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[{"robot_description": robot_desc}, 
-                        robot_controllers],
-            output={
-                "stdout": "screen",
-                "stderr": "screen",
-                },),
     ])
