@@ -18,12 +18,6 @@ def generate_launch_description():
     robot_description_config = xacro.process_file(xacro_file)
     robot_desc = robot_description_config.toxml()
 
-    #print(robot_desc)
-    
-    # with open(urdf, 'r') as infp:
-    #     robot_desc = infp.read()
-
-
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("tuw_gazebo_description"),
@@ -37,6 +31,7 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
+
         Node(package='tuw_gazebo_description', executable='spawn_robot.py', arguments=[robot_desc], output='screen'),
         Node(
             package="robot_state_publisher",

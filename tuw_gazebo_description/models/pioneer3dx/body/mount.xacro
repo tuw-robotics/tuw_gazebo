@@ -40,12 +40,12 @@
  
   
   <!--  mount bottom left -->
-  <joint name="${parent}_${name}_bottom_left_joint" type="fixed">
+  <joint name="${parent}_${name}_bottom_joint" type="fixed">
     <origin xyz="0 0 0" rpy="${rpy}"/>
     <parent link="${parent}"/>
-    <child link="${name}_bottom_left"/>
+    <child link="${name}_bottom"/>
   </joint>
-  <link name="${name}_bottom_left">
+  <link name="${name}_bottom">
     <!-- right base bar -->
     <visual>
       <origin xyz="-0.04 +${0.27/2.} 0.01"/>
@@ -175,7 +175,7 @@
       </geometry>
     </collision>
   </link>
-  <gazebo reference="${name}_bottom_left">
+  <gazebo reference="${name}_bottom">
     <material value="Gazebo/Grey"/>
   </gazebo>
   

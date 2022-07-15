@@ -10,7 +10,8 @@
   <xacro:include filename="sonar.xacro"/>
   <xacro:property name="wheel_radius" value="0.097" />
   
-  <xacro:macro name="vehicle_body" params="name parent">
+  <!-- name="body" parent="base_link" --> 
+  <xacro:macro name="vehicle_body" params="name parent">  
         
     <!-- base_link -->
     <link name="${parent}"/>
