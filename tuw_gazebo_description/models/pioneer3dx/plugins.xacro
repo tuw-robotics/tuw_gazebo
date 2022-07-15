@@ -40,6 +40,7 @@
       <joint_name>left_wheel_joint</joint_name>
       <joint_name>right_wheel_joint</joint_name>
       <joint_name>swivel_joint</joint_name>
+      <joint_name>swivel_wheel_joint</joint_name>
     </plugin>
     </gazebo>    
   </xacro:macro>
