@@ -1,21 +1,28 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
+
+  <xacro:arg name="models_dir"      default="/home/max/projects/ros2/gazebo/ws01/src/tuw2_gazebo/tuw_gazebo_description/models"/>
+  <xacro:arg name="robot_model"     default="pioneer3dx"/>
+  <xacro:arg name="laser_model"     default="hokuyo"/>
+  <xacro:arg name="namespace"       default="r0"/>
+  <xacro:arg name="robot_name"      default="r0"/>
+  <xacro:arg name="laser0_topic"    default="scan_raw"/>
     
-  <xacro:arg name="model_dir"      default="/home/max/projects/ros2/gazebo/ws01/src/tuw2_gazebo/tuw_gazebo_description/models"/>
-  <xacro:arg name="platform_dir"   default="pioneer3dx"/>
-  <xacro:arg name="namespace"      default="r0"/>
-  <xacro:arg name="robot_name"     default="r0"/>
-    
+  <xacro:property name="models_dir" value="$(arg models_dir)"/>
+  <xacro:property name="robot_model" value="$(arg robot_model)"/>
+  <xacro:property name="laser_model" value="$(arg laser_model)"/>
+
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(arg model_dir)/materials.xacro" />
+  <xacro:include filename="$(arg models_dir)/materials.xacro" />
     
   <!-- Import platform -->
-  <xacro:property name="model_dir" value="$(arg model_dir)/$(arg platform_dir)/body"/>
-  <xacro:include filename="${model_dir}/body.xacro"/>
+  <xacro:include filename="${models_dir}/${robot_model}/body/body.xacro"/>
   <xacro:vehicle_body name="body" parent="base_link"/>
   
-  <xacro:include filename="$(arg model_dir)/$(arg platform_dir)/plugins.xacro"/>
+  <xacro:include filename="${models_dir}/${robot_model}/plugins.xacro"/>
   <xacro:differential_drive    name="$(arg robot_name)" namespace="$(arg namespace)" />
   <xacro:joint_state_publisher name="$(arg robot_name)" namespace="$(arg namespace)" />
   
+  <xacro:include filename="${models_dir}/${laser_model}/main.xacro"/>
+  <xacro:laser name="laser0" frame_names="$(arg namespace)/laser0" topic_names="$(arg laser0_topic)" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
 </robot>

@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_swivel" params="name parent xyz rpy model_dir:=^ **contact_data">   
+  <xacro:macro name="pioneer_swivel" params="name parent xyz rpy models_dir:=^ **contact_data">   
   
   <!-- Swivel -->
   <joint name="${name}_joint" type="continuous">
@@ -23,7 +23,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${model_dir}/meshes/swivel.stl"/>
+        <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/swivel.stl"/>
       </geometry>
       <material name="swivel">
         <color rgba="0.5 0.5 0.5 1"/>
@@ -60,7 +60,7 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
 
       <geometry>
-        <mesh filename="file://${model_dir}/meshes/center_wheel.stl"/>
+        <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/center_wheel.stl"/>
       </geometry>
       <material name="WheelBlack">
         <color rgba="0.117 0.117 0.117 1"/>
@@ -94,7 +94,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${model_dir}/meshes/center_hubcap.stl"/>
+        <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/center_hubcap.stl"/>
       </geometry>
       <material name="swivel">
         <color rgba="0.5 0.5 0.5 1"/>

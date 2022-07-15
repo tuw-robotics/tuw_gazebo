@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_mount" params="name parent xyz rpy model_dir:=^">   
+  <xacro:macro name="pioneer_mount" params="name parent xyz rpy">   
   <xacro:property name="mount_base_width" value="0.14" />
   <xacro:property name="mount_bar_width" value="0.02" />
   <xacro:property name="aluminium_bar_colour" value="0.8 0.8 0.8 1" />

@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_sonar" params="name parent xyz rpy model_dir:=^">   
+  <xacro:macro name="pioneer_sonar" params="name parent xyz rpy models_dir:=^">   
   
   <!-- Front Sonar -->
   <joint name="${parent}_${name}_joint" type="fixed">
@@ -15,7 +15,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${model_dir}/meshes/back_sonar.dae"/>
+        <mesh filename="file://${models_dir}/pioneer3dx/meshes/back_sonar.dae"/>
       </geometry>
       <material name="SonarYellow">
         <color rgba="0.715 0.583 0.210 1.0"/>
