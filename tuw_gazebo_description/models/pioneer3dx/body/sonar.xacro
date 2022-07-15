@@ -15,7 +15,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${models_dir}/pioneer3dx/meshes/back_sonar.dae"/>
+        <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/back_sonar.dae"/>
       </geometry>
       <material name="SonarYellow">
         <color rgba="0.715 0.583 0.210 1.0"/>
