@@ -4,6 +4,7 @@
   <xacro:arg name="model_dir"      default="/home/max/projects/ros2/gazebo/ws01/src/tuw2_gazebo/tuw_gazebo_description/models"/>
   <xacro:arg name="platform_dir"   default="pioneer3dx"/>
   <xacro:arg name="namespace"      default="r0"/>
+  <xacro:arg name="robot_name"     default="r0"/>
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(arg model_dir)/materials.xacro" />
@@ -14,6 +15,7 @@
   <xacro:vehicle_body name="body" parent="base_link"/>
   
   <xacro:include filename="$(arg model_dir)/$(arg platform_dir)/plugins.xacro"/>
-  <xacro:differential_drive namespace="$(arg namespace)" />
+  <xacro:differential_drive    name="$(arg robot_name)" namespace="$(arg namespace)" />
+  <xacro:joint_state_publisher name="$(arg robot_name)" namespace="$(arg namespace)" />
   
 </robot>

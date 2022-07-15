@@ -3,7 +3,7 @@
 <package format="3">
   <name>tuw_gazebo_description</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>TUW Robots gazebo descriptions and launches</description>
   <maintainer email="markus.bader@mx-robotics.com">Markus Bader</maintainer>
   <license>BSD</license>
 

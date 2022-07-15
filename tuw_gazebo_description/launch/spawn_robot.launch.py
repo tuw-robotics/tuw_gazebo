@@ -39,5 +39,6 @@ def generate_launch_description():
             name="robot_state_publisher",
             parameters=[
                 {"robot_description": robot_desc}],
+            namespace='r0',
             output="screen"),
     ])

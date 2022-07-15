@@ -47,7 +47,7 @@
     <anchor xyz="0 0 0"/>
     <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.0" friction="0.0"/>
-    <parent link="swivel"/>
+    <parent link="${name}"/>
     <child link="${name}_wheel"/>
   </joint>
   <link name="${name}_wheel">
