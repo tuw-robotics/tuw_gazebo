@@ -11,7 +11,7 @@
   <xacro:property name="wheel_radius" value="0.097" />
   
   <!-- name="body" parent="base_link" --> 
-  <xacro:macro name="vehicle_body" params="name parent">  
+  <xacro:macro name="vehicle_body" params="name parent"> 
         
     <!-- base_link -->
     <link name="${parent}"/>
@@ -38,7 +38,7 @@
     </xacro:property>
 
     <!-- Swivels -->
-    <xacro:pioneer_swivel             parent="${parent}"  xyz="-0.185 0    0.0535" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_swivel>
+    <xacro:pioneer_swivel  name="swivel"    parent="${parent}"  xyz="-0.185 0    0.0535" rpy="0 0 0">               <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_swivel>
 
     <!-- Wheels -->
     <xacro:pioneer_wheel name="right" parent="${parent}"  xyz=" 0    -0.165 ${wheel_radius}" rpy="0 0 0" radius="${wheel_radius}"> <container> <xacro:insert_block name="contact_data"/> </container> </xacro:pioneer_wheel>

@@ -2,19 +2,19 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
-  <xacro:macro name="pioneer_swivel" params="parent xyz rpy model_dir:=^ **contact_data">   
+  <xacro:macro name="pioneer_swivel" params="name parent xyz rpy model_dir:=^ **contact_data">   
   
   <!-- Swivel -->
-  <joint name="chassis_swivel_joint" type="continuous">
+  <joint name="${name}_joint" type="continuous">
     <origin xyz="${xyz}" rpy="${rpy}"/>
     <axis xyz="0 0 1"/>
     <anchor xyz="0 0 0"/>
     <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.1" friction="0.0"/>
     <parent link="${parent}"/>
-    <child link="swivel"/>
+    <child link="${name}"/>
   </joint>
-  <link name="swivel">
+  <link name="${name}">
     <inertial>
       <mass value="0.1"/>
       <origin xyz="0 0 0"/>
@@ -36,21 +36,21 @@
       </geometry>
     </collision>
   </link>
-  <gazebo reference="swivel">
+  <gazebo reference="${name}">
     <material value="Gazebo/Grey"/>
   </gazebo>
   
   <!-- Center Wheel -->
-  <joint name="swivel_wheel_joint" type="continuous">
+  <joint name="${name}_wheel_joint" type="continuous">
     <origin xyz="-0.026 0 -0.016" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <anchor xyz="0 0 0"/>
     <!--limit effort="100" velocity="100" k_velocity="0"/-->
     <joint_properties damping="0.0" friction="0.0"/>
     <parent link="swivel"/>
-    <child link="center_wheel"/>
+    <child link="${name}_wheel"/>
   </joint>
-  <link name="center_wheel">
+  <link name="${name}_wheel">
     <inertial>
       <mass value="0.1"/>
       <origin xyz="0 0 0"/>
@@ -74,18 +74,18 @@
       </geometry>
     </collision>
   </link>
-  <gazebo reference="center_wheel">
+  <gazebo reference="${name}_wheel">
     <material value="Gazebo/Black"/>
     <xacro:insert_block name="contact_data"/>
   </gazebo>
     
   <!-- Center Hubcap -->
-  <joint name="wheel_hubcap_joint" type="fixed">
+  <joint name="${name}_hubcap_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="center_wheel"/>
-    <child link="center_hubcap"/>
+    <parent link="${name}_wheel"/>
+    <child link="${name}_hubcap"/>
   </joint>
-  <link name="center_hubcap">
+  <link name="${name}_hubcap">
     <inertial>
       <mass value="0.01"/>
       <origin xyz="0 0 0"/>
@@ -107,7 +107,7 @@
       </geometry>
     </collision>
   </link>   
-  <gazebo reference="center_hubcap">
+  <gazebo reference="${name}_hubcap">
     <material value="Gazebo/Grey"/>
     <xacro:insert_block name="contact_data"/>
   </gazebo>
