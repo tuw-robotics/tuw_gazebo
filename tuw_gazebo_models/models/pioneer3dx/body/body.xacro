@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-  <xacro:include filename="$(find tuw_gazebo_description)/models/inertia_tensors.xacro"/>
+  <xacro:include filename="$(find tuw_gazebo_models)/models/inertia_tensors.xacro"/>
   <xacro:include filename="chassis.xacro"/>
   <xacro:include filename="mount.xacro"/>
   <xacro:include filename="wheel.xacro"/>
