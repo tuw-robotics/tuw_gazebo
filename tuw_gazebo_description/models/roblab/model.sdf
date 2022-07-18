@@ -1,0 +1,532 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="roblab">
+    <pose>24.0 18.5 0 0 0 3.14159265359</pose>
+    <link name="walls">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/Roblab.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/Roblab.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+    </link>
+    
+    
+    <link name="frame_0">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>20.95 19.05 0 0 0 3.1416</pose>
+    </link>
+    
+    <link name="door_0">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>20.95 19.05 0 0 0 3.1416</pose>
+    </link>
+    
+    <link name="frame_1">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>23.7 17.24 0 0 0 0</pose>
+    </link>
+    
+    <link name="door_1">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>23.7 17.24 0 0 0 0</pose>
+    </link>
+    
+    
+    <link name="frame_2">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>5.85 18.72 0 0 0 -1.5708</pose>
+    </link>
+    
+    <link name="door_2">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>5.85 18.72 0 0 0 -1.5708</pose>
+    </link>
+    
+    
+    
+    <link name="frame_3">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/frame.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>4.22 19.235 0 0 0 0</pose>
+    </link>
+    
+    <link name="door_3">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/door.dae</uri>
+            <scale>0.95 0.95 0.91</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+        <pose>4.22 19.235 0 0 0 0</pose>
+    </link>
+    
+    
+    <link name="main_frame_1_big">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>25.0 17.38 0 0 0 1.5708</pose>
+    </link>
+    
+    <link name="main_door_1_big">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorMain.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorMain.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>25.0 17.38 0 0 0 1.5708</pose>
+    </link>
+    
+    <link name="main_frame_1_small">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>25.0 18.89 0 0 0 -1.5708</pose>
+    </link>
+    
+    <link name="main_door_1_small">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorSmall.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorSmall.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>25.0 18.89 0 0 0 -1.5708</pose>
+    </link>
+    
+    
+    
+    <link name="main_frame_2_big">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>30.55 18.05 0 0 0 -1.5708</pose>
+    </link>
+    
+    <link name="main_door_2_big">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorMain.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorMain.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>30.55 18.05 0 0 0 -1.5708</pose>
+    </link>
+    
+    
+    <link name="main_frame_2_small">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorFrame.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>30.55 16.53 0 0 0 1.5708</pose>
+    </link>
+    
+    <link name="main_door_2_small">
+      <gravity>1</gravity>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorSmall.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://roblab/meshes/GlassDoorSmall.dae</uri>
+            <scale>0.95 0.95 0.95</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <pose>30.55 16.53 0 0 0 1.5708</pose>
+    </link>
+    
+    
+    
+    
+    <joint name='joint_0' type='revolute'>
+      <parent>frame_0</parent>
+      <child>door_0</child>
+      <pose frame=''>0.905 0.03 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='joint_1' type='revolute'>
+      <parent>frame_1</parent>
+      <child>door_1</child>
+      <pose frame=''>0.05 0.03 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='joint_2' type='revolute'>
+      <parent>frame_2</parent>
+      <child>door_2</child>
+      <pose frame=''>0.905 0.03 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='joint_3' type='revolute'>
+      <parent>frame_3</parent>
+      <child>door_3</child>
+      <pose frame=''>0.905 0.03 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='main_joint_1_big' type='revolute'>
+      <parent>main_frame_1_big</parent>
+      <child>main_door_1_big</child>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='main_joint_1_small' type='revolute'>
+      <parent>main_frame_1_small</parent>
+      <child>main_door_1_small</child>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='main_joint_2_big' type='revolute'>
+      <parent>main_frame_2_big</parent>
+      <child>main_door_2_big</child>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    <joint name='main_joint_2_small' type='revolute'>
+      <parent>main_frame_2_small</parent>
+      <child>main_door_2_small</child>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>0</use_parent_model_frame>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+        </limit>
+      </axis>
+    </joint>
+    
+    <joint name="fix_env_0" type="fixed">
+        <parent>world</parent>
+        <child>walls</child>
+    </joint>
+    <joint name="fix_door_0" type="fixed">
+        <parent>walls</parent>
+        <child>frame_0</child>
+    </joint>
+    <joint name="fix_door_1" type="fixed">
+        <parent>frame_0</parent>
+        <child>frame_1</child>
+    </joint>
+    <joint name="fix_door_2" type="fixed">
+        <parent>frame_1</parent>
+        <child>frame_2</child>
+    </joint>
+    <joint name="fix_door_3" type="fixed">
+        <parent>world</parent>
+        <child>frame_3</child>
+    </joint>
+    <joint name="fix_door_4" type="fixed">
+        <parent>world</parent>
+        <child>main_frame_1_big</child>
+    </joint>
+    <joint name="fix_door_5" type="fixed">
+        <parent>world</parent>
+        <child>main_frame_1_small</child>
+    </joint>
+    <joint name="fix_door_6" type="fixed">
+        <parent>world</parent>
+        <child>main_frame_2_big</child>
+    </joint>
+    <joint name="fix_door_7" type="fixed">
+        <parent>world</parent>
+        <child>main_frame_2_small</child>
+    </joint>
+  </model>
+
+</sdf>

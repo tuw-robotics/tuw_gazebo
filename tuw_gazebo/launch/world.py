@@ -10,12 +10,14 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch.substitutions import TextSubstitution
 
 
 def generate_launch_description():
 
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
     pkg_tuw_gazebo = get_package_share_directory('tuw_gazebo')
+
 
     # Gazebo launch
     gazebo = IncludeLaunchDescription(
@@ -24,10 +26,11 @@ def generate_launch_description():
         )
     )    
 
+
     return LaunchDescription([
         DeclareLaunchArgument(
           'world',
-          default_value=[os.path.join(pkg_tuw_gazebo, 'worlds', 'tuw_empty.world'), ''],
+          default_value=[os.path.join(pkg_tuw_gazebo, 'worlds', 'emtpy.world'), ''],
           description='SDF world file'),
         gazebo
     ])
