@@ -2,7 +2,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, TextSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -29,13 +29,35 @@ def generate_launch_description():
         ]
     )
 
+    X_launch_arg = DeclareLaunchArgument(
+        'X', default_value=TextSubstitution(text='0.0')
+    )
+    Y_launch_arg = DeclareLaunchArgument(
+        'Y', default_value=TextSubstitution(text='0.0')
+    )
+    Theta_launch_arg = DeclareLaunchArgument(
+        'Theta', default_value=TextSubstitution(text='0.0')
+    )
+
     return LaunchDescription([
+        X_launch_arg,
+        Y_launch_arg,
+        Theta_launch_arg,
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
 
-        Node(package='tuw_gazebo_models', name="publisher_robot", executable='spawn_robot.py', arguments=[robot_desc], output='screen'),
+        Node(package='tuw_gazebo_models', 
+            name="publisher_robot", 
+            executable='spawn_robot.py', 
+            arguments=[robot_desc],
+            parameters=[{
+                "X": LaunchConfiguration('X'),
+                "Y": LaunchConfiguration('Y'),
+                "Theta": LaunchConfiguration('Theta')
+            }],
+            output='screen'),
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
