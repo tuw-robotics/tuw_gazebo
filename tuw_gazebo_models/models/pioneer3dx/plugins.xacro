@@ -3,7 +3,7 @@
   
   <xacro:macro name="differential_drive" params="name namespace">
     <gazebo>
-        <plugin name='${name}_diff_drive' filename='libgazebo_ros_diff_drive.so'>
+        <plugin name='${name}_diff_drive' filename='libtuw_gazebo_ros_diff_drive.so'>
           <ros>
             <namespace>/${namespace}</namespace>
             <remapping>cmd_vel:=cmd_vel</remapping>

@@ -30,7 +30,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
           'world',
-          default_value=[os.path.join(pkg_tuw_gazebo, 'worlds', 'emtpy.world'), ''],
+          default_value=[os.path.join(pkg_tuw_gazebo, 'worlds', 'empty.world'), ''],
           description='SDF world file'),
         gazebo
     ])
