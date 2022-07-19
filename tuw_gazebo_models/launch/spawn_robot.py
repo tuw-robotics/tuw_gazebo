@@ -22,10 +22,12 @@ def main(args=None):
     pose[1] = node.get_parameter('Y').get_parameter_value().double_value
     pose[2] = node.get_parameter('Theta').get_parameter_value().double_value
 
+    namespace = node.get_parameter('X').get_parameter_value().string_value 
+
     req = SpawnEntity.Request()
     req.name = "pioneer3dx"
     req.xml = content
-    req.robot_namespace = ""
+    req.robot_namespace = namespace
     req.reference_frame = "world"
     req.initial_pose.position.x = pose[0]
     req.initial_pose.position.y = pose[1]

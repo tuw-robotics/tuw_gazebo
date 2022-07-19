@@ -10,12 +10,19 @@ import xacro
 
 def generate_launch_description():
 
-    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    use_sim_time     = LaunchConfiguration('use_sim_time', default='true')
+    namespace_arg    = DeclareLaunchArgument('namespace', default_value=TextSubstitution(text='r0'))
+    X_launch_arg     = DeclareLaunchArgument('X',         default_value=TextSubstitution(text='0.0'))
+    Y_launch_arg     = DeclareLaunchArgument('Y',         default_value=TextSubstitution(text='0.0'))
+    Theta_launch_arg = DeclareLaunchArgument('Theta',     default_value=TextSubstitution(text='0.0'))
+
+    models_dir = get_package_share_directory('tuw_gazebo_models') + '/models'
+
 
     xacro_file = os.path.join(get_package_share_directory('tuw_gazebo_models'), 'models/pioneer3dx', 'main.xacro')    
     assert os.path.exists(xacro_file), "The main.xacro doesnt exist in "+str(xacro_file)
 
-    robot_description_config = xacro.process_file(xacro_file)
+    robot_description_config = xacro.process_file(xacro_file, mappings={"namespace": "r0", "models_dir": models_dir})
     robot_desc = robot_description_config.toxml()
 
     model_file = os.path.join(get_package_share_directory('tuw_gazebo_models'), 'models/pioneer3dx', 'main.xacro')    
@@ -29,17 +36,9 @@ def generate_launch_description():
         ]
     )
 
-    X_launch_arg = DeclareLaunchArgument(
-        'X', default_value=TextSubstitution(text='0.0')
-    )
-    Y_launch_arg = DeclareLaunchArgument(
-        'Y', default_value=TextSubstitution(text='0.0')
-    )
-    Theta_launch_arg = DeclareLaunchArgument(
-        'Theta', default_value=TextSubstitution(text='0.0')
-    )
 
     return LaunchDescription([
+        namespace_arg,
         X_launch_arg,
         Y_launch_arg,
         Theta_launch_arg,
@@ -55,15 +54,15 @@ def generate_launch_description():
             parameters=[{
                 "X": LaunchConfiguration('X'),
                 "Y": LaunchConfiguration('Y'),
-                "Theta": LaunchConfiguration('Theta')
-            }],
+                "Theta": LaunchConfiguration('Theta'),
+                "namespace": LaunchConfiguration('namespace')}],
             output='screen'),
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
             name="robot_state_publisher",
-            parameters=[
-                {"robot_description": robot_desc}],
-            namespace='r0',
+            parameters=[{
+                "robot_description": robot_desc,
+                "namespace": LaunchConfiguration('namespace')}],
             output="screen"),
     ])

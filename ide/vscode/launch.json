@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "preLaunchTask": "colcon build ws01"
+        },
+        {
+            "name": "Python: world",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/ws01/src/tuw2_gazebo/tuw_gazebo/launch/world.py ",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "preLaunchTask": "colcon build ws01",
+            "cwd": "${workspaceFolder}",
+        },
+        {
+            "name": "Python: ros2launch",
+            "type": "python",
+            "request": "launch",
+            "program": "/opt/ros/galactic/lib/python3.8/site-packages/ros2launch/command/launch.py ",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "pythonArgs": ["/home/max/projects/ros2/gazebo/ws01/src/tuw2_gazebo/tuw_gazebo_models/launch/spawn_robot.launch.py"],
+            "cwd": "${workspaceFolder}",
+        }
+    ]
+}
