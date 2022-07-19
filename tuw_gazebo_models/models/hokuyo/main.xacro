@@ -63,13 +63,16 @@
                     </ray>
                     <plugin name="laserscan" filename="libgazebo_ros_ray_sensor.so">
                         <ros>
-                            <namespace>/rrbot/laser</namespace>
-                            <remapping>~/out:=scan</remapping>
+                            <namespace>${namespace}</namespace>
+                            <remapping>~/out:=${topic_name}</remapping>
                         </ros>
                         <output_type>sensor_msgs/LaserScan</output_type>
+                        <frame_name>${name}</frame_name>
                     </plugin>
                 </sensor>
             </gazebo> 
+
+
     </xacro:macro>
 
   
