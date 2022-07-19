@@ -3,36 +3,73 @@
 
 
     <!-- hokuyo Laser --> 
-    <xacro:macro name="laser" params="name frame_names topic_names parent xyz rpy driver:=cpu visualize:=true models_dir:=^" >
+    <xacro:macro name="laser" params="name namespace topic_name parent xyz rpy driver:=cpu visualize:=true models_dir:=^" >
     
         
         <joint name="${parent}_${name}_joint" type="fixed">
-        <axis xyz="0 0 1" />
-        <origin xyz="${xyz}" rpy="${rpy}"/>
-        <parent link="${parent}"/>
-        <child link="${name}"/>
+            <axis xyz="0 0 1" />
+            <origin xyz="${xyz}" rpy="${rpy}"/>
+            <parent link="${parent}"/>
+            <child link="${name}"/>
         </joint>
         
         <link name="${name}">
-        <collision>
-            <origin xyz="0 0 -0.025" rpy="0 0 0"/>
-            <geometry>
-            <box size="0.05 0.05 0.05"/>
-            </geometry>
-        </collision>
-        <visual>
-            <origin xyz="0 0 -0.025" rpy="0 0 0"/>
-            <geometry>
-            <mesh filename="file://${models_dir}/hokuyo/meshes/hokuyo.dae"/>
-            </geometry>
-        </visual>
-        <inertial>
-            <mass value="1e-2" />
-            <origin xyz="0 0 -0.025" rpy="0 0 0"/>
-            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
-        </inertial>
+            <collision>
+                <origin xyz="0 0 -0.025" rpy="0 0 0"/>
+                <geometry>
+                <box size="0.05 0.05 0.05"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 -0.025" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="file://${models_dir}/hokuyo/meshes/hokuyo.dae"/>
+                </geometry>
+            </visual>
+            <inertial>
+                <mass value="1e-2" />
+                <origin xyz="0 0 -0.025" rpy="0 0 0"/>
+                <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+            
+   
         </link>
-        
+
+            <!-- ray sensor -->
+            <gazebo reference="${name}">
+                <sensor name="${name}_sensor" type="ray">
+                    <pose>0 0 0 0 0 0</pose>
+                    <update_rate>10</update_rate>
+                    <visualize>${visualize}</visualize>  
+                    <always_on>true</always_on>
+                    <ray>
+                        <scan>
+                            <horizontal>
+                                <samples>683</samples>
+                                <resolution>1.0</resolution>
+                                <min_angle>-2.35619449019</min_angle>
+                                <max_angle>2.35619449019</max_angle>
+                            </horizontal>
+                        </scan>
+                        <range>
+                            <min>0.05</min>
+                            <max>10</max>
+                        </range>
+                        <noise>
+                            <type>gaussian</type>
+                            <mean>0.0</mean>
+                            <stddev>0.01</stddev>
+                        </noise>
+                    </ray>
+                    <plugin name="laserscan" filename="libgazebo_ros_ray_sensor.so">
+                        <ros>
+                            <namespace>/rrbot/laser</namespace>
+                            <remapping>~/out:=scan</remapping>
+                        </ros>
+                        <output_type>sensor_msgs/LaserScan</output_type>
+                    </plugin>
+                </sensor>
+            </gazebo> 
     </xacro:macro>
 
   

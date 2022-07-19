@@ -24,5 +24,5 @@
   <xacro:joint_state_publisher name="$(arg robot_name)" namespace="$(arg namespace)" />
   
   <xacro:include filename="${models_dir}/${laser_model}/main.xacro"/>
-  <xacro:laser name="laser0" frame_names="$(arg namespace)/laser0" topic_names="$(arg laser0_topic)" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
+  <xacro:laser name="laser0" namespace="$(arg namespace)" topic_name="$(arg laser0_topic)" parent="top" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="gpu" visualize="true"/> 
 </robot>

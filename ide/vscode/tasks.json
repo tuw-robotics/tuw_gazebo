@@ -7,7 +7,7 @@
         "label": "colcon build",
             "detail": "builds the workspace using colcon build",
             "type": "shell",
-            "command": "source /opt/ros/galactic/setup.bash; colcon build --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+            "command": "source ${workspaceFolder}/..ws00/install/setup.bash; colcon build --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
             "group": {
                 "kind": "build",
                 "isDefault": true
