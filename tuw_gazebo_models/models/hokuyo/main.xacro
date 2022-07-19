@@ -3,8 +3,14 @@
 
 
     <!-- hokuyo Laser --> 
-    <xacro:macro name="laser" params="name namespace topic_name parent xyz rpy driver:=cpu visualize:=true models_dir:=^" >
+    <xacro:macro name="laser" params="name parent namespace topic_name frame_name xyz rpy driver:=cpu visualize:=true models_dir:=^" >
     
+        <xacro:if value="${driver == 'gpu'}">
+            <xacro:property name="sensor_type" value="gpu_ray"/>
+        </xacro:if>
+        <xacro:if value="${driver == 'cpu'}">
+            <xacro:property name="sensor_type" value="ray"/>
+        </xacro:if>
         
         <joint name="${parent}_${name}_joint" type="fixed">
             <axis xyz="0 0 1" />
@@ -37,9 +43,9 @@
 
             <!-- ray sensor -->
             <gazebo reference="${name}">
-                <sensor name="${name}_sensor" type="ray">
+                <sensor name="${name}_sensor" type="${sensor_type}">
                     <pose>0 0 0 0 0 0</pose>
-                    <update_rate>10</update_rate>
+                    <update_rate>30</update_rate>
                     <visualize>${visualize}</visualize>  
                     <always_on>true</always_on>
                     <ray>
@@ -61,13 +67,13 @@
                             <stddev>0.01</stddev>
                         </noise>
                     </ray>
-                    <plugin name="laserscan" filename="libgazebo_ros_ray_sensor.so">
+                    <plugin name="${name}_laserscan" filename="libgazebo_ros_ray_sensor.so">
                         <ros>
                             <namespace>${namespace}</namespace>
                             <remapping>~/out:=${topic_name}</remapping>
                         </ros>
                         <output_type>sensor_msgs/LaserScan</output_type>
-                        <frame_name>${name}</frame_name>
+                        <frame_name>${frame_name}</frame_name>
                     </plugin>
                 </sensor>
             </gazebo> 
