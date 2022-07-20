@@ -11,26 +11,15 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "preLaunchTask": "colcon build ws01"
+            "preLaunchTask": "colcon build"
         },
         {
-            "name": "Python: world",
+            "name": "Python: wanderer",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/ws01/src/tuw2_gazebo/tuw_gazebo/launch/world.py ",
+            "program": "${workspaceFolder}/src/tuw2_gazebo/tuw_gazebo_wanderer/scripts/wanderer.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "preLaunchTask": "colcon build ws01",
-            "cwd": "${workspaceFolder}",
-        },
-        {
-            "name": "Python: ros2launch",
-            "type": "python",
-            "request": "launch",
-            "program": "/opt/ros/galactic/lib/python3.8/site-packages/ros2launch/command/launch.py ",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "pythonArgs": ["/home/max/projects/ros2/gazebo/ws01/src/tuw2_gazebo/tuw_gazebo_models/launch/spawn_robot.launch.py"],
             "cwd": "${workspaceFolder}",
         }
     ]

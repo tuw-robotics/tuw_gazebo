@@ -38,6 +38,7 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        use_sim_time,
         namespace_arg,
         X_launch_arg,
         Y_launch_arg,
