@@ -1,8 +1,16 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.6">
-  <world name="default">
-
+  <world name="cave">
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <xyz>0.3 0 3</xyz>
+        <rpy>0 90 90</rpy>
+        <pose>5.70472 -10.9746 20.0208 0 0.991644 2.1002</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
     <include>
       <uri>model://sun</uri>
     </include>

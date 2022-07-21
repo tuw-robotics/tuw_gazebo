@@ -31,8 +31,8 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(
   PROGRAMS
-  scripts/wanderer_fabi.py
-  scripts/wanderer.py
+  scripts/wanderer_v0.py
+  scripts/wanderer_v1.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
