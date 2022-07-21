@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
 
-  <xacro:arg name="models_dir"      default="/tmp"/>
-  <xacro:arg name="robot_model"     default="pioneer3dx"/>
-  <xacro:arg name="laser_model"     default="hokuyo"/>
-  <xacro:arg name="namespace"       default="r0"/>
-  <xacro:arg name="robot_name"      default="r0"/>
-  <xacro:arg name="laser0_topic"    default="scan_raw"/>
+  <xacro:arg name="models_dir"       default="/tmp"/>
+  <xacro:arg name="robot_model"      default="pioneer3dx"/>
+  <xacro:arg name="laser_model"      default="hokuyo"/>
+  <xacro:arg name="namespace"        default="r0"/>
+  <xacro:arg name="robot_name"       default="r0"/>
+  <xacro:arg name="laser0_topic"     default="scan_raw"/>
+  <xacro:arg name="laser0_visualize" default="true"/>
     
   <xacro:property name="models_dir" value="$(arg models_dir)"/>
   <xacro:property name="robot_model" value="$(arg robot_model)"/>
