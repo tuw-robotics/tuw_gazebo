@@ -32,13 +32,11 @@ def generate_launch_description():
         )
     )    
 
-    world_file = os.path.join(pkg_tuw_gazebo, 'worlds', 'empty.world')
-
     return LaunchDescription([
         SetEnvironmentVariable(name='GAZEBO_MODEL_PATH', value=model_path),
         DeclareLaunchArgument(
           'world',
-          default_value=world_file,
+          default_value=[os.path.join(pkg_tuw_gazebo, 'worlds', 'empty.world')],
           description='SDF world file'),
         gazebo
     ])
