@@ -32,6 +32,7 @@ def generate_launch_description():
         return [SetLaunchConfiguration('world', file)]
 
     world_file_launch_configuration_arg = OpaqueFunction(function=world_file_launch_configuration)
+    
     room_arg = DeclareLaunchArgument('room', 
                 default_value=TextSubstitution(text='empty'), 
                 description='Use empty, cave or roblab to load a TUW enviroment')
