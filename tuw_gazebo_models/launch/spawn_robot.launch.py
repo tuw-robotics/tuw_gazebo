@@ -1,11 +1,10 @@
+#!/usr/bin/python3
 import os
-import string
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, TextSubstitution
+from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
 
 import xacro
 
@@ -25,14 +24,6 @@ def generate_launch_description():
 
     robot_description_config = xacro.process_file(xacro_file, mappings={"namespace": "r0", "models_dir": models_dir})
     robot_desc = robot_description_config.toxml()
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("tuw_gazebo_models"),
-            "config",
-            "pioneer2dx_controllers.yaml",
-        ]
-    )
 
     return LaunchDescription([
         namespace_arg,
