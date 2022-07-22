@@ -14,7 +14,7 @@ ros2 launch tuw_gazebo_models spawn_robot.launch.py robot:=pioneer3dx
 ```
 Wanderer
 ```
-ros2 run tuw_gazebo_wanderer wanderer_v0.py cmd:=cmd_vel scan:=scan_raw __ns:=r0
+ros2 run tuw_gazebo_wanderer wanderer_v0.py --ros-args --remap cmd:=/r0/cmd_vel --remap scan:=/r0/scan_raw
 ```
 
 ## IDE
