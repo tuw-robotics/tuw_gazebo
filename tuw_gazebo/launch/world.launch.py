@@ -10,12 +10,13 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration, TextSubstitution 
+from launch.actions import OpaqueFunction
+from launch.actions import SetLaunchConfiguration
 
 # Add string commands if not empty
 
 def generate_launch_description():
 
-    room_arg    = DeclareLaunchArgument('room', default_value=TextSubstitution(text='roblab'))
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
     pkg_tuw_gazebo = get_package_share_directory('tuw_gazebo')
     pkg_tuw_gazebo_models = get_package_share_directory('tuw_gazebo_models')
@@ -26,14 +27,21 @@ def generate_launch_description():
     else:
         model_path =  pkg_tuw_gazebo_models + '/models'
 
+    def world_file_launch_configuration(context):
+        file = os.path.join(pkg_tuw_gazebo, 'worlds', context.launch_configurations['room'] + '.world')
+        return [SetLaunchConfiguration('world', file)]
+
+    world_file_launch_configuration_arg = OpaqueFunction(function=world_file_launch_configuration)
+    room_arg = DeclareLaunchArgument('room', 
+                default_value=TextSubstitution(text='empty'), 
+                description='Use empty, cave or roblab to load a TUW enviroment')
+
     return LaunchDescription([
         room_arg,
+        world_file_launch_configuration_arg,
         SetEnvironmentVariable(name='GAZEBO_MODEL_PATH', value=model_path),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource( os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py')),
-            # This is working, but I like to substitute cave in cave.world with my argument
-            #launch_arguments={'world': os.path.join(pkg_tuw_gazebo, 'worlds', 'cave.world')}.items(),  
-            # This is NOT working, I don't know how to access the room argument?
-            launch_arguments={'world': pkg_tuw_gazebo + '/worlds/' + LaunchConfiguration('room') + '.world'}.items(),
+            launch_arguments={'verbose': 'true'}.items(),
         ) 
     ])

@@ -1,4 +1,5 @@
 import os
+import string
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -25,9 +26,6 @@ def generate_launch_description():
     robot_description_config = xacro.process_file(xacro_file, mappings={"namespace": "r0", "models_dir": models_dir})
     robot_desc = robot_description_config.toxml()
 
-    model_file = os.path.join(get_package_share_directory('tuw_gazebo_models'), 'models/pioneer3dx', 'main.xacro')    
-    assert os.path.exists(xacro_file), "The main.xacro doesnt exist in "+str(xacro_file)
-
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("tuw_gazebo_models"),
@@ -35,7 +33,6 @@ def generate_launch_description():
             "pioneer2dx_controllers.yaml",
         ]
     )
-
 
     return LaunchDescription([
         namespace_arg,
