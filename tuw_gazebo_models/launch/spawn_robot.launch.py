@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os
-from ament_index_python.packages import get_package_share_directory, get_package_directory
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, TextSubstitution
@@ -24,7 +24,7 @@ def generate_launch_description():
 
 
     def create_robot_description(context): 
-        xacro_file = os.path.join(get_package_directory('tuw_gazebo_models'), 'models', context.launch_configurations['robot'], 'main.xacro')    
+        xacro_file = os.path.join(get_package_share_directory('tuw_gazebo_models'), 'models', context.launch_configurations['robot'], 'main.xacro')
         assert os.path.exists(xacro_file), "The main.xacro doesnt exist in "+str(xacro_file)
         robot_description_config = xacro.process_file(xacro_file, 
             mappings={  "namespace": context.launch_configurations['namespace'], 
