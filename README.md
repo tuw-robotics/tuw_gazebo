@@ -10,8 +10,15 @@ ros2 launch tuw_gazebo world.launch.py room:=cave
 ```
 Spawn a robot
 ```
-ros2 launch tuw_gazebo_models spawn_robot.launch.py robot:=pioneer3dx X:=-6.0 Y:=-6.0 Theta:=0.7
+ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
+                                                    model_name:=robot0 \
+                                                    robot:=pioneer3dx \
+                                                    X:=-6.0 Y:=-6.0 Theta:=0.7
 ```
+* __namespace__ namespace used
+* __model_name__ model name used in gazebo to identify the entry
+* __robot__ robot type used to load the correct xacro file from your model folder
+
 Wanderer
 ```
 ros2 run tuw_gazebo_wanderer wanderer_v0.py --ros-args --remap cmd:=/r0/cmd_vel --remap scan:=/r0/scan_raw
