@@ -16,7 +16,7 @@ Wanderer
 ```
 ros2 run tuw_gazebo_wanderer wanderer_v0.py --ros-args --remap cmd:=/r0/cmd_vel --remap scan:=/r0/scan_raw
 ```
-Helper
+Useful ROS2 service calls to gazebo
 ```
 # delete a Entry/Model
 ros2 service call /get_model_list 'gazebo_msgs/DeleteEntity' '{name: "pioneer3dx"}'
