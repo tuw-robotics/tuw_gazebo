@@ -10,7 +10,7 @@ ros2 launch tuw_gazebo world.launch.py room:=cave
 ```
 Spawn a robot
 ```
-ros2 launch tuw_gazebo_models spawn_robot.launch.py robot:=pioneer3dx
+ros2 launch tuw_gazebo_models spawn_robot.launch.py robot:=pioneer3dx X:=-6.0 Y:=-6.0 Theta:=0.7
 ```
 Wanderer
 ```
