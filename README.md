@@ -16,7 +16,7 @@ ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
                                                     X:=-6.0 Y:=-6.0 Theta:=0.7
 ```
 * __namespace__ namespace used
-* __model_name__ model name used in gazebo to identify the entry
+* __model_name__ model name used in gazebo and node prefix
 * __robot__ robot type used to load the correct xacro file from your model folder
 
 Wanderer
