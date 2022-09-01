@@ -54,6 +54,7 @@ def generate_launch_description():
                 "X": LaunchConfiguration('X'),
                 "Y": LaunchConfiguration('Y'),
                 "Theta": LaunchConfiguration('Theta'),
+                "model_name": LaunchConfiguration('namespace'),
                 "namespace": LaunchConfiguration('namespace')}],
             output='screen'),
         Node(
