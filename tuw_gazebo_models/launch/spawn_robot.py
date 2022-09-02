@@ -44,8 +44,7 @@ def spawn_model(node):
     pose[1] = node.get_parameter('Y').get_parameter_value().double_value
     pose[2] = node.get_parameter('Theta').get_parameter_value().double_value
     model_name = node.get_parameter('model_name').get_parameter_value().string_value
-
-    namespace = node.get_parameter('X').get_parameter_value().string_value 
+    namespace = node.get_parameter('namespace').get_parameter_value().string_value 
 
     req = SpawnEntity.Request()
     req.name = model_name
@@ -82,6 +81,7 @@ def main(args=None):
     node.declare_parameter('Y', 0.)
     node.declare_parameter('Theta', 0.)
     node.declare_parameter('model_name', "pioneer3dx")
+    node.declare_parameter('namespace', "r0")
     
     if exists_model_already(node) :
         model_name = node.get_parameter('model_name').get_parameter_value().string_value 

@@ -12,12 +12,14 @@ import xacro
 
 def generate_launch_description():
 
-    use_sim_time     = LaunchConfiguration('use_sim_time', default='true')
-    namespace_arg    = DeclareLaunchArgument('namespace', default_value=TextSubstitution(text='r0'))
-    robot_arg        = DeclareLaunchArgument('robot',     default_value=TextSubstitution(text='pioneer3dx'))
-    X_launch_arg     = DeclareLaunchArgument('X',         default_value=TextSubstitution(text='0.0'))
-    Y_launch_arg     = DeclareLaunchArgument('Y',         default_value=TextSubstitution(text='0.0'))
-    Theta_launch_arg = DeclareLaunchArgument('Theta',     default_value=TextSubstitution(text='0.0'))
+    use_sim_time     = LaunchConfiguration('use_sim_time',  default='true')
+    use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false', description='Use simulation (Gazebo) clock if true')
+    namespace_arg    = DeclareLaunchArgument('namespace',   default_value=TextSubstitution(text='r0'))
+    model_name_arg   = DeclareLaunchArgument('model_name',  default_value=TextSubstitution(text='robot0'))
+    robot_arg        = DeclareLaunchArgument('robot',       default_value=TextSubstitution(text='pioneer3dx'))
+    X_launch_arg     = DeclareLaunchArgument('X',           default_value=TextSubstitution(text='0.0'))
+    Y_launch_arg     = DeclareLaunchArgument('Y',           default_value=TextSubstitution(text='0.0'))
+    Theta_launch_arg = DeclareLaunchArgument('Theta',       default_value=TextSubstitution(text='0.0'))
 
     models_dir = get_package_share_directory('tuw_gazebo_models') + '/models'
 
@@ -41,11 +43,8 @@ def generate_launch_description():
         Y_launch_arg,
         Theta_launch_arg,
         create_robot_description_arg,
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use simulation (Gazebo) clock if true'),
-
+        model_name_arg,
+        use_sim_time_arg,
         Node(package='tuw_gazebo_models', 
             name="publisher_robot", 
             executable='spawn_robot.py', 
@@ -54,16 +53,17 @@ def generate_launch_description():
                 "X": LaunchConfiguration('X'),
                 "Y": LaunchConfiguration('Y'),
                 "Theta": LaunchConfiguration('Theta'),
-                "model_name": LaunchConfiguration('namespace'),
+                "model_name": LaunchConfiguration('model_name'),
                 "namespace": LaunchConfiguration('namespace')}],
             output='screen'),
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
             name="robot_state_publisher",
+            arguments=[LaunchConfiguration('robot_desc')],
             namespace=[LaunchConfiguration('namespace')],
             parameters=[{
-                "robot_description": LaunchConfiguration('robot_desc'),
-                "namespace": LaunchConfiguration('namespace')}],
+                "use_sim_time": use_sim_time,
+                "robot_description": LaunchConfiguration('robot_desc')
             output="screen"),
     ])
