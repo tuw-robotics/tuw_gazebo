@@ -10,14 +10,16 @@ ros2 launch tuw_gazebo world.launch.py room:=cave
 ```
 Spawn a robot
 ```
-ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
-                                                    model_name:=robot0 \
+ros2 launch tuw_gazebo_models spawn_robot.launch.py model_name:=robot0 \
                                                     robot:=pioneer3dx \
                                                     X:=-6.0 Y:=-6.0 Theta:=0.7
 ```
-* __namespace__ namespace used
 * __model_name__ model name used in gazebo and node prefix
 * __robot__ robot type used to load the correct xacro file from your model folder
+RViz2
+```
+ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0
+```
 
 Wanderer
 ```
@@ -31,6 +33,18 @@ ros2 service call /delete_entity 'gazebo_msgs/DeleteEntity' '{name: "robot0"}'
 ros2 service call /get_model_list 'gazebo_msgs/srv/GetModelList' 
 # reset simulation
 ros2 service call /reset_simulation 'std_srvs/srv/Empty'
+```
+## Multuiple robots and namespaces
+We are going to use the  __namespace__ argument set on __r0__
+```
+ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
+                                                    model_name:=robot0 \
+                                                    robot:=pioneer3dx \
+                                                    X:=-6.0 Y:=-6.0 Theta:=0.7
+```
+RViz2
+```
+ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0
 ```
 ## IDE
 IDE configuartion are avliable in [ide](ide)
