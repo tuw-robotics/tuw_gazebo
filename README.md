@@ -26,7 +26,7 @@ ros2 run tuw_gazebo_wanderer wanderer_v0.py --ros-args --remap cmd:=/r0/cmd_vel 
 Useful ROS2 service calls to gazebo
 ```
 # delete a Entry/Model
-ros2 service call /get_model_list 'gazebo_msgs/DeleteEntity' '{name: "pioneer3dx"}'
+ros2 service call /delete_entity 'gazebo_msgs/DeleteEntity' '{name: "robot0"}'
 # list Models
 ros2 service call /get_model_list 'gazebo_msgs/srv/GetModelList' 
 # reset simulation
