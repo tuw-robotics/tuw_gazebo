@@ -47,12 +47,11 @@ ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
 ```
 ### RViz2
 ```
+without namespace
 ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0
-```
-<img src="tuw_gazebo/res/pioneer_in_cave_rviz2_with_namespace_v0.png" alt="Rviz2 with pioneer robot in cave" height="300px" />
-```
+with namespace
 ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0 namespace:=r0
-```
+<img src="tuw_gazebo/res/pioneer_in_cave_rviz2_with_namespace_v0.png" alt="Rviz2 with pioneer robot in cave" height="300px" />
 <img src="tuw_gazebo/res/pioneer_in_cave_rviz2_with_namespace_v1.png" alt="Rviz2 with pioneer robot in cave" height="300px" />
 ## IDE
 IDE configuartion are avliable in [ide](ide)
