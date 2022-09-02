@@ -5,6 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /RobotModel1/Description Topic1
+        - /TF1/Frames1
+        - /TF1/Tree1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz_common/Selection
@@ -76,7 +78,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /scan_raw
+        Value: scan_raw
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -177,6 +179,76 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        battery0:
+          Value: true
+        body:
+          Value: true
+        laser0:
+          Value: true
+        left_hub:
+          Value: true
+        left_wheel:
+          Value: true
+        mount_bottom:
+          Value: true
+        mount_camera_tof:
+          Value: true
+        odom:
+          Value: true
+        right_hub:
+          Value: true
+        right_wheel:
+          Value: true
+        sonar:
+          Value: true
+        swivel:
+          Value: true
+        swivel_hubcap:
+          Value: true
+        swivel_wheel:
+          Value: true
+        top:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        base_link:
+          body:
+            battery0:
+              {}
+            sonar:
+              {}
+          left_wheel:
+            left_hub:
+              {}
+          right_wheel:
+            right_hub:
+              {}
+          swivel:
+            swivel_wheel:
+              swivel_hubcap:
+                {}
+          top:
+            laser0:
+              {}
+            mount_bottom:
+              {}
+            mount_camera_tof:
+              {}
+        odom:
+          {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48

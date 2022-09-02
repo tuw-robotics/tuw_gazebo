@@ -4,11 +4,11 @@ gazebo models for ros2
 <img src="tuw_gazebo/res/pioneer_in_cave.png" alt="pioneer robot in cave" height="200px" /> <img src="tuw_gazebo/res/pioneer.png" alt="pioneer robot with laser ranger" height="200px" />  <img src="tuw_gazebo/res/pioneer_in_roblab.png" alt="pioneer robot in roblab" height="200px" />
 
 ## Demo
-Lunch World
+### Launch World
 ```
 ros2 launch tuw_gazebo world.launch.py room:=cave
 ```
-Spawn a robot
+### Spawn a robot
 ```
 ros2 launch tuw_gazebo_models spawn_robot.launch.py model_name:=robot0 \
                                                     robot:=pioneer3dx \
@@ -16,12 +16,14 @@ ros2 launch tuw_gazebo_models spawn_robot.launch.py model_name:=robot0 \
 ```
 * __model_name__ model name used in gazebo and node prefix
 * __robot__ robot type used to load the correct xacro file from your model folder
-RViz2
+### RViz2
+No additional namespace is set
 ```
 ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0
 ```
+<img src="tuw_gazebo/res/pioneer_in_cave_rviz2_no_namespace.png" alt="Rviz2 with pioneer robot in cave" height="200px" />
 
-Wanderer
+### Wanderer
 ```
 ros2 run tuw_gazebo_wanderer wanderer_v0.py --ros-args --remap cmd:=/r0/cmd_vel --remap scan:=/r0/scan_raw
 ```
@@ -35,6 +37,7 @@ ros2 service call /get_model_list 'gazebo_msgs/srv/GetModelList'
 ros2 service call /reset_simulation 'std_srvs/srv/Empty'
 ```
 ## Multuiple robots and namespaces
+### Spawn a robot
 We are going to use the  __namespace__ argument set on __r0__
 ```
 ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
@@ -42,10 +45,15 @@ ros2 launch tuw_gazebo_models spawn_robot.launch.py namespace:=r0 \
                                                     robot:=pioneer3dx \
                                                     X:=-6.0 Y:=-6.0 Theta:=0.7
 ```
-RViz2
+### RViz2
 ```
 ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0
 ```
+<img src="tuw_gazebo/res/pioneer_in_cave_rviz2_no_namespace_v0.png" alt="Rviz2 with pioneer robot in cave" height="200px" />
+```
+ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0 namespace:=r0
+```
+<img src="tuw_gazebo/res/pioneer_in_cave_rviz2_no_namespace_v1.png" alt="Rviz2 with pioneer robot in cave" height="200px" />
 ## IDE
 IDE configuartion are avliable in [ide](ide)
 

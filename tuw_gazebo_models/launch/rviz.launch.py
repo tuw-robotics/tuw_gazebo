@@ -13,13 +13,14 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
 
+    use_sim_time     = LaunchConfiguration('use_sim_time',  default='true')
     tuw_gazebo_models = get_package_share_directory('tuw_gazebo_models')
 
     def rviz_launch_configuration(context):
         file = os.path.join(tuw_gazebo_models, 'config/rviz', context.launch_configurations['config'] + '.rviz')
         return [SetLaunchConfiguration('config', file)]
 
-    namespace_arg    = DeclareLaunchArgument('namespace',   default_value=TextSubstitution(text='r0'))
+    namespace_arg    = DeclareLaunchArgument('namespace',   default_value=TextSubstitution(text=''))
     rviz_launch_configuration_arg = OpaqueFunction(function=rviz_launch_configuration)
     rviz_config_arg = DeclareLaunchArgument('config', 
                 default_value=TextSubstitution(text='empty'), 
@@ -34,6 +35,8 @@ def generate_launch_description():
             namespace=LaunchConfiguration('namespace'),
             executable='rviz2',
             name='rviz2',
-            arguments=['-d', [LaunchConfiguration('config')]]
+            arguments=['-d', [LaunchConfiguration('config')]],
+            parameters=[{
+                "use_sim_time": use_sim_time}],
         )
     ])
