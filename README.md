@@ -36,6 +36,11 @@ ros2 service call /get_model_list 'gazebo_msgs/srv/GetModelList'
 # reset simulation
 ros2 service call /reset_simulation 'std_srvs/srv/Empty'
 ```
+### Teleop
+I suggest to use the __mouse_teleop__ which can be downloaded from github. The dashing-devel branch works also for galactic!
+```
+ros2 run mouse_teleop mouse_teleop mouse_vel:=cmd_vel
+```
 ## Multuiple robots and namespaces
 ### Spawn a robot
 We are going to use the  __namespace__ argument set on __r0__
