@@ -37,7 +37,8 @@ ros2 service call /get_model_list 'gazebo_msgs/srv/GetModelList'
 ros2 service call /reset_simulation 'std_srvs/srv/Empty'
 ```
 ### Teleop
-I suggest to use the __mouse_teleop__ which can be downloaded from github. The dashing-devel branch works also for galactic!
+I suggest to use the __mouse_teleop__ from [teleop_tools](https://github.com/ros-teleop/teleop_tools/tree/dashing-devel). The dashing-devel branch works also for galactic!
+
 ```
 ros2 run mouse_teleop mouse_teleop mouse_vel:=cmd_vel
 ```
