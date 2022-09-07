@@ -4,7 +4,7 @@
   <arg name="robot_name"                                    default="r0"/>
   <arg name="robot_model"                                   default="pioneer3dx"/>  <!-- pioneer3dx, transportbuddy -->
   <arg name="laser0"                                        default="hokuyo" />     <!-- hokuyo or velodyne -->
-  <arg name="laser0_topic"                                  default="laser0/scan/raw" />   <!-- hokuyo or velodyne -->
+  <arg name="laser0_topic"                                  default="laser0/scan/raw" />   <!-- topic to publish scan -->
   <arg name="gpu"                                           default="true" />
   <arg name="room"                                          default="roblab" />
   <arg name="rviz"                                          default="false" />
