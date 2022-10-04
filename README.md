@@ -63,4 +63,6 @@ ros2 launch tuw_gazebo_models rviz.launch.py config:=robot0 namespace:=r0
 IDE configuartion are avliable in [ide](ide)
 
 ## Install missing dependencies
+`sudo apt install ros-humble-rmw-cyclonedds-cpp`
+`sudo pip3 install transforms3d`
 `rosdep install -i --from-path src --rosdistro galactic -y`
