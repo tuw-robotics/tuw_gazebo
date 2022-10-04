@@ -64,7 +64,7 @@ IDE configuartion are avliable in [ide](ide)
 
 ## Install missing dependencies
 ```
-sudo apt install ros-humble-rmw-cyclonedds-cpp
+sudo apt install ros-$ROS_DISTRO-rmw-cyclonedds-cpp python3-pip
 sudo pip3 install transforms3d
-rosdep install -i --from-path src --rosdistro galactic -y
+rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y
 ```
