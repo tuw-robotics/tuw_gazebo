@@ -4,34 +4,33 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "colcon build",
+        "label": "colcon ws00",
             "detail": "builds the workspace using colcon build",
             "type": "shell",
-            "command": "source ${workspaceFolder}/..ws00/install/setup.bash; colcon build --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+            "command": "source ../env.sh; colcon build --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+            "options": {
+              "cwd": "${workspaceFolder}/ws00/"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+      },     
+      {
+        "label": "colcon ws01",
+            "detail": "builds the workspace using colcon build",
+            "type": "shell",
+            "command": "source ../env.sh; colcon build --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=Debug'",
+            "options": {
+              "cwd": "${workspaceFolder}/ws01/"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": "$gcc"
-      },        
-      {
-        "label": "make mxr_base",
-            "detail": "run make in build folder of mxr_base",
-            "type": "shell",
-            "command": "source ${workspaceFolder}/install/setup.bash; make",
-            "options": {
-              "cwd": "${workspaceFolder}/build/mxr_base"
-            },
-            "problemMatcher": "$gcc"
-      },        
-      {
-        "label": "Cmake: build",
-        "command": "build",
-        "type": "cmake",
-        "options": {
-            "cwd": "${workspaceFolder}/src/mxr/mxr_base"
-        },
-        "group": "build"
+            "dependsOn": [
+              "colcon ws00"
+            ]
       }
     ]
   }

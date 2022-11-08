@@ -8,7 +8,6 @@
         "/home/max/projects/car/ros2/dev_ws/install/mxr_msgs/lib/python3.8/site-packages",
         "/opt/ros/galactic/lib/python3.8/site-packages"
     ],
-    "cmake.sourceDirectory": "${workspaceFolder}/src/mxr/mxr_base",
     "files.associations": {
         "functional": "cpp",
         "array": "cpp",
@@ -67,5 +66,9 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "variant": "cpp"
+    },
+    "files.exclude": {
+        "*/build": true,
+        "*/install": true,
     }
 }

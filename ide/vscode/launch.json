@@ -17,7 +17,7 @@
             "name": "Python: wanderer",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/tuw2_gazebo/tuw_gazebo_wanderer/scripts/wanderer.py",
+            "program": "${workspaceFolder}/ws01/src/tuw2_gazebo/tuw_gazebo_wanderer/scripts/wanderer_v0.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "cwd": "${workspaceFolder}",
