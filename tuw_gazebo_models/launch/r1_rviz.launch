@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <!-- RVIZ   -->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tuw_gazebo_models)/launch/r1.rviz" />
-    
-</launch>

@@ -12,7 +12,7 @@
     </gazebo>
   </xacro:macro>
       
-  <xacro:macro name="differential_drive">
+  <xacro:macro name="differential_drive" params="ns odom_source">
     <gazebo>
         <plugin name="differential_drive_controller" filename="libtuw_gazebo_ros_diff_drive.so">
 	      <robotNamespace></robotNamespace>
@@ -25,21 +25,21 @@
 	      <odometryFrame>odom</odometryFrame>
 	    
 	      <commandTopic>cmd_vel</commandTopic>
-          <odometryTopic>odom</odometryTopic>
-          <!-- odom source world or encoder, world uses the simulated ground truth and encoder the wheel odometry -->
-          <odometrySource>encoder</odometrySource>
+        <odometryTopic>odom</odometryTopic>
+        <!-- odom source world or encoder, world uses the simulated ground truth and encoder the wheel odometry -->
+        <odometrySource>${odom_source}</odometrySource>
 	    
-          <leftJoint>left_hub_joint</leftJoint>
-          <rightJoint>right_hub_joint</rightJoint>
+        <leftJoint>left_hub_joint</leftJoint>
+        <rightJoint>right_hub_joint</rightJoint>
 	    
-          <wheelSeparation>0.3</wheelSeparation>
-          <wheelDiameter>0.18</wheelDiameter>
-          <wheelTorque>10</wheelTorque>
-          <wheelAcceleration>1.5</wheelAcceleration>
+        <wheelSeparation>0.3</wheelSeparation>
+        <wheelDiameter>0.18</wheelDiameter>
+        <wheelTorque>10</wheelTorque>
+        <wheelAcceleration>1.5</wheelAcceleration>
             
-          <publishTf>true</publishTf>
+        <publishTf>true</publishTf>
 	      <publishWheelTF>true</publishWheelTF>
-          <publishWheelJointState>true</publishWheelJointState>
+        <publishWheelJointState>true</publishWheelJointState>
             
         </plugin>
     </gazebo>    

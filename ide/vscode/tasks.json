@@ -1,0 +1,36 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "catkin ws00",
+            "detail": "builds the workspace using colcon build",
+            "type": "shell",
+            "command": "source ../env.sh; catkin_make '-DCMAKE_BUILD_TYPE=Debug'",
+            "options": {
+              "cwd": "${workspaceFolder}/ws00/"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+      },     
+      {
+        "label": "catkin ws01",
+            "detail": "builds the workspace using colcon build",
+            "type": "shell",
+            "command": "source ../env.sh; catkin_make '-DCMAKE_BUILD_TYPE=Debug'",
+            "options": {
+              "cwd": "${workspaceFolder}/ws01/"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+              "catkin ws00"
+            ]
+      }
+    ]
+  }

@@ -8,14 +8,15 @@
   <arg name="position"                                   default="-x 0.0 -y 0.0 -z 0.01" />
   <arg name="model_dir"                                  default="$(find tuw_gazebo_models)/models"/>
   <arg name="platform_dir"                               default="/platforms/pioneer3dx" />
+  <arg name="differential_odom_source"                   default="encoder" />    <!-- endocer or world. Only used with diff_twist -->
   <arg name="motor_plugin"                               default="diff_twist" /> <!-- diff_twist or diff_iws. If something else is set, no plugin will be loaded-->
   <arg name="launch_robot_state_publisher"               default="true" />
-  <arg name="launch_ground_truth_robot_state_publisher"  default="true" />
+  <arg name="launch_ground_truth_robot_state_publisher"  default="false" />       <!-- true makes only sence for diff_iws debugging -->
     
   <group ns="$(arg robot_name)">
 
     <!-- Load the URDF into the ROS Parameter Server -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/$(arg platform_dir)/main.xacro' model_dir:=$(arg model_dir) platform_dir:=$(arg platform_dir) namespace:=$(arg robot_name) motor_plugin:=$(arg motor_plugin) laser0:=$(arg laser0) laser0_topic:=$(arg laser0_topic)  gpu:=$(arg gpu)"/>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg model_dir)/$(arg platform_dir)/main.xacro' model_dir:=$(arg model_dir) platform_dir:=$(arg platform_dir) namespace:=$(arg robot_name) motor_plugin:=$(arg motor_plugin) laser0:=$(arg laser0) laser0_topic:=$(arg laser0_topic)  gpu:=$(arg gpu) differential_odom_source:=$(arg differential_odom_source)"/>
   
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a robot -->
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_mobile_base" args="$(arg position) -urdf -param robot_description -model $(arg robot_name)" respawn="false"/>

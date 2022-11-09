@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="pioneer3dx" >
     
-  <xacro:arg name="model_dir"      default=""/>
-  <xacro:arg name="platform_dir"   default=""/>
-  <xacro:arg name="laser0"         default="hokuyo"/>    <!-- hokuyo or velodyne -->
-  <xacro:arg name="gpu"            default="false"/>
-  <xacro:arg name="namespace"      default="r0"/>
-  <xacro:arg name="motor_plugin"   default="diff_twist"/> <!-- diffdrive or diff_iws. If something else is set, no plugin will be loaded-->
-  <xacro:arg name="laser0_topic"   default="laser0/scan/raw"/>
+  <xacro:arg name="model_dir"                  default=""/>
+  <xacro:arg name="platform_dir"               default=""/>
+  <xacro:arg name="laser0"                     default="hokuyo"/>    <!-- hokuyo or velodyne -->
+  <xacro:arg name="gpu"                        default="false"/>
+  <xacro:arg name="namespace"                  default="r0"/>
+  <xacro:arg name="motor_plugin"               default="diff_twist"/> <!-- diffdrive or diff_iws. If something else is set, no plugin will be loaded-->
+  <xacro:arg name="differential_odom_source"   default="differential_odom_source"/>  <!-- endocer or world. Only used with diff_twist -->
+  <xacro:arg name="laser0_topic"               default="laser0/scan/raw"/>
     
   <!-- Import Rviz colors -->
   <xacro:include filename="$(arg model_dir)/materials.xacro" />
@@ -18,12 +19,13 @@
   <xacro:vehicle_body name="chassis" parent="base_link"/>
   
   <!-- Import platform plugins -->
-  <xacro:property name="model_dir"    value="$(arg model_dir)/$(arg platform_dir)"/>
-  <xacro:property name="namespace"    value="$(arg namespace)"/>
-  <xacro:property name="motor_plugin" value="$(arg motor_plugin)"/>
-  <xacro:property name="laser0"       value="$(arg laser0)"/>
-  <xacro:property name="laser0_topic" value="$(arg laser0_topic)"/>
-  <xacro:property name="gpu"          value="$(arg gpu)"/>
+  <xacro:property name="model_dir"                value="$(arg model_dir)/$(arg platform_dir)"/>
+  <xacro:property name="namespace"                value="$(arg namespace)"/>
+  <xacro:property name="motor_plugin"             value="$(arg motor_plugin)"/>
+  <xacro:property name="differential_odom_source" value="$(arg differential_odom_source)"/>
+  <xacro:property name="laser0"                   value="$(arg laser0)"/>
+  <xacro:property name="laser0_topic"             value="$(arg laser0_topic)"/>
+  <xacro:property name="gpu"                      value="$(arg gpu)"/>
   <xacro:include filename="${model_dir}/plugins.xacro" />
   
   <xacro:if value="${motor_plugin == 'diff_iws'}"> 
@@ -35,7 +37,7 @@
   </xacro:if>
   <xacro:if value="${motor_plugin == 'diff_twist'}">  
     <!-- Motor  plugin -->
-    <xacro:differential_drive/>
+    <xacro:differential_drive ns="${namespace}" odom_source="${differential_odom_source}"/>
     <!-- Joints plugin -->
     <xacro:diff_joints_state_publisher ns="${namespace}"/>
   </xacro:if>

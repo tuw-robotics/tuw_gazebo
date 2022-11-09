@@ -412,12 +412,10 @@ void GazeboRosDiffDrive::publishOdometry ( double step_time )
     tf::Vector3 vt;
 
     if ( odom_source_ == ENCODER ) {
-        // getting data form encoder integration
-        qt = tf::Quaternion ( odom_.pose.pose.orientation.x, odom_.pose.pose.orientation.y, odom_.pose.pose.orientation.z, odom_.pose.pose.orientation.w );
-        vt = tf::Vector3 ( odom_.pose.pose.position.x, odom_.pose.pose.position.y, odom_.pose.pose.position.z );
+        // getting data form encoder integration 
+        // this values are allready computed and stored in odom_
 
-    }
-    if ( odom_source_ == WORLD ) {
+    } else if ( odom_source_ == WORLD ) {
         // getting data form gazebo world
         ignition::math::Pose3d pose = parent->WorldPose();
 
@@ -440,7 +438,10 @@ void GazeboRosDiffDrive::publishOdometry ( double step_time )
         float   yaw = pose.Rot().Yaw();
         odom_.twist.twist.linear.x = cosf ( yaw ) * linear.X() + sinf ( yaw ) * linear.Y();
         odom_.twist.twist.linear.y = cosf ( yaw ) * linear.Y() - sinf ( yaw ) * linear.X();
-    }
+
+    } 
+    qt = tf::Quaternion ( odom_.pose.pose.orientation.x, odom_.pose.pose.orientation.y, odom_.pose.pose.orientation.z, odom_.pose.pose.orientation.w );
+    vt = tf::Vector3 ( odom_.pose.pose.position.x, odom_.pose.pose.position.y, odom_.pose.pose.position.z );
 
     tf::Transform base_footprint_to_odom ( qt, vt );
     transform_broadcaster_->sendTransform (
