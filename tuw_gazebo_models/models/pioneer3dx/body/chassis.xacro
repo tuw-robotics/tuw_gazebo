@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="chassis_width" value="0.27" />
+  <xacro:property name="chassis_collision_ellipse_height" value="0.17" />
 
   <xacro:macro name="pioneer_chassis" params="name parent xyz rpy models_dir:=^">   
         
@@ -12,8 +14,9 @@
     <child link="${name}"/>
   </joint>
   <link name="${name}">
+    <xacro:box_inertial_with_origin x="${chassis_width}" y="${chassis_width}"  z="${chassis_collision_ellipse_height}" mass="5.67" xyz="${-chassis_width/4} 0 ${chassis_collision_ellipse_height/2}"/>
     <visual>
-      <origin xyz="-0.045 0 0.085" rpy="0 0 0"/>
+      <origin xyz="-0.045 0 ${chassis_collision_ellipse_height/2}" rpy="0 0 0"/>
       <geometry>
         <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/chassis.dae"/>
       </geometry>
@@ -22,18 +25,17 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="0.01 0 0.09" rpy="0 0 0"/>
+      <origin xyz="0 0 ${chassis_collision_ellipse_height/2}" rpy="0 0 0"/>
       <geometry>
-          <cylinder radius="0.17" length="0.17"/> 
+          <cylinder radius="${chassis_width/2}" length="${chassis_collision_ellipse_height}"/> 
       </geometry>
-      <!--origin xyz="-0.045 0 0.148" rpy="0 0 0"/>
-      <geometry>  
-        <mesh filename="file://${model_dir}/meshes/body/chassis.dae"/>
-      </geometry-->
     </collision>
-    <box_inertial_with_origin x="0.35" y="0.25"  z="0.17" mass="9.0"> 
-        <origin xyz="-0.04 0 0.15" rpy="0 0 0"/> 
-    </box_inertial_with_origin>
+    <collision>
+      <origin xyz="-${chassis_width/2} 0 ${chassis_collision_ellipse_height/2}" rpy="0 0 0"/>
+      <geometry>
+          <cylinder radius="${chassis_width/2}" length="${chassis_collision_ellipse_height}"/> 
+      </geometry>
+    </collision>
   </link>
   <gazebo reference="${name}">
     <material value="Gazebo/Red"/>
@@ -55,15 +57,6 @@
         <color rgba="0.038 0.038 0.038 1.0"/>
       </material>
     </visual>
-    <collision>
-    <origin xyz="${-0.045-0.05} 0 ${-0.235+0.15}" rpy="0 0 0"/>
-    <geometry><cylinder radius="0.17" length="0.17"/> </geometry>
-    <!--origin xyz="0.0 0 0.0" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://${models_dir}/pioneer3dx/body/meshes/top.dae"/>
-      </geometry-->
-    </collision>
-    <box_inertial_with_origin x="0.45" y="0.35"  z="0.001" mass="1.0"> <origin xyz="0.00 0 0.00" rpy="0 0 0"/> </box_inertial_with_origin>
   </link>
   <gazebo reference="top">
     <material value="Gazebo/Black"/>

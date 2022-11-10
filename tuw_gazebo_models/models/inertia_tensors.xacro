@@ -49,20 +49,20 @@
     </inertial>
   </xacro:macro>
 
-  <xacro:macro name="cylinder_inertial_with_origin" params="radius length mass *origin">
+  <xacro:macro name="cylinder_inertial_with_origin" params="radius length mass xyz rpy">
     <inertial>
       <mass value="${mass}" />
-      <xacro:insert_block name="origin" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
       <inertia ixx="${0.0833333 * mass * (3 * radius * radius + length * length)}" ixy="0.0" ixz="0.0"
         iyy="${0.0833333 * mass * (3 * radius * radius + length * length)}" iyz="0.0"
         izz="${0.5 * mass * radius * radius}" />
     </inertial>
   </xacro:macro>
 
-  <xacro:macro name="box_inertial_with_origin" params="x y z mass *origin">
+  <xacro:macro name="box_inertial_with_origin" params="x y z mass xyz">
     <inertial>
       <mass value="${mass}" />
-      <xacro:insert_block name="origin" />
+      <origin xyz="${xyz}" />
       <inertia ixx="${0.0833333 * mass * (y*y + z*z)}" ixy="0.0" ixz="0.0"
         iyy="${0.0833333 * mass * (x*x + z*z)}" iyz="0.0"
         izz="${0.0833333 * mass * (x*x + y*y)}" />
