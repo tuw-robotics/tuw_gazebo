@@ -8,7 +8,7 @@
   <xacro:arg name="robot_name"       default="r0"/>
   <xacro:arg name="laser0_topic"     default="scan_raw"/>
   <xacro:arg name="laser0_visualize" default="true"/>
-  <xacro:arg name="laser0_driver"    default="gpu"/>
+  <xacro:arg name="laser0_driver"    default="cpu"/>
     
   <xacro:property name="models_dir"    value="$(arg models_dir)"/>
   <xacro:property name="namespace"    value="$(arg namespace)"/>
