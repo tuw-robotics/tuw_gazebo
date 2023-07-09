@@ -1,4 +1,4 @@
-# tuw2_gazebo
+# tuw_gazebo
 gazebo models for ros2
 
 <img src="tuw_gazebo/res/pioneer_in_cave.png" alt="pioneer robot in cave" height="200px" /> <img src="tuw_gazebo/res/pioneer.png" alt="pioneer robot with laser ranger" height="200px" />  <img src="tuw_gazebo/res/pioneer_in_roblab.png" alt="pioneer robot in roblab" height="200px" />
