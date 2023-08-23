@@ -64,7 +64,6 @@ IDE configuartion are avliable in [ide](ide)
 
 ## Install missing dependencies
 ```
-sudo apt install ros-$ROS_DISTRO-rmw-cyclonedds-cpp python3-pip
-sudo pip3 install transforms3d
+sudo apt install ros-$ROS_DISTRO-rmw-cyclonedds-cpp python3-pip tf-transformations
 rosdep install -i --from-path src --rosdistro $ROS_DISTRO -y
 ```
