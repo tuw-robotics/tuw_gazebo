@@ -8,6 +8,7 @@ from launch_ros.actions import Node
 from launch.actions import OpaqueFunction
 from launch.actions import SetLaunchConfiguration
 import xml.dom.minidom
+from launch.conditions import IfCondition
 
 import xacro
 
@@ -48,7 +49,9 @@ def generate_launch_description():
         Theta_launch_arg,
         create_robot_description_arg,
         model_name_arg,
-        Node(package='tuw_gazebo_models', 
+        Node(
+            condition=IfCondition(use_sim_time),
+            package='tuw_gazebo_models', 
             name="publisher_robot", 
             executable='spawn_robot.py', 
             arguments=[LaunchConfiguration('robot_desc')],
