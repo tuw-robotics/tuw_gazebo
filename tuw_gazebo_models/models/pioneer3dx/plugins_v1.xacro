@@ -23,8 +23,8 @@
           <odometry_source>0</odometry_source>
           <publish_odom_ground_truth>true</publish_odom_ground_truth>
 
-          <odometry_frame>odom</odometry_frame>
-          <robot_base_frame>base_link</robot_base_frame>
+          <odometry_frame>${namespace}/odom</odometry_frame>
+          <robot_base_frame>${namespace}/base_link</robot_base_frame>
 
       </plugin>
     </gazebo>    
