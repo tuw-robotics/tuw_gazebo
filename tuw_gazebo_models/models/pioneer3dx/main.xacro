@@ -9,11 +9,13 @@
   <xacro:arg name="laser0_topic"     default="scan_raw"/>
   <xacro:arg name="laser0_visualize" default="true"/>
   <xacro:arg name="laser0_driver"    default="cpu"/>
+  <xacro:arg name="version"  	     default="v1"/>
     
   <xacro:property name="models_dir"    value="$(arg models_dir)"/>
   <xacro:property name="namespace"    value="$(arg namespace)"/>
   <xacro:property name="robot_model"   value="$(arg robot_model)"/>
   <xacro:property name="laser_model"   value="$(arg laser_model)"/>
+  <xacro:property name="version"    value="$(arg version)"/>
 
   <!-- Import Rviz colors -->
   <xacro:include filename="${models_dir}/materials.xacro" />
@@ -23,11 +25,11 @@
   <xacro:vehicle_body name="body" parent="base_link"/>
   
   <!-- differential drive  and joint stage plugin -->
-  <xacro:include filename="${models_dir}/${robot_model}/plugins.xacro"/>
+  <xacro:include filename="${models_dir}/${robot_model}/plugins_${version}.xacro"/>
   <xacro:differential_drive    name="$(arg robot_name)" namespace="${namespace}" />
   <xacro:joint_state_publisher name="$(arg robot_name)" namespace="${namespace}" />
   
   <!-- Laser -->
-  <xacro:include filename="${models_dir}/${laser_model}/main.xacro"/>
+  <xacro:include filename="${models_dir}/${laser_model}/main_${version}.xacro"/>
   <xacro:laser name="laser0" parent="top" namespace="${namespace}" topic_name="$(arg laser0_topic)" frame_name="laser0" xyz="0.15 0.0 0.06" rpy="0 0 0" driver="$(arg laser0_driver)" visualize="$(arg laser0_visualize)"/> 
 </robot>

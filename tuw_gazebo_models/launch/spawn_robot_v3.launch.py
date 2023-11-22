@@ -31,6 +31,7 @@ def generate_launch_description():
         assert os.path.exists(xacro_file), "The main.xacro doesnt exist in "+str(xacro_file)
         robot_description_config = xacro.process_file(xacro_file, 
             mappings={  "namespace": context.launch_configurations['namespace'], 
+            		"version": "v2",
                         "models_dir": models_dir})
         robot_desc = robot_description_config.toxml()
         dom = xml.dom.minidom.parseString(robot_desc)
@@ -68,11 +69,9 @@ def generate_launch_description():
             name="robot_state_publisher",
             arguments=[LaunchConfiguration('robot_desc')],
             namespace=[LaunchConfiguration('namespace')],
-            # this works but I will not use it at the moment
-            # remappings=[
-            #    ("/tf", "/r0/tf"),
-            #    ("/tf_static", "/r0/tf_static")
-            #],
+
+            remappings=[('/tf', 'tf'),
+                    ('/tf_static', 'tf_static')],
             parameters=[{
                 "use_sim_time": use_sim_time,
                 "robot_description": LaunchConfiguration('robot_desc')}],
