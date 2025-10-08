@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.6">
-  <world name="world">
+  <world name="roblab">
 
     <gui fullscreen='0'>
       <camera name='user_camera'>
@@ -11,10 +11,10 @@
       </camera>
     </gui>
     <include>
-      <uri>model://sun</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
     </include>
     <include>
-      <uri>model://ground_plane</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ground Plane</uri>
     </include>
     <include>
       <uri>model://roblab</uri>
